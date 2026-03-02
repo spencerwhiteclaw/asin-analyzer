@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASIN Report — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-light:#60A5FA;--blue-soft:rgba(59,130,246,0.06);--gold:#F5A623;--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--yellow:#F59E0B;--yellow-bg:#FFFBEB;--yellow-border:#FDE68A;--red:#EF4444;--red-bg:#FEF2F2;--red-border:#FECACA;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+nav{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:16px 40px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);}
+.logo-text span{color:var(--blue);}
+.nav-back{color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;}
+.nav-back:hover{color:var(--blue);}
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px 80px;}
+
+/* Header */
+.rpt-header{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:32px;margin-bottom:20px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;}
+.rpt-product h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:8px;}
+.rpt-meta{display:flex;gap:16px;flex-wrap:wrap;}
+.rpt-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;background:var(--bg2);border:1px solid var(--border);color:var(--text2);}
+.rpt-grade{text-align:center;padding:24px 32px;background:var(--bg2);border-radius:var(--r2);min-width:160px;}
+.grade-letter{font-family:'Plus Jakarta Sans',sans-serif;font-size:56px;font-weight:800;line-height:1;}
+.grade-score{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;color:var(--text);}
+.grade-score em{font-style:normal;font-size:16px;color:var(--muted);font-weight:500;}
+.grade-label{font-size:13px;color:var(--muted);margin-top:4px;}
+
+/* Score Grid */
+.scores-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.score-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;transition:transform .2s,box-shadow .2s;}
+.score-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.sc-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.sc-value{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;line-height:1;}
+.sc-bar{height:4px;background:var(--bg3);border-radius:100px;margin-top:8px;overflow:hidden;}
+.sc-bar-fill{height:100%;border-radius:100px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1);}
+.sc-status{font-size:11px;font-weight:700;margin-top:6px;text-transform:uppercase;letter-spacing:0.5px;}
+
+/* Detail Grid */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.detail-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;}
+.dc-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.dc-icon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-size:16px;}
+.dc-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.dc-body{padding:20px 24px;}
+.dc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bg3);}
+.dc-row:last-child{border:none;}
+.dc-row label{font-size:14px;color:var(--text2);}
+.dc-row strong{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text);}
+
+/* Actions */
+.actions-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;margin-bottom:20px;}
+.ac-header{padding:18px 24px;border-bottom:1px solid var(--border);}
+.ac-header h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);}
+.ac-header p{font-size:13px;color:var(--muted);}
+.action-item{display:flex;gap:14px;padding:18px 24px;border-bottom:1px solid var(--bg3);transition:background .15s;}
+.action-item:hover{background:var(--bg2);}
+.action-item:last-child{border:none;}
+.ai-priority{width:8px;flex-shrink:0;border-radius:100px;margin-top:4px;}
+.ai-priority.high{background:var(--red);}
+.ai-priority.medium{background:var(--yellow);}
+.ai-priority.low{background:var(--blue);}
+.ai-body h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.ai-body p{font-size:14px;color:var(--text2);line-height:1.6;}
+.ai-badge{display:inline-block;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-left:8px;}
+.ai-badge.high{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.ai-badge.medium{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border);}
+.ai-badge.low{background:var(--blue-soft);color:var(--blue);border:1px solid rgba(59,130,246,0.2);}
+
+/* CTA */
+.rpt-cta{background:var(--text);border-radius:var(--r3);padding:48px;text-align:center;color:#fff;}
+.rpt-cta h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;}
+.rpt-cta p{color:rgba(255,255,255,0.5);margin-bottom:24px;}
+.rpt-cta a{display:inline-flex;padding:14px 36px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
+.rpt-cta a:hover{background:var(--blue-dark);transform:translateY(-1px);}
+
+/* Loading */
+.loading{text-align:center;padding:120px 40px;}
+.loading h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;}
+
+/* Color helpers */
+.c-green{color:var(--green);}
+.c-blue{color:var(--blue);}
+.c-yellow{color:var(--yellow);}
+.c-red{color:var(--red);}
+.bg-green{background:linear-gradient(90deg,#10B981,#34D399);}
+.bg-blue{background:linear-gradient(90deg,#3B82F6,#60A5FA);}
+.bg-yellow{background:linear-gradient(90deg,#F59E0B,#FBBF24);}
+.bg-red{background:linear-gradient(90deg,#EF4444,#F87171);}
+
+@media(max-width:768px){
+  .scores-grid{grid-template-columns:repeat(2,1fr);}
+  .detail-grid{grid-template-columns:1fr;}
+  .rpt-header{grid-template-columns:1fr;}
+  .rpt-grade{margin:0 auto;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><div class="logo-text">ASIN <span>Analyzer</span></div></a>
+  <a href="/" class="nav-back">← New Analysis</a>
+</nav>
+
+<div class="wrap" id="reportContent">
+  <div class="loading" id="loadingState">
+    <h2>Loading report...</h2>
+    <p style="color:var(--muted);">If this takes more than a few seconds, <a href="/" style="color:var(--blue);">run a new analysis</a>.</p>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // Try sessionStorage first (just analyzed), then API
+  let report = null;
+  const stored = sessionStorage.getItem('asinReport');
+
+  if (stored) {
+    report = JSON.parse(stored);
+    sessionStorage.removeItem('asinReport');
+  } else {
+    // Try loading from API via URL
+    const pathParts = window.location.pathname.split('/');
+    const reportId = pathParts[pathParts.length - 1];
+    if (reportId && reportId !== 'new') {
+      try {
+        const resp = await fetch(`/api/report/${reportId}`);
+        if (resp.ok) {
+          const data = await resp.json();
+          // Reshape DB row to match frontend format
+          const r = data.report;
+          report = {
+            id: r.id, asin: r.asin,
+            product: { title: r.product_title, brand: r.brand, price: parseFloat(r.price), rating: parseFloat(r.rating), reviewCount: r.review_count, bsr: r.bsr, category: r.category, imageCount: r.image_count, bulletCount: r.bullet_count, hasAPlus: r.has_aplus, hasVideo: r.has_video, qaCount: r.qa_count },
+            scores: r.scores, overall: r.overall_score, grade: r.overall_grade, actions: r.action_items,
+          };
+        }
+      } catch (e) { console.error('Failed to load report:', e); }
+    }
+  }
+
+  if (!report) {
+    document.getElementById('loadingState').innerHTML = '<h2>No report found</h2><p style="color:var(--muted);margin-top:8px;"><a href="/" style="color:var(--blue);font-weight:700;">← Run a new analysis</a></p>';
+    return;
+  }
+
+  renderReport(report);
+});
+
+function getScoreColor(val) {
+  if (val >= 8) return 'green';
+  if (val >= 6) return 'blue';
+  if (val >= 4) return 'yellow';
+  return 'red';
+}
+
+function getScoreLabel(val) {
+  if (val >= 9) return 'Excellent';
+  if (val >= 7) return 'Good';
+  if (val >= 5) return 'Average';
+  if (val >= 3) return 'Needs Work';
+  return 'Critical';
+}
+
+function getGradeColor(overall) {
+  if (overall >= 80) return 'var(--green)';
+  if (overall >= 60) return 'var(--blue)';
+  if (overall >= 40) return 'var(--yellow)';
+  return 'var(--red)';
+}
+
+function renderReport(r) {
+  const p = r.product;
+  const s = r.scores;
+  const gc = getGradeColor(r.overall);
+
+  const scoreNames = {
+    title: 'Title Quality', images: 'Image Score', bullets: 'Bullet Points', description: 'A+ Content',
+    pricing: 'Pricing', reviewQuality: 'Review Quality', reviewQuantity: 'Review Volume', qa: 'Q&A Presence',
+    bsr: 'BSR Rank', categoryRank: 'Category Rank', keywords: 'Keyword Visibility', completeness: 'Completeness'
+  };
+
+  document.getElementById('reportContent').innerHTML = `
+    <!-- HEADER -->
+    <div class="rpt-header">
+      <div class="rpt-product">
+        <h1>${p.title || r.asin}</h1>
+        <div class="rpt-meta">
+          <span class="rpt-tag">📦 ${r.asin}</span>
+          ${p.brand ? `<span class="rpt-tag">🏷️ ${p.brand}</span>` : ''}
+          ${p.price ? `<span class="rpt-tag">💲 $${p.price.toFixed(2)}</span>` : ''}
+          ${p.rating ? `<span class="rpt-tag">⭐ ${p.rating}/5 (${(p.reviewCount || 0).toLocaleString()} reviews)</span>` : ''}
+          ${p.bsr ? `<span class="rpt-tag">📊 #${p.bsr.toLocaleString()} in ${p.category || 'N/A'}</span>` : ''}
+        </div>
+      </div>
+      <div class="rpt-grade">
+        <div class="grade-letter" style="color:${gc}">${r.grade}</div>
+        <div class="grade-score">${r.overall}<em>/100</em></div>
+        <div class="grade-label">Overall Score</div>
+      </div>
+    </div>
+
+    <!-- SCORES GRID -->
+    <div class="scores-grid">
+      ${Object.entries(s).map(([key, val]) => {
+        const c = getScoreColor(val);
+        return `
+        <div class="score-card">
+          <div class="sc-label">${scoreNames[key] || key}</div>
+          <div class="sc-value c-${c}">${val}<span style="font-size:14px;color:var(--muted);font-weight:500;">/10</span></div>
+          <div class="sc-bar"><div class="sc-bar-fill bg-${c}" style="width:${val * 10}%"></div></div>
+          <div class="sc-status c-${c}">${getScoreLabel(val)}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- DETAIL CARDS -->
+    <div class="detail-grid">
+      <div class="detail-card">
+        <div class="dc-header"><div class="dc-icon" style="background:var(--blue-soft);">📝</div><div class="dc-title">Content Analysis</div></div>
+        <div class="dc-body">
+          <div class="dc-row"><label>Title Length</label><strong>${p.title?.length || 0} chars</strong></div>
+          <div class="dc-row"><label>Bullet Points</label><strong>${p.bulletCount || 0} / 5</strong></div>
+          <div class="dc-row"><label>A+ Content</label><strong style="color:${p.hasAPlus ? 'var(--green)' : 'var(--red)'}">${p.hasAPlus ? '✓ Active' : '✗ Missing'}</strong></div>
+          <div class="dc-row"><label>Product Video</label><strong style="color:${p.hasVideo ? 'var(--green)' : 'var(--red)'}">${p.hasVideo ? '✓ Present' : '✗ Missing'}</strong></div>
+          <div class="dc-row"><label>Images</label><strong>${p.imageCount || 0} photos</strong></div>
+        </div>
+      </div>
+      <div class="detail-card">
+        <div class="dc-header"><div class="dc-icon" style="background:var(--green-bg);">📊</div><div class="dc-title">Performance Metrics</div></div>
+        <div class="dc-body">
+          <div class="dc-row"><label>Price</label><strong>$${(p.price || 0).toFixed(2)}</strong></div>
+          <div class="dc-row"><label>Rating</label><strong>${p.rating || 'N/A'} / 5.0</strong></div>
+          <div class="dc-row"><label>Total Reviews</label><strong>${(p.reviewCount || 0).toLocaleString()}</strong></div>
+          <div class="dc-row"><label>BSR</label><strong>#${(p.bsr || 0).toLocaleString()}</strong></div>
+          <div class="dc-row"><label>Q&A Count</label><strong>${p.qaCount || 0} answered</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTION ITEMS -->
+    <div class="actions-card">
+      <div class="ac-header">
+        <h2>🎯 Prioritized Action Plan</h2>
+        <p>${r.actions?.length || 0} recommendations to improve your listing</p>
+      </div>
+      ${(r.actions || []).map(a => `
+      <div class="action-item">
+        <div class="ai-priority ${a.priority}" style="min-height:40px;"></div>
+        <div class="ai-body">
+          <h4>${a.category} <span class="ai-badge ${a.priority}">${a.priority}</span></h4>
+          <p>${a.text}</p>
+        </div>
+      </div>`).join('')}
+      ${(!r.actions || r.actions.length === 0) ? '<div style="padding:24px;text-align:center;color:var(--muted);">No critical issues found — your listing is in great shape! 🎉</div>' : ''}
+    </div>
+
+    <!-- CTA -->
+    <div class="rpt-cta">
+      <h2>Want to track your score over time?</h2>
+      <p>Re-run this analysis monthly. See how your changes impact your score.</p>
+      <a href="/">Analyze Another ASIN →</a>
+    </div>
+  `;
+
+  // Animate score bars
+  setTimeout(() => {
+    document.querySelectorAll('.sc-bar-fill').forEach(bar => {
+      const w = bar.style.width;
+      bar.style.width = '0%';
+      setTimeout(() => { bar.style.width = w; }, 100);
+    });
+  }, 100);
+
+  // Update page title
+  document.title = `${r.asin} — ${r.grade} (${r.overall}/100) — ASIN Analyzer`;
+}
+</script>
+</body>
+</html>
