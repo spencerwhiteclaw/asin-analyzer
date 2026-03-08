@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analysis History — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--yellow:#F59E0B;--red:#EF4444;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+.dash-nav{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:16px 40px;background:var(--bg);border-bottom:1px solid var(--border);}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);text-decoration:none;}
+.logo-text span{color:var(--blue);}
+.dash-nav-r{display:flex;align-items:center;gap:24px;}
+.dash-nav-r a{color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;}
+.dash-nav-r a:hover{color:var(--text);}
+.dash-nav-r a.active{color:var(--blue);font-weight:600;}
+.wrap{max-width:1200px;margin:0 auto;padding:32px 40px 80px;}
+h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;}
+.page-sub{font-size:15px;color:var(--text2);margin-bottom:24px;}
+.history-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;}
+.report-row{display:grid;grid-template-columns:50px 1fr 80px 80px 100px 60px;gap:16px;padding:14px 24px;border-bottom:1px solid var(--bg3);align-items:center;transition:background .15s;}
+.report-row:last-child{border:none;}
+.report-row:hover{background:var(--bg2);}
+.report-row.header{background:var(--bg2);font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+.rr-grade{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;text-align:center;}
+.rr-info h4{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:500px;}
+.rr-info p{font-size:12px;color:var(--muted);}
+.rr-score{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;text-align:center;}
+.rr-issues{font-size:13px;color:var(--text2);text-align:center;}
+.rr-date{font-size:12px;color:var(--muted);text-align:center;}
+.rr-link{font-size:13px;color:var(--blue);font-weight:600;text-decoration:none;text-align:center;}
+.rr-link:hover{text-decoration:underline;}
+.empty-state{padding:60px 24px;text-align:center;color:var(--muted);}
+.empty-state h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.pagination{display:flex;justify-content:center;gap:8px;margin-top:20px;}
+.page-btn{padding:8px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s;}
+.page-btn:hover{background:var(--bg2);}
+.page-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+@media(max-width:768px){.report-row{grid-template-columns:40px 1fr 60px 60px;}.rr-issues,.rr-date{display:none;}}
+</style>
+</head>
+<body>
+<div class="dash-nav">
+  <a href="/" class="logo-text">ASIN <span>Analyzer</span></a>
+  <div class="dash-nav-r">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/dashboard/history" class="active">History</a>
+    <a href="/dashboard/account">Account</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <h1>Analysis History</h1>
+  <p class="page-sub" id="pageSub">All your past reports in one place</p>
+
+  <div class="history-card">
+    <div class="report-row header">
+      <div>Grade</div><div>Product</div><div>Score</div><div>Issues</div><div>Date</div><div></div>
+    </div>
+    <div id="historyList">
+      <div class="empty-state"><h3>Loading...</h3></div>
+    </div>
+  </div>
+  <div class="pagination" id="pagination"></div>
+</div>
+
+<script>
+const token = localStorage.getItem('sb_access_token');
+if (!token) window.location.href = '/login';
+
+let currentPage = 1;
+const perPage = 20;
+
+async function loadHistory(page) {
+  try {
+    const resp = await fetch(`/api/history?page=${page}&limit=${perPage}`, {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (resp.status === 401) { window.location.href = '/login'; return; }
+    const data = await resp.json();
+
+    document.getElementById('pageSub').textContent = `${data.total} total reports`;
+    const getColor = (s) => s >= 80 ? 'var(--green)' : s >= 60 ? 'var(--blue)' : s >= 40 ? 'var(--yellow)' : 'var(--red)';
+
+    if (!data.reports?.length) {
+      document.getElementById('historyList').innerHTML = '<div class="empty-state"><h3>No reports yet</h3><p>Run your first analysis from the <a href="/dashboard" style="color:var(--blue);">dashboard</a>.</p></div>';
+      return;
+    }
+
+    document.getElementById('historyList').innerHTML = data.reports.map(r => `
+      <div class="report-row">
+        <div class="rr-grade" style="color:${getColor(r.overall_score)}">${r.overall_grade}</div>
+        <div class="rr-info"><h4>${r.product_title || r.asin}</h4><p>${r.asin}${r.brand ? ' · ' + r.brand : ''} · $${parseFloat(r.price || 0).toFixed(2)}</p></div>
+        <div class="rr-score" style="color:${getColor(r.overall_score)}">${r.overall_score}/100</div>
+        <div class="rr-issues">${(r.action_items || []).length}</div>
+        <div class="rr-date">${new Date(r.created_at).toLocaleDateString()}</div>
+        <a href="/report/${r.id}" class="rr-link">View</a>
+      </div>
+    `).join('');
+
+    // Pagination
+    const totalPages = Math.ceil(data.total / perPage);
+    if (totalPages > 1) {
+      let html = '';
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="page-btn ${i === page ? 'active' : ''}" onclick="loadHistory(${i})">${i}</button>`;
+      }
+      document.getElementById('pagination').innerHTML = html;
+    }
+  } catch (err) {
+    document.getElementById('historyList').innerHTML = '<div class="empty-state"><h3>Failed to load</h3><p>Please try again.</p></div>';
+  }
+}
+
+loadHistory(1);
+</script>
+</body>
+</html>

@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASIN Analyzer — Diagnose Your Listing. Dominate Your Category.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue: #3B82F6;
+  --blue-dark: #2563EB;
+  --blue-light: #60A5FA;
+  --blue-soft: rgba(59,130,246,0.06);
+  --blue-glow: rgba(59,130,246,0.15);
+  --blue-ring: rgba(59,130,246,0.08);
+  --gold: #F5A623;
+  --gold-light: #FFD580;
+  --green: #10B981;
+  --green-light: #34D399;
+  --green-bg: #ECFDF5;
+  --green-border: #A7F3D0;
+  --red: #EF4444;
+  --red-soft: rgba(239,68,68,0.06);
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --text-faint: #CBD5E1;
+  --border: #E2E8F0;
+  --border-light: #F1F5F9;
+  --bg: #FFFFFF;
+  --bg-subtle: #F8FAFC;
+  --bg-section: #F1F5F9;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+  --shadow-xl: 0 24px 60px rgba(0,0,0,0.06);
+  --r: 12px;
+  --r2: 16px;
+  --r3: 20px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ═══ NAV ═══ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1320px; margin: 0 auto; padding: 16px 40px;
+  background: rgba(255,255,255,0.82); backdrop-filter: blur(20px) saturate(1.8);
+  border-bottom: 1px solid var(--border);
+}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-text { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 21px; font-weight: 800; color: var(--text-primary); }
+.logo-text span { color: var(--blue); }
+.logo-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: -2px; }
+.nav-r { display: flex; align-items: center; gap: 32px; }
+.nav-r a { color: var(--text-secondary); font-size: 14px; font-weight: 500; text-decoration: none; transition: color .2s; }
+.nav-r a:hover { color: var(--text-primary); }
+.nav-btn {
+  background: var(--blue) !important; color: #fff !important;
+  padding: 10px 22px; border-radius: 10px; font-weight: 600 !important; font-size: 14px !important;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.25); transition: all .2s !important;
+}
+.nav-btn:hover { background: var(--blue-dark) !important; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(59,130,246,0.35) !important; }
+
+/* ═══ HERO ═══ */
+.hero {
+  max-width: 1320px; margin: 0 auto; padding: 110px 40px 80px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  position: relative;
+}
+.hero::before {
+  content: ''; position: absolute; top: -100px; right: -200px;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(59,130,246,0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-left { position: relative; z-index: 2; }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 100px;
+  padding: 6px 16px 6px 10px; font-size: 13px; color: var(--text-secondary); font-weight: 500;
+  margin-bottom: 28px; animation: fadeInUp 0.6s ease both;
+}
+.hero-badge-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+.hero h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 50px; font-weight: 800;
+  line-height: 1.12; letter-spacing: -0.03em; color: var(--text-primary);
+  margin-bottom: 22px; animation: fadeInUp 0.6s 0.1s ease both;
+}
+.hero h1 em { font-style: italic; color: var(--blue); }
+
+.hero-sub {
+  font-size: 17px; line-height: 1.75; color: var(--text-secondary);
+  margin-bottom: 32px; max-width: 500px; animation: fadeInUp 0.6s 0.2s ease both;
+}
+.hero-sub strong { color: var(--text-primary); font-weight: 600; }
+
+.search-bar {
+  display: flex; align-items: center; background: var(--bg);
+  border: 2px solid var(--border); border-radius: var(--r2); padding: 6px;
+  max-width: 520px; transition: border-color .3s, box-shadow .3s;
+  animation: fadeInUp 0.6s 0.3s ease both;
+}
+.search-bar:focus-within { border-color: var(--blue); box-shadow: 0 0 0 4px var(--blue-ring); }
+.search-bar input {
+  flex: 1; border: none; outline: none; font-size: 15px; padding: 14px 18px;
+  color: var(--text-primary); font-family: 'DM Sans', sans-serif; background: transparent;
+}
+.search-bar input::placeholder { color: var(--text-muted); }
+.search-bar button {
+  background: var(--blue); color: #fff; border: none; padding: 14px 28px;
+  border-radius: var(--r); font-family: 'DM Sans', sans-serif; font-size: 15px;
+  font-weight: 600; cursor: pointer; transition: all .2s; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.25);
+}
+.search-bar button:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(59,130,246,0.35); }
+
+.search-examples { margin-top: 14px; font-size: 13px; color: var(--text-muted); animation: fadeInUp 0.6s 0.35s ease both; }
+.search-examples a { color: var(--blue); text-decoration: none; font-weight: 500; font-family: 'DM Sans', monospace; transition: color .2s; }
+.search-examples a:hover { text-decoration: underline; }
+
+.trust-row { display: flex; gap: 24px; margin-top: 24px; animation: fadeInUp 0.6s 0.4s ease both; }
+.trust-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+.trust-item svg { width: 16px; height: 16px; color: var(--green); flex-shrink: 0; }
+
+/* ═══ DIAGNOSIS CARD ═══ */
+.hero-right { display: flex; justify-content: center; position: relative; z-index: 2; animation: fadeInUp 0.8s 0.3s ease both; }
+.diagnosis-card {
+  width: 440px; background: var(--bg); border-radius: var(--r3);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm), var(--shadow-lg), var(--shadow-xl);
+  overflow: hidden; position: relative;
+}
+.floating-element { position: absolute; pointer-events: none; z-index: 0; }
+.float-1 { top:-30px; right:-20px; width:120px; height:120px; background:radial-gradient(circle,rgba(59,130,246,0.06) 0%,transparent 70%); border-radius:50%; animation:float 6s ease-in-out infinite; }
+.float-2 { bottom:-20px; left:-30px; width:80px; height:80px; background:radial-gradient(circle,rgba(59,130,246,0.04) 0%,transparent 70%); border-radius:50%; animation:float 8s ease-in-out infinite reverse; }
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+
+.card-header { display:flex; align-items:center; justify-content:space-between; padding:18px 22px 14px; border-bottom:1px solid var(--border); }
+.card-header-left { display:flex; align-items:center; gap:10px; }
+.card-icon { width:36px; height:36px; background:linear-gradient(135deg,var(--blue),#6366F1); border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.card-icon svg { width:18px; height:18px; color:#fff; }
+.card-title { font-family:'Plus Jakarta Sans',sans-serif; font-size:17px; font-weight:700; color:var(--text-primary); }
+.card-subtitle { font-size:13px; color:var(--text-muted); }
+.brand-badge { display:flex; align-items:center; gap:4px; background:var(--green-bg); border:1px solid var(--green-border); color:var(--green); font-size:12px; font-weight:700; padding:4px 10px; border-radius:100px; }
+.brand-badge svg { width:12px; height:12px; }
+
+.grade-section { display:flex; align-items:center; justify-content:center; padding:22px 22px 18px; gap:18px; }
+.grade-ring { position:relative; width:96px; height:96px; }
+.grade-ring svg { width:96px; height:96px; transform:rotate(-90deg); }
+.grade-ring-bg { fill:none; stroke:var(--bg-section); stroke-width:6; }
+.grade-ring-fill { fill:none; stroke:url(#gradeGradient); stroke-width:6; stroke-linecap:round; stroke-dasharray:264; stroke-dashoffset:52.8; animation:ringFill 1.5s 0.6s ease both; }
+@keyframes ringFill { from{stroke-dashoffset:264;} to{stroke-dashoffset:52.8;} }
+.grade-letter { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:'Plus Jakarta Sans',sans-serif; font-size:36px; font-weight:800; color:var(--text-primary); }
+.grade-letter sup { font-size:18px; font-weight:700; color:var(--gold); position:relative; top:-6px; }
+.grade-info { flex:1; }
+.grade-score { font-family:'Plus Jakarta Sans',sans-serif; font-size:28px; font-weight:800; color:var(--text-primary); }
+.grade-score span { font-size:16px; font-weight:500; color:var(--text-muted); }
+.grade-label { font-size:14px; color:var(--text-secondary); margin-top:2px; }
+.grade-change { display:inline-flex; align-items:center; gap:4px; margin-top:6px; font-size:13px; font-weight:700; color:var(--green); background:var(--green-bg); padding:3px 8px; border-radius:6px; }
+
+.metrics-section { padding:0 22px 18px; }
+.metric-row { display:flex; align-items:center; padding:8px 0; border-bottom:1px solid rgba(226,232,240,0.6); }
+.metric-row:last-child { border-bottom:none; }
+.metric-label { width:120px; font-size:12px; font-weight:600; color:var(--text-secondary); flex-shrink:0; }
+.metric-bar-wrap { flex:1; height:6px; background:var(--bg-section); border-radius:100px; margin:0 12px; overflow:hidden; }
+.metric-bar { height:100%; border-radius:100px; transition:width 1.2s cubic-bezier(0.4,0,0.2,1); }
+.metric-bar.excellent { background:linear-gradient(90deg,#10B981,#34D399); }
+.metric-bar.good { background:linear-gradient(90deg,#3B82F6,#60A5FA); }
+.metric-bar.warning { background:linear-gradient(90deg,#F59E0B,#FBBF24); }
+.metric-bar.danger { background:linear-gradient(90deg,#EF4444,#F87171); }
+.metric-score { width:32px; text-align:right; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; color:var(--text-primary); flex-shrink:0; }
+
+.alert-banner { margin:0 14px 14px; display:flex; align-items:center; gap:8px; padding:10px 12px; background:#FFF7ED; border:1px solid #FED7AA; border-radius:10px; font-size:13px; color:#C2410C; font-weight:600; }
+.alert-banner svg { width:14px; height:14px; flex-shrink:0; color:#F97316; }
+
+.card-footer { padding:12px 22px; background:var(--bg-subtle); border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.footer-status { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-muted); font-weight:500; }
+.footer-status-dot { width:6px; height:6px; background:var(--green); border-radius:50%; }
+.footer-link { font-size:12px; color:var(--blue); font-weight:600; text-decoration:none; display:flex; align-items:center; gap:4px; transition:gap .2s; }
+.footer-link:hover { gap:8px; }
+
+/* ═══ SECTIONS ═══ */
+.section { max-width: 1320px; margin: 0 auto; padding: 100px 40px; }
+.section-alt { background: var(--bg-subtle); }
+.section-border { border-top: 1px solid var(--border); }
+.tag { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
+.sh { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(32px,4vw,48px); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; color: var(--text-primary); margin-bottom: 16px; }
+.sp { font-size: 17px; max-width: 580px; line-height: 1.75; color: var(--text-secondary); margin-bottom: 48px; }
+.divider { height: 1px; background: var(--border); max-width: 1320px; margin: 0 auto; }
+
+/* ═══ METRICS BAR ═══ */
+.metrics-strip {
+  max-width: 1320px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.metrics-strip .m { padding: 40px 24px; text-align: center; border-right: 1px solid var(--border); }
+.metrics-strip .m:last-child { border: none; }
+.metrics-strip .m .num { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; color: var(--text-primary); line-height: 1; }
+.metrics-strip .m .lbl { font-size: 12px; color: var(--text-muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
+
+/* ═══ PAIN CARDS ═══ */
+.pain-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.pain-card {
+  padding: 28px; border-radius: var(--r2); border: 1px solid var(--border); background: var(--bg);
+  transition: transform .25s, box-shadow .25s;
+}
+.pain-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.pain-card .emoji { font-size: 32px; margin-bottom: 14px; }
+.pain-card h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+.pain-card p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
+
+.cost-callout {
+  border: 1px solid var(--border); border-radius: var(--r3); padding: 48px; text-align: center;
+  margin-top: 40px; background: var(--bg-subtle);
+}
+.cost-callout h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; color: var(--text-secondary); font-weight: 600; margin-bottom: 8px; }
+.cost-num { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 64px; font-weight: 800; color: var(--text-primary); line-height: 1; margin-bottom: 8px; }
+.cost-callout p { font-size: 16px; color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.7; }
+.cost-sub { font-size: 13px; color: var(--text-muted); margin-top: 12px; }
+
+/* ═══ CASE STUDIES ═══ */
+.case-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; }
+.case-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r3); overflow: hidden; transition: transform .25s, box-shadow .25s; }
+.case-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.case-top { padding: 28px 28px 0; display: flex; align-items: flex-start; gap: 16px; }
+.case-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg,var(--blue),var(--blue-light)); display: grid; place-items: center; font-size: 17px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.case-meta h4 { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+.case-meta span { font-size: 13px; color: var(--text-muted); }
+.case-tag { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); margin-bottom: 6px; }
+.case-body { padding: 18px 28px; }
+.case-body blockquote { font-size: 16px; color: var(--text-secondary); line-height: 1.7; font-style: italic; }
+.case-results { display: grid; grid-template-columns: repeat(3,1fr); border-top: 1px solid var(--border); }
+.case-stat { padding: 18px; text-align: center; border-right: 1px solid var(--border); }
+.case-stat:last-child { border: none; }
+.case-stat .val { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 800; margin-bottom: 2px; }
+.case-stat .val.green { color: var(--green); }
+.case-stat .val.blue { color: var(--blue); }
+.case-stat .val.gold { color: var(--gold); }
+.case-stat .desc { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+
+/* ═══ 12 SCORING ═══ */
+.score-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border-radius: var(--r3); overflow: hidden; }
+.score-item { background: var(--bg); padding: 28px; position: relative; transition: background .2s; }
+.score-item:hover { background: var(--bg-subtle); }
+.score-num { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; font-weight: 800; color: var(--border); position: absolute; top: 24px; right: 24px; }
+.score-item h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--text-primary); }
+.score-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+.score-tag { display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; background: var(--blue-soft); color: var(--blue); }
+
+/* ═══ HOW IT WORKS ═══ */
+.flow { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 48px; position: relative; }
+.flow::before { content:''; position:absolute; top:32px; left:16%; right:16%; height:1px; background:var(--border); z-index:0; }
+.flow-step { text-align: center; position: relative; z-index: 1; padding: 0 20px; }
+.flow-n { width: 56px; height: 56px; margin: 0 auto 18px; border-radius: 50%; background: var(--blue); display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 800; color: #fff; box-shadow: 0 4px 16px rgba(59,130,246,0.25); }
+.flow-step h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+.flow-step p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 280px; margin: 0 auto; }
+
+/* ═══ FEATURES ═══ */
+.feature-trio { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 48px; }
+.feature-card {
+  border: 1px solid var(--border); border-radius: var(--r3); padding: 36px; text-align: center;
+  transition: transform .25s, box-shadow .25s; background: var(--bg);
+}
+.feature-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.feature-icon { font-size: 40px; margin-bottom: 14px; }
+.feature-card h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.feature-card p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
+
+/* ═══ COMPARISON ═══ */
+.cmp { max-width: 780px; margin: 40px auto 0; border: 1px solid var(--border); border-radius: var(--r3); overflow: hidden; }
+.c-row { display: grid; grid-template-columns: 1.5fr 90px 90px 90px; border-bottom: 1px solid var(--border); }
+.c-row:last-child { border: none; }
+.c-head { background: var(--bg-subtle); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.c-cell { padding: 14px 16px; font-size: 14px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; }
+.c-cell:first-child { justify-content: flex-start; font-weight: 600; color: var(--text-primary); }
+.c-y { color: var(--blue); font-weight: 800; font-size: 16px; }
+.c-n { color: var(--text-faint); font-size: 16px; }
+
+/* ═══ TESTIMONIALS ═══ */
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.testi-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r3); padding: 28px; transition: transform .25s; }
+.testi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.testi-stars { color: var(--gold); font-size: 16px; margin-bottom: 12px; letter-spacing: 2px; }
+.testi-card blockquote { font-size: 15px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+.testi-foot { display: flex; align-items: center; gap: 10px; }
+.testi-av { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,var(--blue),var(--blue-light)); display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #fff; }
+.testi-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.testi-role { font-size: 13px; color: var(--text-muted); }
+
+/* ═══ QUOTE ═══ */
+.quote-section {
+  max-width: 1320px; margin: 0 auto; padding: 80px 40px; text-align: center;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.quote-text {
+  max-width: 700px; margin: 0 auto;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(24px,3vw,36px); font-weight: 800;
+  line-height: 1.35; color: var(--text-primary); letter-spacing: -0.02em;
+}
+.quote-text em { font-style: italic; color: var(--blue); }
+.quote-attr { margin-top: 14px; font-size: 14px; color: var(--text-muted); font-weight: 500; }
+
+/* ═══ VALUE STACK ═══ */
+.stack-section { background: var(--text-primary); color: #fff; padding: 100px 40px; text-align: center; }
+.stack-section .tag { color: var(--blue-light); }
+.stack-section .sh { color: #fff; }
+.stack-section .sp { color: rgba(255,255,255,0.5); margin: 0 auto 48px; }
+.stk { max-width: 520px; margin: 0 auto; }
+.stk-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.stk-row .n { font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.85); }
+.stk-row .v { font-size: 16px; color: rgba(255,255,255,0.3); text-decoration: line-through; }
+.stk-box {
+  max-width: 520px; margin: 16px auto 0; padding: 22px 28px;
+  border: 1px solid rgba(59,130,246,0.3); border-radius: var(--r2);
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(59,130,246,0.08);
+}
+.stk-box .l { font-size: 20px; font-weight: 800; color: rgba(255,255,255,0.7); }
+.stk-box .p { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 48px; font-weight: 800; color: var(--blue-light); }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 16px 40px; background: var(--blue); color: #fff; border: none; border-radius: var(--r);
+  font-size: 16px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; text-decoration: none; transition: all .2s;
+  box-shadow: 0 4px 16px rgba(59,130,246,0.3);
+}
+.btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.35); }
+.stack-note { margin-top: 14px; font-size: 14px; color: rgba(255,255,255,0.35); }
+
+/* ═══ PRICING ═══ */
+.pricing-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 48px; }
+.price-card {
+  border: 1px solid var(--border); border-radius: var(--r3); padding: 32px 24px;
+  text-align: center; position: relative; transition: transform .25s, box-shadow .25s; background: var(--bg);
+}
+.price-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.price-card.popular { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue), var(--shadow-lg); }
+.price-card.popular::before {
+  content: 'MOST POPULAR'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--blue); color: #fff; font-size: 11px; font-weight: 700;
+  padding: 4px 14px; border-radius: 100px; letter-spacing: 1px;
+}
+.price-tier { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 6px; }
+.price-amt { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 44px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
+.price-amt .currency { font-size: 22px; vertical-align: top; position: relative; top: 6px; }
+.price-amt .period { font-size: 15px; color: var(--text-muted); font-weight: 400; font-family: 'DM Sans', sans-serif; }
+.price-desc { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; min-height: 36px; }
+.price-features { text-align: left; margin-bottom: 24px; }
+.price-features li { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; font-size: 14px; color: var(--text-secondary); border-bottom: 1px solid var(--border-light); list-style: none; }
+.price-features li:last-child { border: none; }
+.price-features li::before { content: '✓'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
+.price-btn {
+  display: block; width: 100%; padding: 12px; border-radius: 10px;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+  text-decoration: none; text-align: center; transition: all .15s; cursor: pointer; border: none;
+}
+.price-btn.btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text-primary); }
+.price-btn.btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+.price-btn.btn-fill { background: var(--blue); color: #fff; }
+.price-btn.btn-fill:hover { background: var(--blue-dark); box-shadow: 0 4px 16px rgba(59,130,246,0.3); }
+.price-guarantee { text-align: center; margin-top: 28px; font-size: 14px; color: var(--text-muted); }
+.price-guarantee strong { color: var(--text-secondary); }
+
+/* ═══ FAQ ═══ */
+.faq { max-width: 660px; margin: 40px auto 0; }
+.fq { border-bottom: 1px solid var(--border); }
+.fq-q {
+  padding: 20px 0; font-size: 17px; font-weight: 600; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center;
+  color: var(--text-primary); transition: color .2s;
+}
+.fq-q:hover { color: var(--blue); }
+.fq-q .ic { color: var(--blue); font-size: 20px; transition: transform .3s; }
+.fq-a { max-height: 0; overflow: hidden; font-size: 15px; color: var(--text-secondary); line-height: 1.8; transition: max-height .35s, padding .35s; }
+.fq.open .fq-a { max-height: 400px; padding-bottom: 18px; }
+.fq.open .ic { transform: rotate(45deg); }
+
+/* ═══ NEWSLETTER ═══ */
+.newsletter {
+  max-width: 1320px; margin: 0 auto; padding: 40px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; gap: 36px;
+}
+.newsletter-text h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+.newsletter-text p { font-size: 14px; color: var(--text-muted); }
+.newsletter-form { display: flex; gap: 8px; }
+.newsletter-form input { padding: 10px 16px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--bg); color: var(--text-primary); font-size: 14px; font-family: 'DM Sans', sans-serif; width: 260px; }
+.newsletter-form input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-ring); }
+.newsletter-form button { padding: 10px 20px; border-radius: 10px; background: var(--blue); color: #fff; border: none; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .15s; }
+.newsletter-form button:hover { background: var(--blue-dark); }
+
+/* ═══ FINAL CTA ═══ */
+.cta-end {
+  max-width: 1320px; margin: 0 auto; padding: 100px 40px; text-align: center;
+  border-top: 1px solid var(--border);
+}
+.cta-end h2 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(32px,4vw,48px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 14px; color: var(--text-primary); }
+.cta-end h2 em { font-style: italic; color: var(--blue); }
+.cta-end p { font-size: 17px; color: var(--text-secondary); max-width: 460px; margin: 0 auto 36px; }
+.cta-note { margin-top: 14px; font-size: 14px; color: var(--text-muted); }
+
+footer {
+  max-width: 1320px; margin: 0 auto; padding: 30px 40px;
+  border-top: 1px solid var(--border); text-align: center; font-size: 13px; color: var(--text-muted);
+}
+footer a { color: var(--blue); text-decoration: none; }
+.footer-brand { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
+
+/* ═══ ANIMATIONS ═══ */
+.ao { opacity:0; transform:translateY(24px); transition:opacity .7s cubic-bezier(0.22,1,0.36,1), transform .7s cubic-bezier(0.22,1,0.36,1); }
+.ao.vis { opacity:1; transform:none; }
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:1024px) {
+  .hero { grid-template-columns:1fr; gap:50px; padding:100px 24px 60px; }
+  .hero h1 { font-size:38px; }
+  .diagnosis-card { width:100%; max-width:440px; }
+  .pain-grid, .score-grid { grid-template-columns:repeat(2,1fr); }
+  .case-grid { grid-template-columns:1fr; }
+  .pricing-grid { grid-template-columns:repeat(2,1fr); }
+  .feature-trio { grid-template-columns:1fr; }
+  .metrics-strip { grid-template-columns:repeat(2,1fr); }
+  .newsletter { flex-direction:column; text-align:center; }
+}
+@media(max-width:640px) {
+  nav { padding:14px 20px; }
+  .nav-r a:not(.nav-btn) { display:none; }
+  .hero h1 { font-size:30px; }
+  .section { padding:60px 20px; }
+  .search-bar { flex-direction:column; }
+  .search-bar button { width:100%; }
+  .trust-row { flex-wrap:wrap; gap:12px; }
+  .pain-grid, .score-grid, .testi-grid { grid-template-columns:1fr; }
+  .pricing-grid { grid-template-columns:1fr; }
+  .case-results { grid-template-columns:1fr; }
+  .c-row { grid-template-columns:1.2fr 55px 55px 55px; }
+  .metrics-strip { grid-template-columns:repeat(2,1fr); }
+  .stack-section { padding:60px 20px; }
+  .newsletter-form { flex-direction:column; width:100%; }
+  .newsletter-form input { width:100%; }
+}
+</style>
+</head>
+<body id="top">
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div>
+      <div class="logo-text">ASIN <span>Analyzer</span></div>
+      <div class="logo-sub">Trusted by 14,000+ Amazon sellers</div>
+    </div>
+  </a>
+  <div class="nav-r">
+    <a href="#features">Features</a>
+    <a href="#how">How It Works</a>
+    <a href="#proof">Results</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
+    <a href="#top" class="nav-btn">Analyze Free →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Free · 12-point diagnostic · 30 seconds
+    </div>
+
+    <h1>Your Amazon listing is losing you money right now. <em>We'll prove it in 30 seconds.</em></h1>
+
+    <p class="hero-sub">
+      Paste any ASIN and get an instant <strong>12-point diagnostic</strong> with A–F grades, competitor benchmarks, review sentiment analysis, and a prioritized action plan. <strong>The same audit agencies charge $2,000+ for.</strong>
+    </p>
+
+    <div class="search-bar" id="searchBar">
+      <input type="text" id="asinInput" placeholder="Paste your ASIN (e.g. B08N5WRWNW)" maxlength="10" />
+      <button id="analyzeBtn" onclick="startAnalysis()">Diagnose My Listing →</button>
+    </div>
+    <div id="searchError" style="display:none;margin-top:8px;font-size:13px;color:var(--red);font-weight:600;"></div>
+
+    <div class="search-examples">
+      Try it now: &nbsp;
+      <a href="#" onclick="fillASIN('B0BSHF7WHW');return false;">B0BSHF7WHW</a> &nbsp;·&nbsp;
+      <a href="#" onclick="fillASIN('B09B8YWXDF');return false;">B09B8YWXDF</a> &nbsp;·&nbsp;
+      <a href="#" onclick="fillASIN('B08N5WRWNW');return false;">B08N5WRWNW</a>
+    </div>
+
+    <div class="trust-row">
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>100% free</div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>30-second results</div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>12 categories scored</div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="diagnosis-card">
+      <div class="floating-element float-1"></div>
+      <div class="floating-element float-2"></div>
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+          <div><div class="card-title">Listing Diagnosis</div><div class="card-subtitle">12-point analysis</div></div>
+        </div>
+        <div class="brand-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Registered</div>
+      </div>
+      <div class="grade-section">
+        <div class="grade-ring">
+          <svg viewBox="0 0 100 100"><defs><linearGradient id="gradeGradient" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#3B82F6"/><stop offset="100%" stop-color="#6366F1"/></linearGradient></defs><circle cx="50" cy="50" r="42" class="grade-ring-bg"/><circle cx="50" cy="50" r="42" class="grade-ring-fill"/></svg>
+          <div class="grade-letter">B<sup>+</sup></div>
+        </div>
+        <div class="grade-info">
+          <div class="grade-score">76 <span>/ 100</span></div>
+          <div class="grade-label">Overall Listing Score</div>
+          <div class="grade-change"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 1L9 6H1L5 1Z" fill="currentColor"/></svg>+12 vs. category avg</div>
+        </div>
+      </div>
+      <div class="metrics-section">
+        <div class="metric-row"><div class="metric-label">Title Quality</div><div class="metric-bar-wrap"><div class="metric-bar warning" style="width:55%"></div></div><div class="metric-score">55</div></div>
+        <div class="metric-row"><div class="metric-label">Bullet Points</div><div class="metric-bar-wrap"><div class="metric-bar good" style="width:80%"></div></div><div class="metric-score">80</div></div>
+        <div class="metric-row"><div class="metric-label">Competitive Position</div><div class="metric-bar-wrap"><div class="metric-bar excellent" style="width:92%"></div></div><div class="metric-score">92</div></div>
+        <div class="metric-row"><div class="metric-label">Keyword Rank</div><div class="metric-bar-wrap"><div class="metric-bar good" style="width:70%"></div></div><div class="metric-score">70</div></div>
+        <div class="metric-row"><div class="metric-label">Descriptions & A+</div><div class="metric-bar-wrap"><div class="metric-bar danger" style="width:38%"></div></div><div class="metric-score">38</div></div>
+        <div style="text-align:center; padding:12px 0 4px;">
+          <div style="font-size:13px; color:var(--text-muted); font-weight:500;">Plus 6 More Diagnoses</div>
+          <a href="#top" style="display:inline-block; margin-top:6px; font-size:13px; font-weight:700; color:var(--blue); text-decoration:none; transition:color .2s;">Get all 12 Action Steps →</a>
+        </div>
+      </div>
+      <div class="alert-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div>⚠ 23% of 1–2 star reviews share the same complaint — <b>fix plan ready</b></div></div>
+      <div class="card-footer"><div class="footer-status"><div class="footer-status-dot"></div>Analyzed just now</div><a href="#" class="footer-link">View full report <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics-strip">
+  <div class="m ao"><div class="num" data-count="14327">0</div><div class="lbl">Listings Analyzed</div></div>
+  <div class="m ao"><div class="num" data-prefix="$" data-suffix="M+" data-count="47">$0</div><div class="lbl">Revenue Optimized</div></div>
+  <div class="m ao"><div class="num" data-count="12">0</div><div class="lbl">Factors Scored</div></div>
+  <div class="m ao"><div class="num" data-suffix="s" data-count="30">0</div><div class="lbl">Avg Diagnosis Time</div></div>
+</div>
+
+<!-- THE PROBLEM -->
+<section class="section ao">
+  <div class="tag">The Problem</div>
+  <h2 class="sh">You're paying Amazon to lose money.</h2>
+  <p class="sp">Every day your listing stays unoptimized, you're funding your competitors. Here's exactly how it's happening.</p>
+  <div class="pain-grid">
+    <div class="pain-card"><div class="emoji">💸</div><h3>Burning Ad Spend</h3><p>Average FBA seller spends $37/day on PPC. If your listing converts at 8% instead of 15%, you're flushing $19/day straight into Amazon's pocket. That's <strong>$570/month</strong> gone.</p></div>
+    <div class="pain-card"><div class="emoji">👻</div><h3>Algorithmic Death Spiral</h3><p>Amazon's A10 algorithm rewards conversion rate. Bad listing → low conversion → lower rank → less traffic → even lower conversion. It's happening right now.</p></div>
+    <div class="pain-card"><div class="emoji">🏆</div><h3>Worse Products Outselling You</h3><p>Their product isn't better. Their listing is. Better images, sharper copy, stronger reviews. They're eating your market share with a product you could beat.</p></div>
+    <div class="pain-card"><div class="emoji">🎯</div><h3>Guessing Instead of Knowing</h3><p>You "feel" something's off but can't pinpoint it. So you change the title. Then the images. Then the price. No data, no framework, no idea what moved the needle.</p></div>
+    <div class="pain-card"><div class="emoji">📋</div><h3>Agencies Want $2K/Month</h3><p>For a PDF checklist and a "strategy call." You don't need a retainer. You need a diagnosis — in 30 seconds, not 30 days.</p></div>
+    <div class="pain-card"><div class="emoji">📉</div><h3>Review Landmines</h3><p>Buried in your 1-star reviews are the exact complaints killing your conversion. We read every single one and surface the patterns automatically.</p></div>
+  </div>
+  <div class="cost-callout">
+    <h3>The average unoptimized listing costs you</h3>
+    <div class="cost-num" id="costCounter">$2,847</div>
+    <p>per month in lost sales, wasted ad spend, and missed rank opportunities. That's $34,164 per year — for every listing.</p>
+    <div class="cost-sub">Based on average FBA seller metrics · 15% conversion gap × avg daily sessions × AOV</div>
+  </div>
+</section>
+
+<!-- CASE STUDIES -->
+<div class="section-alt">
+<section class="section ao" id="proof">
+  <div class="tag">Case Studies</div>
+  <h2 class="sh">They found the problem. Fixed it. The numbers exploded.</h2>
+  <p class="sp">These aren't testimonials. These are case studies with real metrics from sellers who ran one free report and changed everything.</p>
+  <div class="case-grid">
+    <div class="case-card">
+      <div class="case-top"><div class="case-avatar">MR</div><div class="case-meta"><div class="case-tag">Home & Kitchen · 7-Figure</div><h4>Mike R.</h4><span>$1.2M annual revenue · 14 ASINs</span></div></div>
+      <div class="case-body"><blockquote>"I was spending $3,100/month on PPC with a 4.2% conversion rate. The Analyzer flagged my bullets as feature-heavy with zero benefit language. Rewrote them in one afternoon. Two weeks later: 11.3% conversion. Same traffic. Same product. Same price."</blockquote></div>
+      <div class="case-results"><div class="case-stat"><div class="val green">+169%</div><div class="desc">Conversion Rate</div></div><div class="case-stat"><div class="val blue">$1,847</div><div class="desc">Monthly PPC Saved</div></div><div class="case-stat"><div class="val gold">9 days</div><div class="desc">Time to Result</div></div></div>
+    </div>
+    <div class="case-card">
+      <div class="case-top"><div class="case-avatar">SJ</div><div class="case-meta"><div class="case-tag">Beauty · 6-Figure</div><h4>Sarah J.</h4><span>$340K annual revenue · 6 ASINs</span></div></div>
+      <div class="case-body"><blockquote>"D+ on title quality. I had my brand name taking up half the character limit and zero search terms. The report showed me exactly what to fix and in what order. Page 3 to page 1 for my main keyword in 9 days."</blockquote></div>
+      <div class="case-results"><div class="case-stat"><div class="val green">Page 1</div><div class="desc">Keyword Rank</div></div><div class="case-stat"><div class="val blue">+214%</div><div class="desc">Organic Traffic</div></div><div class="case-stat"><div class="val gold">D+ → A-</div><div class="desc">Title Score</div></div></div>
+    </div>
+    <div class="case-card">
+      <div class="case-top"><div class="case-avatar">DK</div><div class="case-meta"><div class="case-tag">Sports & Outdoors · Multi-Brand</div><h4>David K.</h4><span>$2.1M annual revenue · 38 ASINs</span></div></div>
+      <div class="case-body"><blockquote>"Was paying an agency $2,200/month. They gave me a monthly PDF with the same recommendations. Ran all 38 ASINs through the Analyzer in one afternoon, got more actionable data than 6 months of agency reports. Cancelled them immediately."</blockquote></div>
+      <div class="case-results"><div class="case-stat"><div class="val green">$26,400</div><div class="desc">Annual Savings</div></div><div class="case-stat"><div class="val blue">38 ASINs</div><div class="desc">Audited in 1 Day</div></div><div class="case-stat"><div class="val gold">+31%</div><div class="desc">Avg Score Increase</div></div></div>
+    </div>
+    <div class="case-card">
+      <div class="case-top"><div class="case-avatar">JL</div><div class="case-meta"><div class="case-tag">Electronics · New Seller</div><h4>Jessica L.</h4><span>$89K first year · 3 ASINs</span></div></div>
+      <div class="case-body"><blockquote>"Brand new seller, no idea what I was doing wrong. The sentiment analysis found that 40% of my negative reviews mentioned 'confusing instructions.' Added an insert card and a product video. Returns dropped 60% in one month."</blockquote></div>
+      <div class="case-results"><div class="case-stat"><div class="val green">-60%</div><div class="desc">Return Rate</div></div><div class="case-stat"><div class="val blue">4.1 → 4.6</div><div class="desc">Star Rating</div></div><div class="case-stat"><div class="val gold">$890</div><div class="desc">Monthly Savings</div></div></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- QUOTE -->
+<div class="quote-section ao">
+  <div class="quote-text">"Stop optimizing <em>ad spend</em> when your listing converts like a <em>broken checkout page.</em> Fix the listing first. Then spend."</div>
+  <div class="quote-attr">— The Listing Doctor philosophy</div>
+</div>
+
+<!-- 12-POINT SCORING -->
+<section class="section ao" id="features">
+  <div class="tag">12-Point Diagnostic</div>
+  <h2 class="sh">We score everything that kills — or creates — sales.</h2>
+  <p class="sp">Each category gets a letter grade, a numerical score, specific findings, and a prioritized fix. Not vague advice — exact steps.</p>
+  <div class="score-grid">
+    <div class="score-item"><div class="score-num">01</div><h3>Title Quality</h3><p>Character count, keyword density, benefit language, brand positioning, readability.</p><div class="score-tag">Keywords · Clarity</div></div>
+    <div class="score-item"><div class="score-num">02</div><h3>Bullet Points</h3><p>Count, average length, benefit-to-feature ratio, keyword integration, emotional triggers.</p><div class="score-tag">Benefits · Structure</div></div>
+    <div class="score-item"><div class="score-num">03</div><h3>Description & A+</h3><p>A+ content presence, module variety, brand story, word count, cross-sell integration.</p><div class="score-tag">A+ · EBC · Depth</div></div>
+    <div class="score-item"><div class="score-num">04</div><h3>Image Audit</h3><p>Total count, type analysis — lifestyle, infographic, comparison. White background compliance.</p><div class="score-tag">Count · Types · Quality</div></div>
+    <div class="score-item"><div class="score-num">05</div><h3>Reviews & Rating</h3><p>Star rating, total count, distribution curve, velocity trend, category benchmark comparison.</p><div class="score-tag">Stars · Velocity</div></div>
+    <div class="score-item"><div class="score-num">06</div><h3>BSR & Rank</h3><p>Primary category rank, sub-category positions, rank trajectory, badge presence signals.</p><div class="score-tag">BSR · Trajectory</div></div>
+    <div class="score-item"><div class="score-num">07</div><h3>Q&A Health</h3><p>Total questions, seller response rate, unanswered flagged, keyword opportunities.</p><div class="score-tag">Engagement · Trust</div></div>
+    <div class="score-item"><div class="score-num">08</div><h3>Competitive Position</h3><p>Head-to-head vs. top 3 BSR competitors across price, reviews, images, content, and rank.</p><div class="score-tag">vs. Top 3 Competitors</div></div>
+    <div class="score-item"><div class="score-num">09</div><h3>Content Sentiment</h3><p>Top 3 recurring complaints from 1–2 star reviews. The exact words killing your conversion.</p><div class="score-tag">Review Mining</div></div>
+    <div class="score-item"><div class="score-num">10</div><h3>Badge & Visibility</h3><p>Amazon's Choice, Best Seller, Prime, Small Business, Climate Pledge — every trust signal.</p><div class="score-tag">Badges · Trust</div></div>
+    <div class="score-item"><div class="score-num">11</div><h3>Listing Completeness</h3><p>All fields populated, variants configured, missing attributes flagged, backend search terms.</p><div class="score-tag">Completeness</div></div>
+    <div class="score-item"><div class="score-num">12</div><h3>Keyword Rank Check</h3><p>Where your listing appears when searching your own title keywords. Organic visibility mapped.</p><div class="score-tag">Search Position</div></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="section-alt">
+<section class="section ao" id="how" style="text-align:center;">
+  <div class="tag">How It Works</div>
+  <h2 class="sh">Three steps. Thirty seconds. Zero excuses.</h2>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-n">1</div><h3>Paste Your ASIN</h3><p>Grab the 10-character code from any Amazon URL. No login, no signup, no credit card.</p></div>
+    <div class="flow-step"><div class="flow-n">2</div><h3>Get Diagnosed</h3><p>12 scored categories, A–F grades, competitor benchmarks, sentiment analysis — in 30 seconds.</p></div>
+    <div class="flow-step"><div class="flow-n">3</div><h3>Fix, Re-Test, Dominate</h3><p>Follow the prioritized action plan. Re-run the report. Watch your score climb and sales follow.</p></div>
+  </div>
+</section>
+</div>
+
+<!-- POWER FEATURES -->
+<section class="section ao" style="text-align:center;">
+  <div class="tag">Exclusive Features</div>
+  <h2 class="sh">Weapons your competitors don't have.</h2>
+  <div class="feature-trio">
+    <div class="feature-card"><div class="feature-icon">📈</div><h3>Re-Run Tracking</h3><p>Scan the same ASIN over time. Watch your score improve after every fix. See exactly which changes moved the needle. The feedback loop agencies never give you.</p></div>
+    <div class="feature-card"><div class="feature-icon">🎯</div><h3>Competitor X-Ray</h3><p>Enter any competitor's ASIN. See their scores, weaknesses, blind spots. Find the gap. Exploit it. This is how category leaders are built.</p></div>
+    <div class="feature-card"><div class="feature-icon">🏅</div><h3>Category Benchmarking</h3><p>"Your score is 72. Average in your category is 65. Top 10% score 88+." Now you know exactly where you stand and how far you need to go.</p></div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<div class="section-alt">
+<section class="section ao" style="text-align:center;">
+  <div class="tag">The Comparison</div>
+  <h2 class="sh">ASIN Analyzer vs. everything else.</h2>
+  <div class="cmp">
+    <div class="c-row c-head"><div class="c-cell"></div><div class="c-cell" style="color:var(--blue)">Analyzer</div><div class="c-cell">Agencies</div><div class="c-cell">Helium 10</div></div>
+    <div class="c-row"><div class="c-cell">Instant results</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">12-point listing audit</div><div class="c-cell c-y">✓</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">Review sentiment analysis</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">Competitor benchmarking</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-y">✓</div></div>
+    <div class="c-row"><div class="c-cell">Re-run tracking</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">Prioritized action plan</div><div class="c-cell c-y">✓</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">Category benchmarks</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">No contract</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-y">✓</div></div>
+    <div class="c-row"><div class="c-cell">Starting price</div><div class="c-cell" style="color:var(--green);font-weight:800">FREE</div><div class="c-cell" style="color:var(--red)">$2K+/mo</div><div class="c-cell" style="color:var(--red)">$79/mo</div></div>
+  </div>
+</section>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="section ao">
+  <div class="tag">What Sellers Say</div>
+  <h2 class="sh">Don't take our word for it.</h2>
+  <div class="testi-grid">
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"Ran my competitor's ASIN and found 4 weaknesses I could exploit. Launched a new variation targeting those gaps. $12K in the first month."</blockquote><div class="testi-foot"><div class="testi-av">RB</div><div><div class="testi-name">Ryan B.</div><div class="testi-role">Supplements · 8-Figure Brand</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"I manage 120+ ASINs for clients. The Agency plan lets me white-label reports and deliver them as my own. My clients think I'm a genius."</blockquote><div class="testi-foot"><div class="testi-av">AT</div><div><div class="testi-name">Amanda T.</div><div class="testi-role">Amazon Agency Owner</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"The sentiment analysis found 'chemical smell' in 31% of my 1-stars. Changed the packaging. Returns dropped 45% in three weeks."</blockquote><div class="testi-foot"><div class="testi-av">PG</div><div><div class="testi-name">Paul G.</div><div class="testi-role">Home Goods · 7-Figure</div></div></div></div>
+  </div>
+</section>
+
+<!-- VALUE STACK -->
+<div class="stack-section ao">
+  <div class="tag">What You're Getting</div>
+  <h2 class="sh">Everything. For free. No catch.</h2>
+  <p class="sp">Here's what agencies charge for this exact scope of work — and what you'll pay today.</p>
+  <div class="stk">
+    <div class="stk-row"><span class="n">✅ 12-Point Listing Diagnostic</span><span class="v">$497</span></div>
+    <div class="stk-row"><span class="n">✅ A–F Grades + Numerical Scores</span><span class="v">$197</span></div>
+    <div class="stk-row"><span class="n">✅ Review Sentiment Analysis</span><span class="v">$297</span></div>
+    <div class="stk-row"><span class="n">✅ Competitor Benchmarking</span><span class="v">$397</span></div>
+    <div class="stk-row"><span class="n">✅ Prioritized Action Plan</span><span class="v">$297</span></div>
+    <div class="stk-row"><span class="n">✅ Category Rank Positioning</span><span class="v">$197</span></div>
+    <div class="stk-row"><span class="n">✅ Keyword Visibility Check</span><span class="v">$197</span></div>
+    <div class="stk-row"><span class="n">✅ Weekly Seller Intelligence</span><span class="v">$47/mo</span></div>
+  </div>
+  <div class="stk-box"><span class="l">Total value: <span style="text-decoration:line-through;opacity:0.4">$2,126</span></span><span class="p">FREE</span></div>
+  <a href="#top" class="btn-primary" style="margin-top:32px;">Diagnose My Listing — Free →</a>
+  <div class="stack-note">No credit card · Email only · Full report, no blur, no tricks</div>
+</div>
+
+<!-- PRICING -->
+<section class="section ao" id="pricing" style="text-align:center;">
+  <div class="tag">Plans</div>
+  <h2 class="sh">Start free. Upgrade when you're addicted.</h2>
+  <p class="sp" style="margin:0 auto 16px;">The free report is real. Full detail, no blur, no paywall. Upgrade only when you want more.</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-tier">Free</div>
+      <div class="price-amt">0 <span class="period">forever</span></div>
+      <div class="price-desc">One report per month. Full detail.</div>
+      <ul class="price-features"><li>1 full ASIN report/month</li><li>All 12 categories scored</li><li>Complete action plan</li><li>Weekly seller newsletter</li></ul>
+      <a href="#top" class="price-btn btn-outline">Analyze Free →</a>
+    </div>
+    <div class="price-card popular">
+      <div class="price-tier">Seller</div>
+      <div class="price-amt"><span class="currency">$</span>29 <span class="period">/mo</span></div>
+      <div class="price-desc">For active sellers optimizing listings.</div>
+      <ul class="price-features"><li>10 reports/month</li><li>Re-run tracking & score history</li><li>Competitor ASIN analysis</li><li>Category benchmarking</li><li>Priority support</li></ul>
+      <button class="price-btn btn-fill">Start Seller Plan →</button>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Agency</div>
+      <div class="price-amt"><span class="currency">$</span>99 <span class="period">/mo</span></div>
+      <div class="price-desc">For agencies managing client accounts.</div>
+      <ul class="price-features"><li>50 reports/month</li><li>White-label PDF reports</li><li>Client dashboard</li><li>All Seller features included</li><li>Dedicated support</li></ul>
+      <button class="price-btn btn-fill">Start Agency Plan →</button>
+    </div>
+    <div class="price-card">
+      <div class="price-tier">Enterprise</div>
+      <div class="price-amt"><span class="currency">$</span>299 <span class="period">/mo</span></div>
+      <div class="price-desc">For brands and tools at scale.</div>
+      <ul class="price-features"><li>Unlimited reports</li><li>Raw API access</li><li>Custom scoring weights</li><li>All Agency features</li><li>SLA & onboarding call</li></ul>
+      <button class="price-btn btn-outline">Contact Sales →</button>
+    </div>
+  </div>
+  <div class="price-guarantee">🔒 <strong>30-day money-back guarantee.</strong> Cancel anytime. No contracts.</div>
+</section>
+
+<!-- FAQ -->
+<div class="section-alt">
+<section class="section ao" id="faq">
+  <div class="tag" style="text-align:center;">FAQ</div>
+  <h2 class="sh" style="text-align:center;">Questions you should be asking.</h2>
+  <div class="faq">
+    <div class="fq open"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Is the free report actually free? No catch?<span class="ic">+</span></div><div class="fq-a">Yes. One full 12-point report per month, completely free. No blur, no paywall, no "upgrade to see your results" tricks. We ask for your email to deliver the report and send weekly seller tips. That's it.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">How is this different from Helium 10 or Jungle Scout?<span class="ic">+</span></div><div class="fq-a">Those tools are for product research — finding what to sell. ASIN Analyzer is for listing optimization — making what you've already launched convert better. They find products. We fix listings. Complementary, not competitors.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I analyze my competitor's listing?<span class="ic">+</span></div><div class="fq-a">Absolutely. Any public ASIN works. Smart sellers run their top 5 competitors through the tool to find gaps and vulnerabilities. The Seller plan includes dedicated competitor analysis features.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What does "re-run tracking" mean?<span class="ic">+</span></div><div class="fq-a">On the Seller plan and above, you can re-scan the same ASIN over time and see how your score changes. Made a title change? Re-run and see if your Title Quality score improved. It's a feedback loop so you know what's working.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">How accurate is the data?<span class="ic">+</span></div><div class="fq-a">We pull real-time data directly from Amazon product pages — pricing, reviews, BSR, images, A+ content, Q&A, everything. The scoring algorithm is calibrated against top 1% seller practices.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What's in the white-label Agency reports?<span class="ic">+</span></div><div class="fq-a">Everything in the standard report, but with your branding. Your logo, your colors, your agency name. Deliver it to clients as a professional PDF audit. They'll never know it took 30 seconds instead of 30 hours.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Where do I find my ASIN?<span class="ic">+</span></div><div class="fq-a">It's the 10-character code starting with "B0" in any Amazon product URL. You'll also find it in the "Product Information" section of any listing page.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I cancel anytime?<span class="ic">+</span></div><div class="fq-a">Yes. No contracts, no commitments. Cancel in one click. 30-day money-back guarantee on all paid plans.</div></div>
+  </div>
+</section>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter ao">
+  <div class="newsletter-text"><h3>The Listing Doctor Weekly</h3><p>Strategies and data from top 1% Amazon sellers. Every Tuesday. Free.</p></div>
+  <div class="newsletter-form"><input type="email" id="nlEmail" placeholder="Enter your email" /><button onclick="subscribeNL()">Subscribe →</button></div>
+</div>
+
+<!-- FINAL CTA -->
+<section class="cta-end ao">
+  <h2>Your listing has a problem.<br>We'll find it in <em>30 seconds.</em></h2>
+  <p>Free. No login. No credit card. The only cost is not knowing.</p>
+  <a href="#top" class="btn-primary">Diagnose My Listing — Free →</a>
+  <div class="cta-note">Join 14,000+ sellers who stopped guessing and started knowing.</div>
+</section>
+
+<footer>
+  <div class="footer-brand">Listing Doctor</div>
+  <p>© 2026 ASIN Analyzer · A Listing Doctor Product · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+</footer>
+
+<!-- EMAIL MODAL -->
+<div id="emailModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);z-index:999;display:none;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:20px;padding:40px;max-width:420px;width:90%;box-shadow:0 24px 60px rgba(0,0,0,0.15);text-align:center;position:relative;">
+    <button onclick="closeModal()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;color:#94A3B8;cursor:pointer;">✕</button>
+    <div style="font-size:48px;margin-bottom:12px;">🏥</div>
+    <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;color:#0F172A;margin-bottom:8px;">Almost there!</h3>
+    <p style="font-size:15px;color:#64748B;margin-bottom:24px;line-height:1.6;">Where should we send your full report?<br><strong style="color:#0F172A;">100% free. No spam. Unsubscribe anytime.</strong></p>
+    <input type="email" id="emailInput" placeholder="you@example.com" style="width:100%;padding:14px 18px;border:2px solid #E2E8F0;border-radius:12px;font-size:15px;font-family:'DM Sans',sans-serif;margin-bottom:12px;outline:none;transition:border-color .2s;" onfocus="this.style.borderColor='#3B82F6'" onblur="this.style.borderColor='#E2E8F0'" />
+    <button id="modalAnalyzeBtn" onclick="runAnalysis()" style="width:100%;padding:14px;background:#3B82F6;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);">Generate My Free Report →</button>
+    <p style="display:block;margin-top:10px;font-size:12px;color:#94A3B8;">🔒 We'll email you a copy of your report. One free report per email.</p>
+  </div>
+</div>
+
+<!-- LOADING OVERLAY -->
+<div id="loadingOverlay" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);z-index:1000;align-items:center;justify-content:center;flex-direction:column;">
+  <div style="text-align:center;">
+    <div id="loadingSpinner" style="width:64px;height:64px;border:4px solid #E2E8F0;border-top-color:#3B82F6;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 24px;"></div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+    <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;color:#0F172A;margin-bottom:8px;" id="loadingTitle">Diagnosing your listing...</h3>
+    <p style="color:#64748B;font-size:15px;" id="loadingText">Scraping live Amazon data</p>
+    <div style="max-width:300px;margin:24px auto 0;height:4px;background:#E2E8F0;border-radius:100px;overflow:hidden;">
+      <div id="loadingBar" style="width:0%;height:100%;background:linear-gradient(90deg,#3B82F6,#60A5FA);border-radius:100px;transition:width 0.5s ease;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const bars = document.querySelectorAll('.metric-bar');
+  bars.forEach((bar, i) => {
+    const tw = bar.style.width;
+    bar.style.width = '0%';
+    setTimeout(() => { bar.style.width = tw; }, 600 + i * 120);
+  });
+
+  // Enter key on ASIN input
+  document.getElementById('asinInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') startAnalysis();
+  });
+});
+
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.06 });
+document.querySelectorAll('.ao').forEach(el => obs.observe(el));
+
+function animateCounters() {
+  document.querySelectorAll('.metrics-strip .num').forEach(el => {
+    const target = parseInt(el.dataset.count);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const duration = 2000;
+    const start = performance.now();
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = prefix + Math.round(target * eased).toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  });
+}
+const metricsObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { animateCounters(); metricsObs.disconnect(); } });
+}, { threshold: 0.3 });
+const mb = document.querySelector('.metrics-strip');
+if (mb) metricsObs.observe(mb);
+
+const costObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const el = e.target;
+      const target = 2847;
+      const duration = 2500;
+      const start = performance.now();
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = '$' + Math.round(target * eased).toLocaleString();
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+      costObs.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+const cn = document.getElementById('costCounter');
+if (cn) costObs.observe(cn);
+
+// ═══════════════════════════════════════════
+// FUNCTIONAL LOGIC
+// ═══════════════════════════════════════════
+
+let pendingASIN = '';
+
+function fillASIN(asin) {
+  document.getElementById('asinInput').value = asin;
+  startAnalysis();
+}
+
+function startAnalysis() {
+  const input = document.getElementById('asinInput');
+  const asin = input.value.trim().toUpperCase();
+  const errEl = document.getElementById('searchError');
+  errEl.style.display = 'none';
+
+  // Extract ASIN from URL if pasted
+  let cleanASIN = asin;
+  const urlMatch = asin.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
+  if (urlMatch) cleanASIN = urlMatch[1].toUpperCase();
+
+  if (!cleanASIN || !/^B0[A-Z0-9]{8}$/i.test(cleanASIN)) {
+    errEl.textContent = 'Please enter a valid ASIN (10 characters starting with B0) or paste an Amazon URL.';
+    errEl.style.display = 'block';
+    input.focus();
+    return;
+  }
+
+  pendingASIN = cleanASIN;
+  input.value = cleanASIN;
+
+  // Show email modal
+  const modal = document.getElementById('emailModal');
+  modal.style.display = 'flex';
+  setTimeout(() => document.getElementById('emailInput').focus(), 300);
+}
+
+function closeModal() {
+  document.getElementById('emailModal').style.display = 'none';
+}
+
+async function runAnalysis() {
+  const email = document.getElementById('emailInput')?.value?.trim() || '';
+
+  // Email is required
+  if (!email || !email.includes('@')) {
+    const emailInput = document.getElementById('emailInput');
+    emailInput.style.borderColor = '#EF4444';
+    emailInput.placeholder = 'Email is required for your free report';
+    emailInput.focus();
+    return;
+  }
+
+  closeModal();
+  showLoading();
+
+  try {
+    const steps = [
+      ['Connecting to Amazon...', 10],
+      ['Scraping live product data...', 30],
+      ['Analyzing title & content quality...', 50],
+      ['Scoring images & A+ content...', 65],
+      ['Evaluating reviews & Q&A...', 80],
+      ['Generating your report...', 95],
+    ];
+
+    let stepIdx = 0;
+    const stepInterval = setInterval(() => {
+      if (stepIdx < steps.length) {
+        document.getElementById('loadingText').textContent = steps[stepIdx][0];
+        document.getElementById('loadingBar').style.width = steps[stepIdx][1] + '%';
+        stepIdx++;
+      }
+    }, 3000);
+
+    const resp = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ asin: pendingASIN, email }),
+    });
+
+    clearInterval(stepInterval);
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      // Handle rate limiting — 1 free report per email
+      if (resp.status === 429 && err.upgradeRequired) {
+        hideLoading();
+        const errEl = document.getElementById('searchError');
+        errEl.innerHTML = err.error + ' <a href="/pricing" style="color:#3B82F6;font-weight:600;">See plans →</a>';
+        errEl.style.display = 'block';
+        return;
+      }
+      throw new Error(err.error || 'Analysis failed');
+    }
+
+    const data = await resp.json();
+    document.getElementById('loadingBar').style.width = '100%';
+    document.getElementById('loadingText').textContent = 'Report ready!';
+
+    // Store report + email in sessionStorage for report page + funnel
+    sessionStorage.setItem('asinReport', JSON.stringify(data.report));
+    sessionStorage.setItem('asinEmail', email);
+
+    // Store offer context for the $7 tripwire page
+    sessionStorage.setItem('asinOffer', JSON.stringify({
+      asin: data.report.asin,
+      grade: data.report.grade,
+      overall: data.report.overall,
+      actionCount: data.report.actionCount || data.report.actions?.length || 0,
+    }));
+
+    setTimeout(() => {
+      const reportUrl = data.report.id ? `/report/${data.report.id}` : '/report/new';
+      window.location.href = reportUrl;
+    }, 800);
+
+  } catch (err) {
+    hideLoading();
+    const errEl = document.getElementById('searchError');
+    errEl.textContent = err.message || 'Something went wrong. Please try again.';
+    errEl.style.display = 'block';
+  }
+}
+
+function showLoading() {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+  document.getElementById('loadingBar').style.width = '5%';
+}
+
+function hideLoading() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+async function subscribeNL() {
+  const input = document.getElementById('nlEmail');
+  const email = input.value.trim();
+  if (!email || !email.includes('@')) { input.style.borderColor = '#EF4444'; return; }
+  try {
+    await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    input.value = '';
+    input.placeholder = '✓ Subscribed!';
+    input.style.borderColor = '#10B981';
+  } catch (e) {
+    input.placeholder = 'Something went wrong';
+  }
+}
+</script>
+</body>
+</html>

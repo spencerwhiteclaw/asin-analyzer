@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-soft:rgba(59,130,246,0.06);--green:#10B981;--green-bg:#ECFDF5;--yellow:#F59E0B;--red:#EF4444;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+/* Dashboard Nav */
+.dash-nav{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:16px 40px;background:var(--bg);border-bottom:1px solid var(--border);}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);text-decoration:none;}
+.logo-text span{color:var(--blue);}
+.dash-nav-r{display:flex;align-items:center;gap:24px;}
+.dash-nav-r a{color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s;}
+.dash-nav-r a:hover{color:var(--text);}
+.dash-nav-r a.active{color:var(--blue);font-weight:600;}
+.avatar-btn{width:36px;height:36px;background:var(--blue);color:#fff;border-radius:50%;display:grid;place-items:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;}
+.wrap{max-width:1200px;margin:0 auto;padding:32px 40px 80px;}
+
+/* Welcome */
+.welcome{margin-bottom:28px;}
+.welcome h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;}
+.welcome p{font-size:15px;color:var(--text2);}
+
+/* Stat Cards */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stat-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:20px;transition:transform .2s;}
+.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.stat-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.stat-value{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;color:var(--text);line-height:1;}
+.stat-sub{font-size:13px;color:var(--text2);margin-top:4px;}
+/* Quota bar */
+.quota-bar{height:6px;background:var(--bg3);border-radius:100px;margin-top:10px;overflow:hidden;}
+.quota-fill{height:100%;border-radius:100px;background:var(--blue);transition:width .6s;}
+.quota-fill.warning{background:var(--yellow);}
+.quota-fill.danger{background:var(--red);}
+
+/* Quick Analyze */
+.quick-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:24px;margin-bottom:28px;}
+.quick-card h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;margin-bottom:12px;}
+.quick-form{display:flex;gap:10px;}
+.quick-form input{flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:var(--r);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;}
+.quick-form input:focus{border-color:var(--blue);}
+.quick-form button{padding:12px 24px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.quick-form button:hover{background:var(--blue-dark);}
+.quick-form button:disabled{opacity:0.6;cursor:not-allowed;}
+
+/* Recent Reports */
+.recent-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;}
+.rc-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.rc-header h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;}
+.rc-header a{font-size:13px;color:var(--blue);font-weight:600;text-decoration:none;}
+.report-row{display:grid;grid-template-columns:auto 1fr auto auto auto;gap:16px;padding:14px 24px;border-bottom:1px solid var(--bg3);align-items:center;transition:background .15s;}
+.report-row:last-child{border:none;}
+.report-row:hover{background:var(--bg2);}
+.rr-grade{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;width:40px;text-align:center;}
+.rr-info h4{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:400px;}
+.rr-info p{font-size:12px;color:var(--muted);}
+.rr-score{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text);}
+.rr-date{font-size:12px;color:var(--muted);white-space:nowrap;}
+.rr-link{font-size:13px;color:var(--blue);font-weight:600;text-decoration:none;}
+.rr-link:hover{text-decoration:underline;}
+.empty-state{padding:48px 24px;text-align:center;color:var(--muted);}
+.empty-state h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;}
+
+/* Upgrade banner */
+.upgrade-banner{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:var(--r3);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;color:#fff;margin-bottom:28px;}
+.upgrade-banner h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;}
+.upgrade-banner p{font-size:13px;color:rgba(255,255,255,0.5);}
+.upgrade-banner a{padding:10px 20px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;font-size:14px;text-decoration:none;transition:all .2s;white-space:nowrap;}
+.upgrade-banner a:hover{background:var(--blue-dark);}
+
+@media(max-width:768px){
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .report-row{grid-template-columns:auto 1fr auto;}
+  .rr-date,.rr-score{display:none;}
+  .quick-form{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<div class="dash-nav">
+  <a href="/" class="logo-text">ASIN <span>Analyzer</span></a>
+  <div class="dash-nav-r">
+    <a href="/dashboard" class="active">Dashboard</a>
+    <a href="/dashboard/history">History</a>
+    <a href="/dashboard/account">Account</a>
+    <button class="avatar-btn" id="avatarBtn" onclick="window.location.href='/dashboard/account'">M</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- Welcome -->
+  <div class="welcome">
+    <h1 id="welcomeTitle">Welcome back</h1>
+    <p id="welcomeSub">Seller Plan · 10 reports per month</p>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Reports Used</div>
+      <div class="stat-value" id="reportsUsed">0 / 10</div>
+      <div class="quota-bar"><div class="quota-fill" id="quotaFill" style="width:0%"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Best Grade</div>
+      <div class="stat-value" id="bestGrade">—</div>
+      <div class="stat-sub" id="bestGradeSub">across all reports</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg Score</div>
+      <div class="stat-value" id="avgScore">—</div>
+      <div class="stat-sub">your listing average</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Reports Reset</div>
+      <div class="stat-value" id="resetDate">—</div>
+      <div class="stat-sub">quota refreshes monthly</div>
+    </div>
+  </div>
+
+  <!-- Upgrade banner (shown for free/seller users) -->
+  <div class="upgrade-banner" id="upgradeBanner" style="display:none;">
+    <div>
+      <h3 id="upgradeTitle">Want more reports?</h3>
+      <p id="upgradeSub">Upgrade for more reports, implementation plans, and score tracking.</p>
+    </div>
+    <a href="/pricing" id="upgradeLink">See Plans →</a>
+  </div>
+
+  <!-- Quick Analyze -->
+  <div class="quick-card">
+    <h2>Run a new analysis</h2>
+    <div class="quick-form">
+      <input type="text" id="quickAsin" placeholder="Paste an ASIN (e.g., B0BSHF7WHW)" />
+      <button onclick="quickAnalyze()" id="quickBtn">Analyze →</button>
+    </div>
+    <div id="quickError" style="color:var(--red);font-size:13px;margin-top:8px;display:none;"></div>
+  </div>
+
+  <!-- Recent Reports -->
+  <div class="recent-card">
+    <div class="rc-header">
+      <h2>Recent Reports</h2>
+      <a href="/dashboard/history">View all →</a>
+    </div>
+    <div id="recentReports">
+      <div class="empty-state">
+        <h3>No reports yet</h3>
+        <p>Run your first analysis above to get started.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Auth check — redirect to login if not authenticated
+const token = localStorage.getItem('sb_access_token');
+if (!token) {
+  window.location.href = '/login';
+}
+
+// Load dashboard data
+async function loadDashboard() {
+  try {
+    const resp = await fetch('/api/dashboard', {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+
+    if (resp.status === 401) {
+      localStorage.removeItem('sb_access_token');
+      localStorage.removeItem('sb_refresh_token');
+      window.location.href = '/login';
+      return;
+    }
+
+    if (resp.ok) {
+      const data = await resp.json();
+      renderDashboard(data);
+    }
+  } catch (err) {
+    console.error('Dashboard load failed:', err);
+  }
+}
+
+function renderDashboard(data) {
+  const u = data.user;
+  const tierNames = { free: 'Free', seller: 'Seller', agency_power: 'Agency Power', agency: 'Agency', enterprise: 'Enterprise' };
+  const tierLimits = { free: 1, seller: 10, agency_power: 100, agency: 50, enterprise: 300 };
+  const tier = u.subscription_tier || 'free';
+  const limit = tierLimits[tier] || 1;
+  const used = u.analyses_this_month || 0;
+  const pct = Math.min(100, Math.round((used / limit) * 100));
+
+  document.getElementById('welcomeTitle').textContent = `Welcome back${u.name ? ', ' + u.name.split(' ')[0] : ''}`;
+  document.getElementById('welcomeSub').textContent = `${tierNames[tier]} Plan · ${limit} reports per month`;
+  document.getElementById('reportsUsed').textContent = `${used} / ${limit}`;
+  document.getElementById('avatarBtn').textContent = (u.name || u.email || 'U')[0].toUpperCase();
+
+  const fill = document.getElementById('quotaFill');
+  fill.style.width = pct + '%';
+  if (pct >= 90) fill.classList.add('danger');
+  else if (pct >= 70) fill.classList.add('warning');
+
+  // Best grade
+  if (data.reports?.length) {
+    const gradeOrder = ['A+','A','B+','B','C+','C','D','F'];
+    let best = 'F';
+    let totalScore = 0;
+    data.reports.forEach(r => {
+      totalScore += r.overall_score;
+      if (gradeOrder.indexOf(r.overall_grade) < gradeOrder.indexOf(best)) best = r.overall_grade;
+    });
+    document.getElementById('bestGrade').textContent = best;
+    document.getElementById('avgScore').textContent = Math.round(totalScore / data.reports.length);
+  }
+
+  // Reset date — 1st of next month
+  const now = new Date();
+  const reset = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const days = Math.ceil((reset - now) / (1000 * 60 * 60 * 24));
+  document.getElementById('resetDate').textContent = `${days}d`;
+
+  // Upgrade banner
+  if (tier === 'free' || tier === 'seller') {
+    document.getElementById('upgradeBanner').style.display = 'flex';
+  }
+
+  // Recent reports
+  if (data.reports?.length) {
+    const getColor = (s) => s >= 80 ? 'var(--green)' : s >= 60 ? 'var(--blue)' : s >= 40 ? 'var(--yellow)' : 'var(--red)';
+    document.getElementById('recentReports').innerHTML = data.reports.slice(0, 8).map(r => `
+      <div class="report-row">
+        <div class="rr-grade" style="color:${getColor(r.overall_score)}">${r.overall_grade}</div>
+        <div class="rr-info">
+          <h4>${r.product_title || r.asin}</h4>
+          <p>${r.asin}${r.brand ? ' · ' + r.brand : ''}</p>
+        </div>
+        <div class="rr-score">${r.overall_score}/100</div>
+        <div class="rr-date">${new Date(r.created_at).toLocaleDateString()}</div>
+        <a href="/report/${r.id}" class="rr-link">View →</a>
+      </div>
+    `).join('');
+  }
+}
+
+async function quickAnalyze() {
+  const input = document.getElementById('quickAsin');
+  const btn = document.getElementById('quickBtn');
+  const errEl = document.getElementById('quickError');
+  let asin = input.value.trim().toUpperCase();
+  errEl.style.display = 'none';
+
+  // Extract from URL
+  const urlMatch = asin.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
+  if (urlMatch) asin = urlMatch[1].toUpperCase();
+
+  if (!asin || !/^B0[A-Z0-9]{8}$/i.test(asin)) {
+    errEl.textContent = 'Enter a valid ASIN (10 chars starting with B0).';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Analyzing...';
+
+  try {
+    const resp = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ asin }),
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      sessionStorage.setItem('asinReport', JSON.stringify(data.report));
+      window.location.href = `/report/${data.report.id}`;
+    } else {
+      const err = await resp.json();
+      errEl.textContent = err.error || 'Analysis failed.';
+      errEl.style.display = 'block';
+    }
+  } catch (err) {
+    errEl.textContent = 'Connection error. Try again.';
+    errEl.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Analyze →';
+}
+
+loadDashboard();
+</script>
+</body>
+</html>

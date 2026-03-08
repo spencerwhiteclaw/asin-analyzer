@@ -1,0 +1,25 @@
+{
+  "name": "asin-analyzer",
+  "version": "3.0.1",
+  "description": "ASIN Analyzer — Diagnose Your Listing. Dominate Your Category. Sprint 1+2 Complete.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.12.0",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4",
+    "node-fetch": "^2.7.0",
+    "resend": "^3.2.0",
+    "@anthropic-ai/sdk": "^0.39.0",
+    "stripe": "^14.0.0",
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

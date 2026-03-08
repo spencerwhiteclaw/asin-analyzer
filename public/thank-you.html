@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thank You — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--r:12px;--r2:16px;--r3:20px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+nav{display:flex;align-items:center;justify-content:space-between;max-width:800px;margin:0 auto;padding:16px 40px;}
+.logo{text-decoration:none;}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);}
+.logo-text span{color:var(--blue);}
+.wrap{max-width:680px;margin:0 auto;padding:0 24px 80px;}
+
+.ty-hero{text-align:center;padding:48px 0 32px;}
+.ty-check{width:64px;height:64px;background:#ECFDF5;border:2px solid #A7F3D0;border-radius:50%;display:grid;place-items:center;margin:0 auto 20px;}
+.ty-check svg{width:32px;height:32px;color:var(--green);}
+.ty-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;margin-bottom:8px;}
+.ty-hero p{font-size:16px;color:var(--text2);}
+
+.delivery-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:28px;margin-bottom:20px;}
+.delivery-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.delivery-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bg2);}
+.delivery-item:last-child{border:none;}
+.delivery-item svg{width:20px;height:20px;color:var(--green);flex-shrink:0;}
+.delivery-item span{font-size:14px;color:var(--text2);}
+.delivery-item a{color:var(--blue);font-weight:600;text-decoration:none;}
+.delivery-item a:hover{text-decoration:underline;}
+
+.plan-loading{text-align:center;padding:24px;color:var(--muted);font-size:14px;}
+.plan-content{display:none;}
+
+/* Referral */
+.referral-card{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:var(--r3);padding:32px;text-align:center;color:#fff;margin-bottom:20px;}
+.referral-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px;}
+.referral-card p{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:16px;}
+.referral-link{display:flex;gap:8px;max-width:440px;margin:0 auto;}
+.referral-link input{flex:1;padding:12px 16px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);color:#fff;font-size:14px;font-family:'DM Sans',sans-serif;}
+.referral-link button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.referral-link button:hover{background:var(--blue-dark);}
+
+/* Next steps */
+.next-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:28px;margin-bottom:20px;}
+.next-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px;}
+.next-step{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--bg2);}
+.next-step:last-child{border:none;}
+.ns-num{width:28px;height:28px;background:var(--blue);color:#fff;border-radius:50%;display:grid;place-items:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;flex-shrink:0;}
+.ns-text h4{font-size:14px;font-weight:700;color:var(--text);}
+.ns-text p{font-size:14px;color:var(--text2);}
+
+.bottom-cta{text-align:center;padding:32px 0;}
+.bottom-cta a{display:inline-flex;padding:14px 32px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
+.bottom-cta a:hover{background:var(--blue-dark);transform:translateY(-1px);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><div class="logo-text">ASIN <span>Analyzer</span></div></a>
+  <a href="/" style="color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;">← Back to Analyzer</a>
+</nav>
+
+<div class="wrap">
+
+  <div class="ty-hero">
+    <div class="ty-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+    <h1>You're all set!</h1>
+    <p id="tySubtext">Your purchase is confirmed. Here's everything you got.</p>
+  </div>
+
+  <!-- What they purchased -->
+  <div class="delivery-card" id="deliveryCard">
+    <h3>📦 Your Deliverables</h3>
+    <div id="deliveryItems">
+      <div class="plan-loading" id="planLoading">Generating your Implementation Plan... this takes about 10 seconds.</div>
+    </div>
+  </div>
+
+  <!-- Referral -->
+  <div class="referral-card">
+    <h3>Share the love — you both win</h3>
+    <p>Send a friend to ASIN Analyzer. When they run their first report, you both get a free competitor analysis.</p>
+    <div class="referral-link">
+      <input type="text" value="https://www.asinanalyzer.app?ref=friend" readonly id="refLink" />
+      <button onclick="copyRef()">Copy Link</button>
+    </div>
+  </div>
+
+  <!-- Next steps -->
+  <div class="next-card">
+    <h3>What to do now</h3>
+    <div class="next-step">
+      <div class="ns-num">1</div>
+      <div class="ns-text">
+        <h4>Read your Implementation Plan</h4>
+        <p>Go through each section. Prioritize the "Quick Wins" — they take under 30 minutes.</p>
+      </div>
+    </div>
+    <div class="next-step">
+      <div class="ns-num">2</div>
+      <div class="ns-text">
+        <h4>Follow the 30-day calendar</h4>
+        <p>Week by week, implement the changes. Don't try to do everything at once.</p>
+      </div>
+    </div>
+    <div class="next-step">
+      <div class="ns-num">3</div>
+      <div class="ns-text">
+        <h4>Re-run your analysis in 30 days</h4>
+        <p>Come back and see how your score changed. Track what worked and what to improve next.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-cta">
+    <a href="/">Analyze Another ASIN →</a>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const analysisId = params.get('analysis_id') || params.get('analysis');
+const sessionId = params.get('session_id');
+const email = sessionStorage.getItem('asinEmail') || '';
+const purchasePath = sessionStorage.getItem('purchasePath') || '';
+
+// Attempt to generate and show the implementation plan
+// Track purchase
+if(typeof gtag==='function')gtag('event','purchase',{transaction_id:sessionId||'unknown',value:7,currency:'USD'});
+if(typeof fbq==='function')fbq('track','Purchase',{value:7,currency:'USD'});
+
+async function loadPlan() {
+  if (!analysisId) {
+    document.getElementById('planLoading').textContent = 'Check your email for your implementation plan.';
+    return;
+  }
+
+  try {
+    const resp = await fetch('/api/generate-plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ analysisId, email }),
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      const plan = data.plan;
+      document.getElementById('planLoading').style.display = 'none';
+
+      let html = '';
+
+      // Executive summary
+      if (plan.executiveSummary) {
+        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Executive Summary:</strong> ${plan.executiveSummary}</span></div>`;
+      }
+
+      // Quick wins
+      if (plan.quickWins?.length) {
+        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Quick Wins (do today):</strong></span></div>`;
+        plan.quickWins.forEach(qw => {
+          html += `<div class="delivery-item" style="padding-left:30px;"><span>⚡ ${qw.action} (${qw.timeMinutes} min) — ${qw.impact}</span></div>`;
+        });
+      }
+
+      // Weekly calendar
+      if (plan.weeklyCalendar) {
+        Object.entries(plan.weeklyCalendar).forEach(([week, tasks]) => {
+          html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>${week.replace('week', 'Week ')}:</strong> ${Array.isArray(tasks) ? tasks.join(' → ') : tasks}</span></div>`;
+        });
+      }
+
+      // Category plans
+      if (plan.categoryPlans?.length) {
+        plan.categoryPlans.forEach(cp => {
+          const steps = Array.isArray(cp.steps) ? cp.steps.join(' ') : (cp.steps || '');
+          html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>${cp.category}:</strong> ${steps.substring(0, 200)}${steps.length > 200 ? '...' : ''}</span></div>`;
+        });
+      }
+
+      // Keyword suggestions
+      if (plan.keywordSuggestions?.length) {
+        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Keyword Suggestions:</strong> ${plan.keywordSuggestions.join(', ')}</span></div>`;
+      }
+
+      html += `<div class="delivery-item" style="margin-top:12px;"><span style="font-size:13px;color:var(--muted);">Full plan also sent to your email.</span></div>`;
+
+      document.getElementById('deliveryItems').innerHTML += html;
+    } else {
+      document.getElementById('planLoading').textContent = 'Your implementation plan will be emailed to you shortly.';
+    }
+  } catch (err) {
+    document.getElementById('planLoading').textContent = 'Your implementation plan will be emailed to you shortly.';
+  }
+}
+
+loadPlan();
+
+function copyRef() {
+  const input = document.getElementById('refLink');
+  input.select();
+  document.execCommand('copy');
+  const btn = input.nextElementSibling;
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = 'Copy Link', 2000);
+}
+
+// Clean up session storage
+sessionStorage.removeItem('purchasePath');
+sessionStorage.removeItem('asinOffer');
+</script>
+</body>
+</html>

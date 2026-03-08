@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One-Time Offer — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--red:#EF4444;--yellow:#F59E0B;--purple:#8B5CF6;--gold:#F5A623;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--r:12px;--r2:16px;--r3:20px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:#0F172A;color:#fff;-webkit-font-smoothing:antialiased;line-height:1.6;min-height:100vh;}
+nav{display:flex;align-items:center;justify-content:center;max-width:800px;margin:0 auto;padding:16px 40px;}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:#fff;}
+.logo-text span{color:var(--gold);}
+.wrap{max-width:680px;margin:0 auto;padding:0 24px 80px;}
+
+/* Urgency bar */
+.urgency-bar{background:linear-gradient(90deg,#EF4444,#DC2626);text-align:center;padding:10px;font-size:13px;font-weight:700;letter-spacing:0.5px;}
+
+.oto-hero{text-align:center;padding:40px 0 28px;}
+.oto-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:700;color:var(--gold);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;}
+.oto-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:34px;font-weight:800;line-height:1.15;margin-bottom:12px;}
+.oto-hero h1 em{font-style:normal;color:var(--gold);}
+.oto-hero p{font-size:16px;color:rgba(255,255,255,0.6);max-width:520px;margin:0 auto;}
+
+/* Comparison */
+.compare-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r3);overflow:hidden;margin-bottom:28px;}
+.compare-row{display:grid;grid-template-columns:1fr auto auto;gap:16px;padding:12px 24px;align-items:center;border-bottom:1px solid rgba(255,255,255,0.06);}
+.compare-row:last-child{border:none;}
+.compare-row.header{background:rgba(255,255,255,0.04);font-weight:700;font-size:13px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px;}
+.compare-row .feat{font-size:14px;color:rgba(255,255,255,0.8);}
+.compare-row .val{font-size:14px;font-weight:700;text-align:center;min-width:80px;}
+.compare-row .val.oto{color:var(--gold);}
+.compare-row .val.reg{color:rgba(255,255,255,0.4);}
+
+/* Price comparison */
+.price-compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.pc-box{border-radius:var(--r2);padding:24px;text-align:center;}
+.pc-box.regular{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
+.pc-box.oto-price{background:linear-gradient(135deg,rgba(245,166,35,0.12),rgba(245,166,35,0.04));border:2px solid rgba(245,166,35,0.4);}
+.pc-box h4{font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.pc-box .amount{font-family:'Plus Jakarta Sans',sans-serif;font-size:42px;font-weight:800;line-height:1;}
+.pc-box .amount sup{font-size:16px;vertical-align:super;}
+.pc-box .per{font-size:14px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.pc-box.regular .amount{color:rgba(255,255,255,0.3);text-decoration:line-through;text-decoration-color:var(--red);}
+.pc-box.oto-price .amount{color:var(--gold);}
+.pc-box.oto-price .per{color:rgba(245,166,35,0.6);}
+
+.buy-btn{display:block;width:100%;padding:20px;background:linear-gradient(135deg,var(--gold),#E89D1C);color:#0F172A;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(245,166,35,0.3);margin-bottom:12px;}
+.buy-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(245,166,35,0.4);}
+.buy-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.skip-link{display:block;text-align:center;font-size:14px;color:rgba(255,255,255,0.3);text-decoration:none;padding:8px;cursor:pointer;}
+.skip-link:hover{color:rgba(255,255,255,0.5);}
+.warning-text{text-align:center;font-size:12px;color:rgba(255,255,255,0.25);margin-top:16px;font-style:italic;}
+</style>
+</head>
+<body>
+
+<!-- Urgency bar -->
+<div class="urgency-bar">⚠️ THIS OFFER DISAPPEARS WHEN YOU LEAVE THIS PAGE — YOU WILL NEVER SEE IT AGAIN</div>
+
+<nav><div class="logo-text">ASIN <span>Analyzer</span></div></nav>
+
+<div class="wrap">
+  <div class="oto-hero">
+    <div class="oto-badge">🔥 One-time offer</div>
+    <h1>Get <em>double the reports</em><br>for <em>less than Agency price</em></h1>
+    <p>100 reports per month. All Agency features. White-label PDFs. Client dashboard. Competitor analysis. $39/month — less than our public Agency plan.</p>
+  </div>
+
+  <!-- Feature comparison -->
+  <div class="compare-card">
+    <div class="compare-row header">
+      <div>Feature</div>
+      <div class="val">This Offer</div>
+      <div class="val">Agency Plan</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat">Reports per month</div>
+      <div class="val oto">100</div>
+      <div class="val reg">50</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat">Implementation plans</div>
+      <div class="val oto">✓</div>
+      <div class="val reg">✓</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat">White-label PDF reports</div>
+      <div class="val oto">✓</div>
+      <div class="val reg">✓</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat">Client dashboard</div>
+      <div class="val oto">✓</div>
+      <div class="val reg">✓</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat">Competitor analysis per ASIN</div>
+      <div class="val oto">✓</div>
+      <div class="val reg">✓</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat">Score tracking & history</div>
+      <div class="val oto">✓</div>
+      <div class="val reg">✓</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat">Category benchmarking</div>
+      <div class="val oto">✓</div>
+      <div class="val reg">✓</div>
+    </div>
+  </div>
+
+  <!-- Price comparison -->
+  <div class="price-compare">
+    <div class="pc-box regular">
+      <h4>Public Agency Plan</h4>
+      <div class="amount"><sup>$</sup>49</div>
+      <div class="per">per month · 50 reports</div>
+    </div>
+    <div class="pc-box oto-price">
+      <h4>Your Price Right Now</h4>
+      <div class="amount"><sup>$</sup>39</div>
+      <div class="per">per month · 100 reports</div>
+    </div>
+  </div>
+
+  <button class="buy-btn" id="buyBtn" onclick="handleOTO()">Lock In $39/month → 100 Reports</button>
+  <a class="skip-link" id="skipLink" onclick="handleDeclineOTO(event)">No thanks, I'll pass on this deal</a>
+
+  <p class="warning-text">This offer is exclusive to this page. If you close this window or navigate away, this pricing will never be available to you again. The standard Agency Plan is $49/month for 50 reports.</p>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const analysisId = params.get('analysis');
+const email = sessionStorage.getItem('asinEmail') || '';
+
+// Mark OTO as shown on page load (so it never shows again)
+if (email) {
+  fetch('/api/mark-oto-shown', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  }).catch(() => {});
+}
+
+// Warn on navigation away
+let purchased = false;
+window.addEventListener('beforeunload', (e) => {
+  if (!purchased) {
+    e.preventDefault();
+    e.returnValue = 'This offer disappears when you leave. Are you sure?';
+  }
+});
+
+async function handleOTO() {
+  const btn = document.getElementById('buyBtn');
+  btn.disabled = true;
+  btn.textContent = 'Redirecting to checkout...';
+  purchased = true;
+
+  try {
+    const resp = await fetch('/api/stripe/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        priceId: 'price_1T8YviLhOMEKeqYhja9HXiIt',
+        email, analysisId, mode: 'subscription',
+      }),
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.url) {
+        sessionStorage.setItem('purchasePath', 'agency_power_oto');
+        window.location.href = data.url;
+      }
+    } else {
+      purchased = false;
+      const err = await resp.json();
+      alert(err.error || 'Something went wrong.');
+      btn.disabled = false;
+      btn.textContent = 'Lock In $39/month → 100 Reports';
+    }
+  } catch (err) {
+    purchased = false;
+    alert('Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Lock In $39/month → 100 Reports';
+  }
+}
+
+function handleDeclineOTO(e) {
+  e.preventDefault();
+  purchased = true; // prevent beforeunload warning
+  window.location.href = `/thank-you?analysis=${analysisId || ''}`;
+}
+</script>
+</body>
+</html>

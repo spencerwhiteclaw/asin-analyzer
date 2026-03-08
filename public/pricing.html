@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-light:#60A5FA;--blue-soft:rgba(59,130,246,0.06);--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--gold:#F5A623;--red:#EF4444;--purple:#8B5CF6;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;max-width:1320px;margin:0 auto;padding:16px 40px;background:rgba(255,255,255,0.82);backdrop-filter:blur(20px) saturate(1.8);border-bottom:1px solid var(--border);}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);}
+.logo-text span{color:var(--blue);}
+.nav-r{display:flex;align-items:center;gap:32px;}
+.nav-r a{color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s;}
+.nav-r a:hover{color:var(--text);}
+.nav-btn{background:var(--blue)!important;color:#fff!important;padding:10px 22px;border-radius:10px;font-weight:600!important;box-shadow:0 2px 8px rgba(59,130,246,0.25);transition:all .2s!important;}
+.nav-btn:hover{background:var(--blue-dark)!important;transform:translateY(-1px);}
+.wrap{max-width:1200px;margin:0 auto;padding:100px 40px 80px;}
+
+/* Hero */
+.pricing-hero{text-align:center;padding:40px 0 48px;}
+.pricing-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:44px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:12px;}
+.pricing-hero p{font-size:18px;color:var(--text2);max-width:560px;margin:0 auto;}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:40px;}
+.toggle-label{font-size:14px;font-weight:600;color:var(--text2);}
+.toggle-label.active{color:var(--text);}
+.toggle{width:52px;height:28px;background:var(--bg3);border-radius:100px;cursor:pointer;position:relative;transition:background .2s;border:1px solid var(--border);}
+.toggle.on{background:var(--blue);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,0.15);}
+.toggle.on::after{transform:translateX(24px);}
+.save-badge{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:12px;font-weight:700;padding:2px 10px;border-radius:100px;}
+
+/* Pricing Grid */
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:60px;}
+.plan-card{background:var(--bg);border:2px solid var(--border);border-radius:var(--r3);padding:28px;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s;}
+.plan-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.08);}
+.plan-card.popular{border-color:var(--blue);box-shadow:0 8px 30px rgba(59,130,246,0.12);}
+.pop-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:4px 16px;border-radius:100px;white-space:nowrap;text-transform:uppercase;letter-spacing:0.5px;}
+.plan-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.plan-desc{font-size:13px;color:var(--muted);margin-bottom:16px;min-height:36px;}
+.plan-price{margin-bottom:20px;}
+.plan-amount{font-family:'Plus Jakarta Sans',sans-serif;font-size:42px;font-weight:800;color:var(--text);line-height:1;}
+.plan-amount sup{font-size:16px;vertical-align:super;}
+.plan-amount.free{color:var(--green);}
+.plan-per{font-size:13px;color:var(--muted);margin-top:2px;}
+.plan-annual{font-size:12px;color:var(--green);font-weight:600;display:none;}
+.plan-annual.show{display:block;}
+.plan-btn{display:block;width:100%;padding:12px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;text-align:center;text-decoration:none;transition:all .2s;margin-bottom:20px;cursor:pointer;border:none;}
+.plan-btn.primary{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(59,130,246,0.25);}
+.plan-btn.primary:hover{background:var(--blue-dark);transform:translateY(-1px);}
+.plan-btn.secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border);}
+.plan-btn.secondary:hover{background:var(--bg3);}
+.plan-features{flex:1;}
+.plan-feat{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:13px;color:var(--text2);}
+.plan-feat svg{width:16px;height:16px;color:var(--green);flex-shrink:0;margin-top:2px;}
+.plan-feat.disabled{color:var(--muted);}
+.plan-feat.disabled svg{color:var(--border);}
+.feat-divider{height:1px;background:var(--bg3);margin:10px 0;}
+.plan-reports{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;}
+
+/* Comparison Table */
+.compare-section{margin-bottom:60px;}
+.compare-section h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;text-align:center;margin-bottom:8px;}
+.compare-section>p{text-align:center;color:var(--text2);font-size:15px;margin-bottom:28px;}
+.compare-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;}
+.compare-table th,.compare-table td{padding:12px 16px;text-align:center;font-size:13px;border-bottom:1px solid var(--bg3);}
+.compare-table th{background:var(--bg2);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--text);font-size:14px;}
+.compare-table th:first-child,.compare-table td:first-child{text-align:left;font-weight:600;color:var(--text2);min-width:200px;}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table .check{color:var(--green);font-weight:700;}
+.compare-table .dash{color:var(--border);}
+.compare-table .highlight{background:rgba(59,130,246,0.03);}
+
+/* FAQ */
+.faq-section{max-width:720px;margin:0 auto 60px;}
+.faq-section h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;text-align:center;margin-bottom:24px;}
+.fq{border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden;}
+.fq-q{padding:16px 20px;font-size:15px;font-weight:600;color:var(--text);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .15s;}
+.fq-q:hover{background:var(--bg2);}
+.fq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;padding:0 20px;}
+.fq.open .fq-a{max-height:300px;padding:0 20px 16px;}
+.fq-a p{font-size:14px;color:var(--text2);line-height:1.7;}
+.fq .ic{font-size:20px;color:var(--muted);transition:transform .2s;}
+.fq.open .ic{transform:rotate(45deg);}
+
+/* Bottom CTA */
+.bottom-cta{background:var(--text);border-radius:var(--r3);padding:48px;text-align:center;color:#fff;}
+.bottom-cta h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;}
+.bottom-cta p{color:rgba(255,255,255,0.5);margin-bottom:24px;}
+.bottom-cta a{display:inline-flex;padding:14px 36px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
+.bottom-cta a:hover{background:var(--blue-dark);transform:translateY(-1px);}
+
+@media(max-width:900px){.pricing-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.pricing-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><div class="logo-text">ASIN <span>Analyzer</span></div></a>
+  <div class="nav-r">
+    <a href="/#how">How It Works</a>
+    <a href="/pricing" style="color:var(--text);font-weight:600;">Pricing</a>
+    <a href="/" class="nav-btn">Free Analysis →</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="pricing-hero">
+    <h1>Simple pricing.<br>Serious results.</h1>
+    <p>Start free. Upgrade when you're ready to fix more listings and track your progress.</p>
+  </div>
+
+  <!-- Toggle -->
+  <div class="toggle-row">
+    <span class="toggle-label active" id="monthlyLabel">Monthly</span>
+    <div class="toggle" id="billingToggle" onclick="toggleBilling()"></div>
+    <span class="toggle-label" id="annualLabel">Annual</span>
+    <span class="save-badge">Save up to 35%</span>
+  </div>
+
+  <!-- Pricing Cards -->
+  <div class="pricing-grid">
+
+    <!-- FREE -->
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-desc">See what's broken. One report to prove it works.</div>
+      <div class="plan-price">
+        <div class="plan-amount free">$0</div>
+        <div class="plan-per">forever</div>
+      </div>
+      <a href="/" class="plan-btn secondary">Run Free Analysis →</a>
+      <div class="plan-features">
+        <div class="plan-reports">1 report total</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Full 12-point diagnosis</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Letter grade + scores</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Prioritized issue list</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Report emailed to you</div>
+        <div class="feat-divider"></div>
+        <div class="plan-feat disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Implementation plan</div>
+        <div class="plan-feat disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Score tracking</div>
+      </div>
+    </div>
+
+    <!-- SELLER -->
+    <div class="plan-card popular">
+      <div class="pop-badge">Most Popular</div>
+      <div class="plan-name">Seller</div>
+      <div class="plan-desc">Fix your listings. Track your progress. Outsmart competitors.</div>
+      <div class="plan-price">
+        <div class="plan-amount" id="sellerPrice"><sup>$</sup>19</div>
+        <div class="plan-per" id="sellerPer">per month</div>
+        <div class="plan-annual" id="sellerAnnual">$149/year — save 35%</div>
+      </div>
+      <button class="plan-btn primary" onclick="checkout('seller')">Start Seller Plan →</button>
+      <div class="plan-features">
+        <div class="plan-reports">10 reports / month</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Everything in Free</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Implementation plan every report</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Score tracking over time</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Competitor ASIN comparison</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Category benchmarking</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Keyword priority lists</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 30-day action calendars</div>
+      </div>
+    </div>
+
+    <!-- AGENCY -->
+    <div class="plan-card">
+      <div class="plan-name">Agency</div>
+      <div class="plan-desc">Manage client listings at scale. Look like a hero.</div>
+      <div class="plan-price">
+        <div class="plan-amount" id="agencyPrice"><sup>$</sup>49</div>
+        <div class="plan-per" id="agencyPer">per month</div>
+        <div class="plan-annual" id="agencyAnnual">$449/year — save 24%</div>
+      </div>
+      <button class="plan-btn primary" onclick="checkout('agency')">Start Agency Plan →</button>
+      <div class="plan-features">
+        <div class="plan-reports">50 reports / month</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Everything in Seller</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Team / client organization</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Priority support</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Bulk analysis</div>
+      </div>
+    </div>
+
+    <!-- ENTERPRISE -->
+    <div class="plan-card">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-desc">Keyword tracking, auto re-scans, and category intelligence.</div>
+      <div class="plan-price">
+        <div class="plan-amount" id="entPrice"><sup>$</sup>199</div>
+        <div class="plan-per" id="entPer">per month</div>
+        <div class="plan-annual" id="entAnnual">$1,899/year — save 20%</div>
+      </div>
+      <button class="plan-btn primary" onclick="checkout('enterprise')">Start Enterprise Plan →</button>
+      <div class="plan-features">
+        <div class="plan-reports">300 reports / month</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Everything in Agency</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Keyword Rank Tracking</strong></div>
+        <div class="plan-feat" style="padding-left:24px;font-size:12px;color:var(--muted);">Track 50 keywords/ASIN in Amazon search results</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Automated Monthly Re-Scans</strong></div>
+        <div class="plan-feat" style="padding-left:24px;font-size:12px;color:var(--muted);">All ASINs re-analyzed on the 1st with score-change alerts</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Category Intelligence</strong></div>
+        <div class="plan-feat" style="padding-left:24px;font-size:12px;color:var(--muted);">Benchmark against top 20 listings in your category</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="compare-section">
+    <h2>Compare plans</h2>
+    <p>Every plan includes the 12-point diagnosis. Here's what's different.</p>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Free</th>
+          <th class="highlight">Seller</th>
+          <th>Agency</th>
+          <th>Enterprise</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Reports per month</td><td>1 total</td><td class="highlight">10</td><td>50</td><td>300</td></tr>
+        <tr><td>12-point diagnosis</td><td class="check">✓</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Implementation plan</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Score tracking over time</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Competitor ASIN analysis</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Category benchmarking</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Keyword priority lists</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>30-day action calendars</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Team / client organization</td><td class="dash">—</td><td class="dash highlight">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Priority support</td><td class="dash">—</td><td class="dash highlight">—</td><td class="check">✓</td><td class="check">✓</td></tr>
+        <tr><td>Keyword Rank Tracking</td><td class="dash">—</td><td class="dash highlight">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+        <tr><td>Automated Monthly Re-Scans</td><td class="dash">—</td><td class="dash highlight">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+        <tr><td>Category Intelligence</td><td class="dash">—</td><td class="dash highlight">—</td><td class="dash">—</td><td class="check">✓</td></tr>
+        <tr>
+          <td><strong>Price</strong></td>
+          <td><strong>$0</strong></td>
+          <td class="highlight"><strong>$19/mo</strong></td>
+          <td><strong>$49/mo</strong></td>
+          <td><strong>$199/mo</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <h2>Questions? Answers.</h2>
+
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I cancel anytime?<span class="ic">+</span></div><div class="fq-a"><p>Yes. Cancel any time from your account settings. No contracts, no cancellation fees. If you cancel, you keep access through the end of your billing period.</p></div></div>
+
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What counts as a "report"?<span class="ic">+</span></div><div class="fq-a"><p>Each ASIN you analyze counts as one report. Re-running the same ASIN counts as a new report (because we pull fresh data each time). Your quota resets on the 1st of every month.</p></div></div>
+
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What's the difference between the free report and paid?<span class="ic">+</span></div><div class="fq-a"><p>The free report tells you WHAT is wrong — all 12 categories scored with specific findings. Paid plans add the Implementation Plan — step-by-step instructions on HOW to fix every issue, plus keyword priorities, action calendars, and score tracking over time.</p></div></div>
+
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I upgrade or downgrade later?<span class="ic">+</span></div><div class="fq-a"><p>Absolutely. Upgrade any time and the price difference is prorated. Downgrade takes effect at your next billing cycle. Your reports and history are always preserved.</p></div></div>
+
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What is Keyword Rank Tracking?<span class="ic">+</span></div><div class="fq-a"><p>Enterprise-only feature. We check where your ASIN appears in Amazon search results for up to 50 keywords. You can see if you rank #3 or #300 for "silicone nipple covers" — and track how your ranking changes over time as you optimize. This replaces the need for tools like Helium 10's keyword tracker.</p></div></div>
+
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Is my data secure?<span class="ic">+</span></div><div class="fq-a"><p>All data is encrypted in transit and at rest. We only access publicly available Amazon data. We never access your Seller Central account or store any Amazon credentials.</p></div></div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="bottom-cta">
+    <h2>Start with a free analysis</h2>
+    <p>See your listing's score in 30 seconds. No credit card required.</p>
+    <a href="/">Analyze My Listing Free →</a>
+  </div>
+
+</div>
+
+<script>
+let isAnnual = false;
+
+function toggleBilling() {
+  isAnnual = !isAnnual;
+  document.getElementById('billingToggle').classList.toggle('on', isAnnual);
+  document.getElementById('monthlyLabel').classList.toggle('active', !isAnnual);
+  document.getElementById('annualLabel').classList.toggle('active', isAnnual);
+
+  // Seller
+  document.getElementById('sellerPrice').innerHTML = isAnnual ? '<sup>$</sup>12<span style="font-size:16px;font-weight:500;">.42</span>' : '<sup>$</sup>19';
+  document.getElementById('sellerPer').textContent = isAnnual ? 'per month, billed annually' : 'per month';
+  document.getElementById('sellerAnnual').classList.toggle('show', isAnnual);
+
+  // Agency
+  document.getElementById('agencyPrice').innerHTML = isAnnual ? '<sup>$</sup>37<span style="font-size:16px;font-weight:500;">.42</span>' : '<sup>$</sup>49';
+  document.getElementById('agencyPer').textContent = isAnnual ? 'per month, billed annually' : 'per month';
+  document.getElementById('agencyAnnual').classList.toggle('show', isAnnual);
+
+  // Enterprise
+  document.getElementById('entPrice').innerHTML = isAnnual ? '<sup>$</sup>158<span style="font-size:16px;font-weight:500;">.25</span>' : '<sup>$</sup>199';
+  document.getElementById('entPer').textContent = isAnnual ? 'per month, billed annually' : 'per month';
+  document.getElementById('entAnnual').classList.toggle('show', isAnnual);
+}
+
+async function checkout(plan) {
+  const priceMap = {
+    seller: isAnnual ? 'price_1T8YvhLhOMEKeqYhyqxhGszT' : 'price_1T8YvhLhOMEKeqYhIln1TduM',
+    agency: isAnnual ? 'price_1T8YvjLhOMEKeqYhFY1anKa4' : 'price_1T8YviLhOMEKeqYhNj6UVKgk',
+    enterprise: isAnnual ? 'price_1T8YvkLhOMEKeqYheyjYf5S4' : 'price_1T8YvjLhOMEKeqYh3kcVBOZc',
+  };
+
+  try {
+    const resp = await fetch('/api/stripe/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        priceId: priceMap[plan],
+        email: sessionStorage.getItem('asinEmail') || '',
+        mode: 'subscription',
+      }),
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.url) window.location.href = data.url;
+    } else {
+      const err = await resp.json();
+      alert(err.error || 'Checkout not available yet. Coming soon!');
+    }
+  } catch (err) {
+    alert('Connection error. Please try again.');
+  }
+}
+</script>
+</body>
+</html>

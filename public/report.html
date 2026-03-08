@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASIN Report — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-light:#60A5FA;--blue-soft:rgba(59,130,246,0.06);--gold:#F5A623;--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--yellow:#F59E0B;--yellow-bg:#FFFBEB;--yellow-border:#FDE68A;--red:#EF4444;--red-bg:#FEF2F2;--red-border:#FECACA;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+nav{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:16px 40px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);}
+.logo-text span{color:var(--blue);}
+.nav-back{color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s;}
+.nav-back:hover{color:var(--blue);}
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px 80px;}
+
+/* Header */
+.rpt-header{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:32px;margin-bottom:20px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;}
+.rpt-product h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;color:var(--text);line-height:1.3;margin-bottom:8px;}
+.rpt-meta{display:flex;gap:16px;flex-wrap:wrap;}
+.rpt-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;background:var(--bg2);border:1px solid var(--border);color:var(--text2);}
+.rpt-grade{text-align:center;padding:24px 32px;background:var(--bg2);border-radius:var(--r2);min-width:160px;}
+.grade-letter{font-family:'Plus Jakarta Sans',sans-serif;font-size:56px;font-weight:800;line-height:1;}
+.grade-score{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;color:var(--text);}
+.grade-score em{font-style:normal;font-size:16px;color:var(--muted);font-weight:500;}
+.grade-label{font-size:13px;color:var(--muted);margin-top:4px;}
+
+/* Verdict bar */
+.verdict-bar{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:20px 28px;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+.verdict-icon{font-size:24px;}
+.verdict-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.verdict-sub{font-size:14px;color:var(--text2);margin-top:2px;}
+
+/* Score Grid */
+.scores-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.score-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;}
+.score-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.score-card.locked{pointer-events:none;}
+.score-card.locked .sc-value,
+.score-card.locked .sc-bar-fill,
+.score-card.locked .sc-status{filter:blur(8px);-webkit-filter:blur(8px);user-select:none;}
+.lock-overlay{display:none;position:absolute;inset:0;background:rgba(255,255,255,0.6);backdrop-filter:blur(2px);z-index:2;place-items:center;}
+.score-card.locked .lock-overlay{display:grid;}
+.lock-icon{width:36px;height:36px;background:var(--bg);border:1px solid var(--border);border-radius:50%;display:grid;place-items:center;box-shadow:var(--shadow);}
+.lock-icon svg{width:16px;height:16px;color:var(--muted);}
+.sc-label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.sc-value{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;line-height:1;}
+.sc-bar{height:4px;background:var(--bg3);border-radius:100px;margin-top:8px;overflow:hidden;}
+.sc-bar-fill{height:100%;border-radius:100px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1);}
+.sc-status{font-size:11px;font-weight:700;margin-top:6px;text-transform:uppercase;letter-spacing:0.5px;}
+
+/* Email Gate */
+.email-gate{background:linear-gradient(135deg,#0F172A 0%,#1E293B 100%);border-radius:var(--r3);padding:48px;text-align:center;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;}
+.email-gate::before{content:'';position:absolute;top:-50%;right:-30%;width:400px;height:400px;background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 70%);pointer-events:none;}
+.email-gate h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;margin-bottom:6px;position:relative;}
+.email-gate .gate-sub{color:rgba(255,255,255,0.5);font-size:15px;margin-bottom:24px;position:relative;}
+.email-gate .gate-features{display:flex;justify-content:center;gap:24px;margin-bottom:28px;flex-wrap:wrap;position:relative;}
+.gate-feat{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);}
+.gate-feat svg{width:16px;height:16px;color:var(--green);}
+.email-gate-form{display:flex;gap:10px;max-width:480px;margin:0 auto;position:relative;}
+.email-gate-form input{flex:1;padding:14px 20px;border-radius:var(--r);border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);color:#fff;font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;}
+.email-gate-form input::placeholder{color:rgba(255,255,255,0.35);}
+.email-gate-form input:focus{border-color:var(--blue);}
+.email-gate-form button{padding:14px 28px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-weight:700;font-size:15px;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.email-gate-form button:hover{background:var(--blue-dark);transform:translateY(-1px);}
+.gate-trust{font-size:12px;color:rgba(255,255,255,0.3);margin-top:12px;position:relative;}
+
+/* Hidden sections (shown after unlock) */
+.gated-content{display:none;}
+.gated-content.unlocked{display:block;}
+
+/* Detail Grid */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.detail-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;}
+.dc-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.dc-icon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-size:16px;}
+.dc-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.dc-body{padding:20px 24px;}
+.dc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bg3);}
+.dc-row:last-child{border:none;}
+.dc-row label{font-size:14px;color:var(--text2);}
+.dc-row strong{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text);}
+
+/* Actions */
+.actions-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;margin-bottom:20px;}
+.ac-header{padding:18px 24px;border-bottom:1px solid var(--border);}
+.ac-header h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);}
+.ac-header p{font-size:13px;color:var(--muted);}
+.action-item{display:flex;gap:14px;padding:18px 24px;border-bottom:1px solid var(--bg3);transition:background .15s;}
+.action-item:hover{background:var(--bg2);}
+.action-item:last-child{border:none;}
+.ai-priority{width:8px;flex-shrink:0;border-radius:100px;margin-top:4px;}
+.ai-priority.high{background:var(--red);}
+.ai-priority.medium{background:var(--yellow);}
+.ai-priority.low{background:var(--blue);}
+.ai-body h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.ai-body p{font-size:14px;color:var(--text2);line-height:1.6;}
+.ai-badge{display:inline-block;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-left:8px;}
+.ai-badge.high{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.ai-badge.medium{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border);}
+.ai-badge.low{background:var(--blue-soft);color:var(--blue);border:1px solid rgba(59,130,246,0.2);}
+
+/* Solution locked hint */
+.solution-locked{margin-top:10px;padding:12px 16px;background:var(--bg2);border:1px dashed var(--border);border-radius:var(--r);display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);}
+.solution-locked svg{width:14px;height:14px;flex-shrink:0;color:var(--blue);}
+
+/* Implementation Plan CTA */
+.impl-cta{background:linear-gradient(135deg,#1E40AF 0%,#3B82F6 50%,#2563EB 100%);border-radius:var(--r3);padding:48px;text-align:center;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;}
+.impl-cta::before{content:'';position:absolute;top:-60%;left:-20%;width:500px;height:500px;background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 60%);pointer-events:none;}
+.impl-cta h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px;position:relative;}
+.impl-cta .impl-sub{color:rgba(255,255,255,0.65);font-size:15px;margin-bottom:24px;max-width:600px;margin-left:auto;margin-right:auto;position:relative;}
+.impl-value-stack{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:500px;margin:0 auto 28px;text-align:left;position:relative;}
+.impl-value-item{display:flex;align-items:center;gap:8px;font-size:14px;color:rgba(255,255,255,0.85);}
+.impl-value-item svg{width:18px;height:18px;color:#34D399;flex-shrink:0;}
+.impl-price{position:relative;margin-bottom:24px;}
+.impl-price .was{font-size:16px;color:rgba(255,255,255,0.4);text-decoration:line-through;margin-bottom:4px;}
+.impl-price .now{font-family:'Plus Jakarta Sans',sans-serif;font-size:48px;font-weight:800;color:#fff;}
+.impl-price .now sup{font-size:20px;vertical-align:super;}
+.impl-cta a.impl-btn{display:inline-flex;padding:16px 40px;background:#fff;color:#1E40AF;border-radius:var(--r);font-weight:800;font-size:16px;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+.impl-cta a.impl-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,0.3);}
+.impl-guarantee{font-size:12px;color:rgba(255,255,255,0.35);margin-top:16px;position:relative;}
+
+/* CTA bottom */
+.rpt-cta{background:var(--text);border-radius:var(--r3);padding:48px;text-align:center;color:#fff;}
+.rpt-cta h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;}
+.rpt-cta p{color:rgba(255,255,255,0.5);margin-bottom:24px;}
+.rpt-cta a{display:inline-flex;padding:14px 36px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
+.rpt-cta a:hover{background:var(--blue-dark);transform:translateY(-1px);}
+
+/* Loading */
+.loading{text-align:center;padding:120px 40px;}
+.loading h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px;}
+
+/* Color helpers */
+.c-green{color:var(--green);}
+.c-blue{color:var(--blue);}
+.c-yellow{color:var(--yellow);}
+.c-red{color:var(--red);}
+.bg-green{background:linear-gradient(90deg,#10B981,#34D399);}
+.bg-blue{background:linear-gradient(90deg,#3B82F6,#60A5FA);}
+.bg-yellow{background:linear-gradient(90deg,#F59E0B,#FBBF24);}
+.bg-red{background:linear-gradient(90deg,#EF4444,#F87171);}
+
+/* Toast notification */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#0F172A;color:#fff;padding:14px 28px;border-radius:var(--r);font-size:14px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:1000;transition:transform .4s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;gap:8px;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.toast svg{width:18px;height:18px;color:var(--green);}
+
+@media(max-width:768px){
+  .scores-grid{grid-template-columns:repeat(2,1fr);}
+  .detail-grid{grid-template-columns:1fr;}
+  .rpt-header{grid-template-columns:1fr;}
+  .rpt-grade{margin:0 auto;}
+  .email-gate-form{flex-direction:column;}
+  .impl-value-stack{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><div class="logo-text">ASIN <span>Analyzer</span></div></a>
+  <a href="/" class="nav-back">← New Analysis</a>
+</nav>
+
+<div class="wrap" id="reportContent">
+  <div class="loading" id="loadingState">
+    <h2>Loading report...</h2>
+    <p style="color:var(--muted);">If this takes more than a few seconds, <a href="/" style="color:var(--blue);">run a new analysis</a>.</p>
+  </div>
+</div>
+
+<!-- Toast for unlock confirmation -->
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+  <span>Full report unlocked! Check your email too.</span>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  let report = null;
+  let userEmail = null;
+  const stored = sessionStorage.getItem('asinReport');
+  const storedEmail = sessionStorage.getItem('asinEmail');
+
+  if (stored) {
+    report = JSON.parse(stored);
+    userEmail = storedEmail || null;
+    sessionStorage.removeItem('asinReport');
+    sessionStorage.removeItem('asinEmail');
+  } else {
+    const pathParts = window.location.pathname.split('/');
+    const reportId = pathParts[pathParts.length - 1];
+    if (reportId && reportId !== 'new') {
+      try {
+        const resp = await fetch(`/api/report/${reportId}`);
+        if (resp.ok) {
+          const data = await resp.json();
+          const r = data.report;
+          report = {
+            id: r.id, asin: r.asin,
+            product: { title: r.product_title, brand: r.brand, price: parseFloat(r.price), rating: parseFloat(r.rating), reviewCount: r.review_count, bsr: r.bsr, category: r.category, imageCount: r.image_count, bulletCount: r.bullet_count, hasAPlus: r.has_aplus, hasVideo: r.has_video, qaCount: r.qa_count },
+            scores: r.scores, overall: r.overall_score, grade: r.overall_grade,
+            actions: r.action_items,
+            actionCount: (r.action_items || []).length,
+          };
+        }
+      } catch (e) { console.error('Failed to load report:', e); }
+    }
+  }
+
+  if (!report) {
+    document.getElementById('loadingState').innerHTML = '<h2>No report found</h2><p style="color:var(--muted);margin-top:8px;"><a href="/" style="color:var(--blue);font-weight:700;">← Run a new analysis</a></p>';
+    return;
+  }
+
+  // Determine if report is already unlocked (email was provided during analysis)
+  const isUnlocked = !!userEmail;
+  renderReport(report, isUnlocked, userEmail);
+});
+
+function getScoreColor(val) {
+  if (val >= 8) return 'green';
+  if (val >= 6) return 'blue';
+  if (val >= 4) return 'yellow';
+  return 'red';
+}
+
+function getScoreLabel(val) {
+  if (val >= 9) return 'Excellent';
+  if (val >= 7) return 'Good';
+  if (val >= 5) return 'Average';
+  if (val >= 3) return 'Needs Work';
+  return 'Critical';
+}
+
+function getGradeColor(overall) {
+  if (overall >= 80) return 'var(--green)';
+  if (overall >= 60) return 'var(--blue)';
+  if (overall >= 40) return 'var(--yellow)';
+  return 'var(--red)';
+}
+
+function getVerdictText(overall, actionCount) {
+  if (overall >= 85) return { icon: '🟢', text: 'Your listing is performing well.', sub: `We found ${actionCount} minor areas to fine-tune.` };
+  if (overall >= 70) return { icon: '🔵', text: 'Solid foundation with room to grow.', sub: `We found ${actionCount} areas that could boost your conversion rate.` };
+  if (overall >= 55) return { icon: '🟡', text: 'Your listing needs attention.', sub: `We found ${actionCount} issues holding back your sales.` };
+  return { icon: '🔴', text: 'Your listing has critical problems.', sub: `We found ${actionCount} issues that are actively costing you sales every day.` };
+}
+
+function renderReport(r, unlocked, email) {
+  const p = r.product;
+  const s = r.scores;
+  const gc = getGradeColor(r.overall);
+  const v = getVerdictText(r.overall, r.actionCount || r.actions?.length || 0);
+
+  const scoreNames = {
+    title: 'Title Quality', images: 'Image Score', bullets: 'Bullet Points', description: 'A+ Content',
+    pricing: 'Pricing', reviewQuality: 'Review Quality', reviewQuantity: 'Review Volume', qa: 'Q&A Presence',
+    bsr: 'BSR Rank', categoryRank: 'Category Rank', keywords: 'Keyword Visibility', completeness: 'Completeness'
+  };
+
+  // Sort scores to find 3 worst
+  const sortedScores = Object.entries(s).sort((a, b) => a[1] - b[1]);
+  const worstThreeKeys = new Set(sortedScores.slice(0, 3).map(([k]) => k));
+
+  // Lock icon SVG
+  const lockSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`;
+  const checkSVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>`;
+
+  document.getElementById('reportContent').innerHTML = `
+    <!-- HEADER — always visible -->
+    <div class="rpt-header">
+      <div class="rpt-product">
+        <h1>${p.title || r.asin}</h1>
+        <div class="rpt-meta">
+          <span class="rpt-tag">📦 ${r.asin}</span>
+          ${p.brand ? `<span class="rpt-tag">🏷️ ${p.brand}</span>` : ''}
+          ${p.price ? `<span class="rpt-tag">💲 $${p.price.toFixed(2)}</span>` : ''}
+          ${p.rating ? `<span class="rpt-tag">⭐ ${p.rating}/5 (${(p.reviewCount || 0).toLocaleString()} reviews)</span>` : ''}
+          ${p.bsr ? `<span class="rpt-tag">📊 #${p.bsr.toLocaleString()} in ${p.category || 'N/A'}</span>` : ''}
+        </div>
+      </div>
+      <div class="rpt-grade">
+        <div class="grade-letter" style="color:${gc}">${r.grade}</div>
+        <div class="grade-score">${r.overall}<em>/100</em></div>
+        <div class="grade-label">Overall Score</div>
+      </div>
+    </div>
+
+    <!-- VERDICT — always visible -->
+    <div class="verdict-bar">
+      <div class="verdict-icon">${v.icon}</div>
+      <div>
+        <div class="verdict-text">${v.text}</div>
+        <div class="verdict-sub">${v.sub}</div>
+      </div>
+    </div>
+
+    <!-- SCORES GRID — 3 worst visible, rest locked unless unlocked -->
+    <div class="scores-grid">
+      ${Object.entries(s).map(([key, val]) => {
+        const c = getScoreColor(val);
+        const isVisible = unlocked || worstThreeKeys.has(key);
+        return `
+        <div class="score-card ${isVisible ? '' : 'locked'}">
+          <div class="lock-overlay"><div class="lock-icon">${lockSVG}</div></div>
+          <div class="sc-label">${scoreNames[key] || key}</div>
+          <div class="sc-value c-${c}">${val}<span style="font-size:14px;color:var(--muted);font-weight:500;">/10</span></div>
+          <div class="sc-bar"><div class="sc-bar-fill bg-${c}" style="width:${val * 10}%"></div></div>
+          <div class="sc-status c-${c}">${getScoreLabel(val)}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- EMAIL GATE — shown only when locked -->
+    <div id="emailGate" class="email-gate" style="${unlocked ? 'display:none;' : ''}">
+      <h2>9 more scores waiting for you</h2>
+      <p class="gate-sub">Enter your email to unlock your complete 12-point diagnosis — free.</p>
+      <div class="gate-features">
+        <div class="gate-feat">${checkSVG} All 12 category scores</div>
+        <div class="gate-feat">${checkSVG} Detailed performance data</div>
+        <div class="gate-feat">${checkSVG} Prioritized action plan</div>
+        <div class="gate-feat">${checkSVG} Report saved to your email</div>
+      </div>
+      <form class="email-gate-form" onsubmit="unlockReport(event)">
+        <input type="email" id="gateEmail" placeholder="Enter your email address" required autocomplete="email" />
+        <button type="submit" id="gateBtn">Unlock Full Report →</button>
+      </form>
+      <p class="gate-trust">🔒 No spam. Your report will be emailed to you for safekeeping.</p>
+    </div>
+
+    <!-- === GATED CONTENT — hidden until email entered === -->
+    <div class="gated-content ${unlocked ? 'unlocked' : ''}" id="gatedContent">
+
+      <!-- DETAIL CARDS -->
+      <div class="detail-grid">
+        <div class="detail-card">
+          <div class="dc-header"><div class="dc-icon" style="background:var(--blue-soft);">📝</div><div class="dc-title">Content Analysis</div></div>
+          <div class="dc-body">
+            <div class="dc-row"><label>Title Length</label><strong>${p.title?.length || 0} chars</strong></div>
+            <div class="dc-row"><label>Bullet Points</label><strong>${p.bulletCount || 0} / 5</strong></div>
+            <div class="dc-row"><label>A+ Content</label><strong style="color:${p.hasAPlus ? 'var(--green)' : 'var(--red)'}">${p.hasAPlus ? '✓ Active' : '✗ Missing'}</strong></div>
+            <div class="dc-row"><label>Product Video</label><strong style="color:${p.hasVideo ? 'var(--green)' : 'var(--red)'}">${p.hasVideo ? '✓ Present' : '✗ Missing'}</strong></div>
+            <div class="dc-row"><label>Images</label><strong>${p.imageCount || 0} photos</strong></div>
+          </div>
+        </div>
+        <div class="detail-card">
+          <div class="dc-header"><div class="dc-icon" style="background:var(--green-bg);">📊</div><div class="dc-title">Performance Metrics</div></div>
+          <div class="dc-body">
+            <div class="dc-row"><label>Price</label><strong>$${(p.price || 0).toFixed(2)}</strong></div>
+            <div class="dc-row"><label>Rating</label><strong>${p.rating || 'N/A'} / 5.0</strong></div>
+            <div class="dc-row"><label>Total Reviews</label><strong>${(p.reviewCount || 0).toLocaleString()}</strong></div>
+            <div class="dc-row"><label>BSR</label><strong>#${(p.bsr || 0).toLocaleString()}</strong></div>
+            <div class="dc-row"><label>Q&A Count</label><strong>${p.qaCount || 0} answered</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTION ITEMS — problems only, solutions locked -->
+      <div class="actions-card">
+        <div class="ac-header">
+          <h2>🎯 Issues Found</h2>
+          <p>${r.actions?.length || r.actionCount || 0} problems identified across your listing</p>
+        </div>
+        ${(r.actions || []).map(a => `
+        <div class="action-item">
+          <div class="ai-priority ${a.priority}" style="min-height:40px;"></div>
+          <div class="ai-body">
+            <h4>${a.category} <span class="ai-badge ${a.priority}">${a.priority}</span></h4>
+            <p>${a.problem || a.text || ''}</p>
+            <div class="solution-locked">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <span>How to fix this → <a href="/offer?analysis=${r.id}" style="color:var(--blue);font-weight:600;text-decoration:none;">Get your Implementation Plan</a></span>
+            </div>
+          </div>
+        </div>`).join('')}
+        ${(!r.actions || r.actions.length === 0) ? '<div style="padding:24px;text-align:center;color:var(--muted);">No critical issues found — your listing is in great shape! 🎉</div>' : ''}
+      </div>
+
+      <!-- IMPLEMENTATION PLAN CTA — the $7 ascension -->
+      <div class="impl-cta">
+        <h2>Your report found ${r.actions?.length || r.actionCount || 0} issues.<br>Here's exactly how to fix every one.</h2>
+        <p class="impl-sub">Get your personalized Implementation Plan — step-by-step instructions specific to your listing, your scores, and your category.</p>
+        <div class="impl-value-stack">
+          <div class="impl-value-item">${checkSVG} Step-by-step fix for every issue</div>
+          <div class="impl-value-item">${checkSVG} 30-day action calendar</div>
+          <div class="impl-value-item">${checkSVG} Keyword priority list</div>
+          <div class="impl-value-item">${checkSVG} Quick wins (do today)</div>
+          <div class="impl-value-item">${checkSVG} 30-day free re-scan credit</div>
+          <div class="impl-value-item">${checkSVG} Category-specific guidance</div>
+        </div>
+        <div class="impl-price">
+          <div class="was">Value: $97+</div>
+          <div class="now"><sup>$</sup>7</div>
+        </div>
+        <a href="/offer?analysis=${r.id}" class="impl-btn">Get My Implementation Plan →</a>
+        <p class="impl-guarantee">One-time payment. Instant delivery. Specific to your ASIN.</p>
+      </div>
+    </div>
+
+    <!-- BOTTOM CTA -->
+    <div class="rpt-cta">
+      <h2>Track your score over time</h2>
+      <p>Re-run this analysis monthly. See how your changes move the needle.</p>
+      <a href="/">Analyze Another ASIN →</a>
+    </div>
+  `;
+
+  // Animate visible score bars
+  setTimeout(() => {
+    document.querySelectorAll('.score-card:not(.locked) .sc-bar-fill').forEach(bar => {
+      const w = bar.style.width;
+      bar.style.width = '0%';
+      setTimeout(() => { bar.style.width = w; }, 100);
+    });
+  }, 100);
+
+  // Update page title
+  // Track report view
+  if(typeof gtag==='function')gtag('event','report_viewed',{asin:r.asin,grade:r.grade,score:r.overall});
+  if(typeof fbq==='function')fbq('track','ViewContent',{content_name:r.asin,content_category:r.grade});
+
+  document.title = `${r.asin} — ${r.grade} (${r.overall}/100) — ASIN Analyzer`;
+
+  // Store report data for unlock function
+  window.__report = r;
+}
+
+// Unlock report when email is entered
+async function unlockReport(e) {
+  e.preventDefault();
+  const emailInput = document.getElementById('gateEmail');
+  const btn = document.getElementById('gateBtn');
+  const email = emailInput.value.trim().toLowerCase();
+
+  if (!email || !email.includes('@')) return;
+
+  btn.textContent = 'Unlocking...';
+  btn.disabled = true;
+
+  try {
+    // Subscribe this email
+    await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    // Track email capture
+    if(typeof gtag==='function')gtag('event','email_captured',{method:'report_gate'});
+    if(typeof fbq==='function')fbq('track','Lead');
+
+    // Unlock the UI
+    document.getElementById('emailGate').style.display = 'none';
+    document.getElementById('gatedContent').classList.add('unlocked');
+
+    // Remove locks from score cards
+    document.querySelectorAll('.score-card.locked').forEach(card => {
+      card.classList.remove('locked');
+    });
+
+    // Animate newly-unlocked bars
+    setTimeout(() => {
+      document.querySelectorAll('.sc-bar-fill').forEach(bar => {
+        const w = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => { bar.style.width = w; }, 100);
+      });
+    }, 200);
+
+    // Show toast
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 4000);
+
+  } catch (err) {
+    console.error('Unlock error:', err);
+    btn.textContent = 'Unlock Full Report →';
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

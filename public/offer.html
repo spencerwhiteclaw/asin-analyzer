@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Implementation Plan — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--red:#EF4444;--yellow:#F59E0B;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--r:12px;--r2:16px;--r3:20px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+nav{display:flex;align-items:center;justify-content:space-between;max-width:800px;margin:0 auto;padding:16px 40px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);}
+.logo-text span{color:var(--blue);}
+.wrap{max-width:720px;margin:0 auto;padding:0 24px 80px;}
+
+/* Hero */
+.offer-hero{text-align:center;padding:40px 0 32px;}
+.offer-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:100px;padding:6px 16px;font-size:13px;font-weight:600;color:var(--red);margin-bottom:20px;}
+.offer-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:12px;}
+.offer-hero h1 em{font-style:normal;color:var(--blue);text-decoration:underline;text-decoration-color:rgba(59,130,246,0.3);text-underline-offset:4px;}
+.offer-hero p{font-size:17px;color:var(--text2);max-width:560px;margin:0 auto;}
+
+/* Grade recap */
+.grade-recap{display:flex;align-items:center;gap:20px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:20px 24px;margin-bottom:28px;}
+.gr-grade{font-family:'Plus Jakarta Sans',sans-serif;font-size:40px;font-weight:800;line-height:1;}
+.gr-info h3{font-size:15px;font-weight:700;color:var(--text);}
+.gr-info p{font-size:14px;color:var(--text2);}
+
+/* Value stack */
+.value-stack{background:var(--bg);border:2px solid var(--blue);border-radius:var(--r3);overflow:hidden;margin-bottom:28px;}
+.vs-header{background:var(--blue);color:#fff;padding:14px 24px;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;text-align:center;}
+.vs-item{display:flex;align-items:flex-start;gap:12px;padding:16px 24px;border-bottom:1px solid var(--bg2);}
+.vs-item:last-child{border:none;}
+.vs-check{width:22px;height:22px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:50%;display:grid;place-items:center;flex-shrink:0;margin-top:2px;}
+.vs-check svg{width:12px;height:12px;color:var(--green);}
+.vs-text h4{font-size:14px;font-weight:700;color:var(--text);}
+.vs-text p{font-size:13px;color:var(--text2);margin-top:2px;}
+.vs-text .vs-val{font-size:12px;color:var(--muted);font-weight:600;margin-top:4px;}
+.vs-total{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:var(--bg2);}
+.vs-total-label{font-size:14px;color:var(--text2);font-weight:600;}
+.vs-total-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;color:var(--text);text-decoration:line-through;text-decoration-color:var(--red);}
+
+/* Price + CTA */
+.price-block{text-align:center;margin-bottom:32px;}
+.price-label{font-size:15px;color:var(--text2);margin-bottom:4px;}
+.price-big{font-family:'Plus Jakarta Sans',sans-serif;font-size:64px;font-weight:800;color:var(--text);line-height:1;}
+.price-big sup{font-size:24px;vertical-align:super;}
+.price-note{font-size:13px;color:var(--muted);margin-top:4px;}
+.buy-btn{display:block;width:100%;padding:18px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(59,130,246,0.3);text-align:center;text-decoration:none;margin-bottom:12px;}
+.buy-btn:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 30px rgba(59,130,246,0.4);}
+.buy-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.skip-link{display:block;text-align:center;font-size:14px;color:var(--muted);text-decoration:none;padding:8px;}
+.skip-link:hover{color:var(--text2);}
+
+/* Trust */
+.trust-row{display:flex;justify-content:center;gap:20px;margin-bottom:32px;flex-wrap:wrap;}
+.trust-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);font-weight:500;}
+.trust-item svg{width:16px;height:16px;color:var(--green);}
+
+/* FAQ */
+.offer-faq{margin-top:40px;}
+.offer-faq h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:16px;}
+.faq-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:8px;}
+.faq-item h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.faq-item p{font-size:14px;color:var(--text2);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><div class="logo-text">ASIN <span>Analyzer</span></div></a>
+</nav>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <div class="offer-hero">
+    <div class="offer-badge">⚠️ Your report found issues</div>
+    <h1>You know what's broken.<br>Now get the <em>exact fix</em> for every issue.</h1>
+    <p>Your personalized Implementation Plan — step-by-step instructions written specifically for your listing, your scores, and your category.</p>
+  </div>
+
+  <!-- Grade recap (filled by JS) -->
+  <div class="grade-recap" id="gradeRecap" style="display:none;"></div>
+
+  <!-- Value Stack -->
+  <div class="value-stack">
+    <div class="vs-header">Here's Everything You Get</div>
+
+    <div class="vs-item">
+      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="vs-text">
+        <h4>Complete Implementation Plan</h4>
+        <p>Step-by-step fix instructions for every issue found in your 12-point diagnosis. Not generic advice — specific to your ASIN, your scores, your category.</p>
+        <div class="vs-val">Value: $47</div>
+      </div>
+    </div>
+
+    <div class="vs-item">
+      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="vs-text">
+        <h4>30-Day Action Calendar</h4>
+        <p>Week-by-week breakdown of exactly what to do and when. No guessing, no overwhelm — just follow the calendar.</p>
+        <div class="vs-val">Value: $19</div>
+      </div>
+    </div>
+
+    <div class="vs-item">
+      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="vs-text">
+        <h4>Keyword Priority List</h4>
+        <p>Which keywords to target first and why, based on your title, category, and competitor landscape.</p>
+        <div class="vs-val">Value: $15</div>
+      </div>
+    </div>
+
+    <div class="vs-item">
+      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="vs-text">
+        <h4>"Quick Wins" Checklist</h4>
+        <p>3 things you can do TODAY in under 30 minutes that will start improving your listing immediately.</p>
+        <div class="vs-val">Value: $9</div>
+      </div>
+    </div>
+
+    <div class="vs-item">
+      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <div class="vs-text">
+        <h4>30-Day Re-Scan Credit</h4>
+        <p>Come back in 30 days and re-run your analysis for free. See exactly how your changes moved the score.</p>
+        <div class="vs-val">Value: $7</div>
+      </div>
+    </div>
+
+    <div class="vs-total">
+      <div class="vs-total-label">Total Value</div>
+      <div class="vs-total-val">$97+</div>
+    </div>
+  </div>
+
+  <!-- Price + Buy -->
+  <div class="price-block">
+    <div class="price-label">Your price today:</div>
+    <div class="price-big"><sup>$</sup>7</div>
+    <div class="price-note">One-time payment · Instant delivery · Specific to your listing</div>
+  </div>
+
+  <button class="buy-btn" id="buyBtn" onclick="handlePurchase()">
+    Get My Implementation Plan → $7
+  </button>
+  <a href="#" class="skip-link" id="skipLink" onclick="handleSkip(event)">No thanks, I'll figure it out on my own</a>
+
+  <!-- Trust signals -->
+  <div class="trust-row">
+    <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Secure Checkout</div>
+    <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Instant Access</div>
+    <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generated in seconds</div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="offer-faq">
+    <h3>Common Questions</h3>
+    <div class="faq-item">
+      <h4>What exactly is the Implementation Plan?</h4>
+      <p>It's a detailed, step-by-step action plan written by AI specifically for YOUR listing. It covers every issue found in your diagnosis with specific instructions on how to fix each one — not generic advice you could find in a blog post.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Is this a done-for-you service?</h4>
+      <p>No — you do the work. The plan tells you exactly what to do, in what order, with specific guidance. You implement it in Seller Central. You own the outcome. That's why it's $7 and not $2,000.</p>
+    </div>
+    <div class="faq-item">
+      <h4>How is this different from the free report?</h4>
+      <p>The free report tells you WHAT is wrong. The Implementation Plan tells you exactly HOW to fix it — step-by-step instructions, a 30-day calendar, keyword priorities, and quick wins you can do today.</p>
+    </div>
+    <div class="faq-item">
+      <h4>What if I have multiple ASINs?</h4>
+      <p>This plan covers the ASIN you just analyzed. For multiple ASINs, check out our Seller Plan ($19/mo) — every report includes the full implementation plan automatically.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const analysisId = params.get('analysis');
+
+// Try to get report context for the grade recap
+const stored = sessionStorage.getItem('asinOffer');
+if (stored) {
+  try {
+    const data = JSON.parse(stored);
+    const gc = data.overall >= 80 ? 'var(--green)' : data.overall >= 60 ? 'var(--blue)' : data.overall >= 40 ? 'var(--yellow)' : 'var(--red)';
+    const recap = document.getElementById('gradeRecap');
+    recap.style.display = 'flex';
+    recap.innerHTML = `
+      <div class="gr-grade" style="color:${gc}">${data.grade}</div>
+      <div class="gr-info">
+        <h3>${data.asin} — ${data.overall}/100</h3>
+        <p>${data.actionCount || 0} issues found that are costing you sales</p>
+      </div>
+    `;
+  } catch(e) {}
+}
+
+async function handlePurchase() {
+  const btn = document.getElementById('buyBtn');
+  btn.disabled = true;
+  btn.textContent = 'Redirecting to checkout...';
+  if(typeof gtag==='function')gtag('event','begin_checkout',{value:7,currency:'USD',items:[{item_name:'Implementation Plan'}]});
+  if(typeof fbq==='function')fbq('track','InitiateCheckout',{value:7,currency:'USD'});
+
+  try {
+    // Get email from sessionStorage or URL
+    const email = sessionStorage.getItem('asinEmail') || '';
+
+    const resp = await fetch('/api/stripe/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        priceId: 'price_1T8YvgLhOMEKeqYhtWctJRfE', // Will be replaced with real Stripe price ID
+        email: email,
+        analysisId: analysisId,
+        mode: 'payment',
+      }),
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.url) {
+        // Store state for post-purchase flow
+        sessionStorage.setItem('purchasePath', 'tripwire');
+        window.location.href = data.url;
+      }
+    } else {
+      const err = await resp.json();
+      if (err.error && err.error.includes('not configured')) {
+        alert('Payments are being set up. Check back soon!');
+      } else {
+        alert(err.error || 'Something went wrong. Please try again.');
+      }
+      btn.disabled = false;
+      btn.textContent = 'Get My Implementation Plan → $7';
+    }
+  } catch (err) {
+    console.error('Purchase error:', err);
+    alert('Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Get My Implementation Plan → $7';
+  }
+}
+
+function handleSkip(e) {
+  e.preventDefault();
+  // Declined $7 → go to $4.97 downsell
+  sessionStorage.setItem('purchasePath', 'declined_tripwire');
+  window.location.href = `/downsell?analysis=${analysisId || ''}`;
+}
+</script>
+</body>
+</html>

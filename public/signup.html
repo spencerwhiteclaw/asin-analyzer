@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--red:#EF4444;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r3:20px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;}
+nav{display:flex;align-items:center;justify-content:center;padding:20px 40px;border-bottom:1px solid var(--border);background:var(--bg);}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);text-decoration:none;}
+.logo-text span{color:var(--blue);}
+.auth-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.auth-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:40px;width:100%;max-width:420px;box-shadow:0 4px 24px rgba(0,0,0,0.04);}
+.auth-card h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;text-align:center;margin-bottom:4px;}
+.auth-card .sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:28px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px;}
+.form-group input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:var(--r);font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;transition:border .2s;background:var(--bg);}
+.form-group input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.08);}
+.form-group input:read-only{background:var(--bg2);color:var(--muted);}
+.pw-hint{font-size:12px;color:var(--muted);margin-top:4px;}
+.auth-btn{display:block;width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px;}
+.auth-btn:hover{background:var(--blue-dark);transform:translateY(-1px);}
+.auth-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.auth-footer{text-align:center;margin-top:24px;font-size:14px;color:var(--text2);}
+.auth-footer a{color:var(--blue);font-weight:600;text-decoration:none;}
+.error-msg{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:16px;display:none;}
+.plan-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:100px;padding:6px 14px;font-size:13px;font-weight:600;color:var(--blue);margin-bottom:20px;}
+</style>
+</head>
+<body>
+<nav><a href="/" class="logo-text">ASIN <span>Analyzer</span></a></nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>Create your account</h1>
+    <p class="sub">Set a password to access your dashboard and reports</p>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div id="planBadge" style="text-align:center;display:none;"></div>
+
+    <form onsubmit="handleSignup(event)">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Your name" autocomplete="name" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Create a password" required autocomplete="new-password" minlength="8" />
+        <div class="pw-hint">Minimum 8 characters</div>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm password" required autocomplete="new-password" />
+      </div>
+      <button type="submit" class="auth-btn" id="signupBtn">Create Account →</button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="/login">Log in</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// Pre-fill email from URL params (post-Stripe purchase) or sessionStorage
+const params = new URLSearchParams(window.location.search);
+const emailParam = params.get('email') || sessionStorage.getItem('asinEmail') || '';
+if (emailParam) {
+  document.getElementById('email').value = emailParam;
+  document.getElementById('email').readOnly = true;
+}
+
+// Show plan badge if coming from purchase
+const plan = params.get('plan');
+if (plan) {
+  const badge = document.getElementById('planBadge');
+  badge.style.display = 'block';
+  badge.innerHTML = `<span class="plan-badge">✓ ${plan} Plan activated</span>`;
+}
+
+async function handleSignup(e) {
+  e.preventDefault();
+  const btn = document.getElementById('signupBtn');
+  const email = document.getElementById('email').value.trim();
+  const name = document.getElementById('name').value.trim();
+  const password = document.getElementById('password').value;
+  const confirm = document.getElementById('confirmPassword').value;
+
+  if (password !== confirm) {
+    showError('Passwords do not match.');
+    return;
+  }
+  if (password.length < 8) {
+    showError('Password must be at least 8 characters.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating account...';
+  document.getElementById('errorMsg').style.display = 'none';
+
+  try {
+    const resp = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, name }),
+    });
+
+    const data = await resp.json();
+    if (resp.ok && data.session) {
+      localStorage.setItem('sb_access_token', data.session.access_token);
+      localStorage.setItem('sb_refresh_token', data.session.refresh_token);
+      window.location.href = '/dashboard';
+    } else {
+      showError(data.error || 'Failed to create account.');
+    }
+  } catch (err) {
+    showError('Connection error. Please try again.');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Create Account →';
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--red:#EF4444;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;}
+nav{display:flex;align-items:center;justify-content:center;padding:20px 40px;border-bottom:1px solid var(--border);background:var(--bg);}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);text-decoration:none;}
+.logo-text span{color:var(--blue);}
+.auth-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.auth-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:40px;width:100%;max-width:420px;box-shadow:0 4px 24px rgba(0,0,0,0.04);}
+.auth-card h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;text-align:center;margin-bottom:4px;}
+.auth-card .sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:28px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px;}
+.form-group input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:var(--r);font-size:15px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;transition:border .2s;background:var(--bg);}
+.form-group input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.08);}
+.form-group input.error{border-color:var(--red);}
+.forgot-row{display:flex;justify-content:flex-end;margin-top:-8px;margin-bottom:16px;}
+.forgot-row a{font-size:13px;color:var(--blue);text-decoration:none;font-weight:500;}
+.forgot-row a:hover{text-decoration:underline;}
+.auth-btn{display:block;width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:16px;}
+.auth-btn:hover{background:var(--blue-dark);transform:translateY(-1px);}
+.auth-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.divider span{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:0.5px;}
+.oauth-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;color:var(--text);cursor:pointer;transition:all .2s;margin-bottom:10px;}
+.oauth-btn:hover{background:var(--bg2);border-color:var(--text2);}
+.oauth-btn svg{width:18px;height:18px;}
+.magic-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;}
+.magic-btn:hover{background:var(--bg3);}
+.auth-footer{text-align:center;margin-top:24px;font-size:14px;color:var(--text2);}
+.auth-footer a{color:var(--blue);font-weight:600;text-decoration:none;}
+.auth-footer a:hover{text-decoration:underline;}
+.error-msg{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:16px;display:none;}
+.success-msg{background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--green);margin-bottom:16px;display:none;}
+</style>
+</head>
+<body>
+<nav><a href="/" class="logo-text">ASIN <span>Analyzer</span></a></nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>Welcome back</h1>
+    <p class="sub">Log in to access your dashboard and reports</p>
+
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="success-msg" id="successMsg"></div>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="you@example.com" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Your password" required autocomplete="current-password" />
+      </div>
+      <div class="forgot-row"><a href="/forgot-password">Forgot password?</a></div>
+      <button type="submit" class="auth-btn" id="loginBtn">Log In →</button>
+    </form>
+
+    <div class="divider"><span>or</span></div>
+
+    <button class="oauth-btn" onclick="handleGoogleLogin()">
+      <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continue with Google
+    </button>
+
+    <button class="magic-btn" onclick="handleMagicLink()">
+      ✉️ Send me a magic link
+    </button>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="/signup">Sign up</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// Supabase client will be initialized here
+// const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  btn.disabled = true;
+  btn.textContent = 'Logging in...';
+  hideMessages();
+
+  try {
+    const resp = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await resp.json();
+    if (resp.ok && data.session) {
+      // Store session token
+      localStorage.setItem('sb_access_token', data.session.access_token);
+      localStorage.setItem('sb_refresh_token', data.session.refresh_token);
+      window.location.href = '/dashboard';
+    } else {
+      showError(data.error || 'Invalid email or password.');
+    }
+  } catch (err) {
+    showError('Connection error. Please try again.');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Log In →';
+}
+
+async function handleGoogleLogin() {
+  try {
+    const resp = await fetch('/api/auth/google');
+    const data = await resp.json();
+    if (data.url) window.location.href = data.url;
+  } catch (err) {
+    showError('Google login unavailable. Try email/password.');
+  }
+}
+
+async function handleMagicLink() {
+  const email = document.getElementById('email').value.trim();
+  if (!email || !email.includes('@')) {
+    showError('Enter your email above first, then click magic link.');
+    return;
+  }
+
+  try {
+    const resp = await fetch('/api/auth/magic-link', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    if (resp.ok) {
+      showSuccess('Magic link sent! Check your email.');
+    } else {
+      const data = await resp.json();
+      showError(data.error || 'Failed to send magic link.');
+    }
+  } catch (err) {
+    showError('Connection error. Please try again.');
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorMsg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function showSuccess(msg) {
+  const el = document.getElementById('successMsg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function hideMessages() {
+  document.getElementById('errorMsg').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'none';
+}
+</script>
+</body>
+</html>

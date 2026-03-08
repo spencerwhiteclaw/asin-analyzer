@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upgrade to Seller Plan — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--red:#EF4444;--yellow:#F59E0B;--purple:#8B5CF6;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--r:12px;--r2:16px;--r3:20px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+nav{display:flex;align-items:center;justify-content:center;max-width:800px;margin:0 auto;padding:16px 40px;}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);}
+.logo-text span{color:var(--blue);}
+.wrap{max-width:680px;margin:0 auto;padding:0 24px 80px;}
+
+.up-hero{text-align:center;padding:40px 0 32px;}
+.up-hero .congrats{font-size:14px;font-weight:600;color:var(--green);margin-bottom:8px;}
+.up-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;line-height:1.2;margin-bottom:12px;}
+.up-hero p{font-size:16px;color:var(--text2);max-width:540px;margin:0 auto;}
+
+.up-pitch{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:28px;margin-bottom:24px;}
+.up-pitch h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:12px;}
+.up-pitch p{font-size:14px;color:var(--text2);margin-bottom:16px;}
+
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.feat-item{display:flex;align-items:flex-start;gap:8px;font-size:14px;color:var(--text2);}
+.feat-item svg{width:18px;height:18px;color:var(--green);flex-shrink:0;margin-top:2px;}
+
+.price-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+.price-opt{background:var(--bg);border:2px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.price-opt.selected{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
+.price-opt .badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:11px;font-weight:700;padding:2px 12px;border-radius:100px;white-space:nowrap;display:none;}
+.price-opt.best .badge{display:block;}
+.price-opt h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text2);margin-bottom:4px;}
+.price-opt .p-amount{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;color:var(--text);line-height:1;}
+.price-opt .p-amount sup{font-size:14px;vertical-align:super;}
+.price-opt .p-per{font-size:13px;color:var(--muted);}
+
+.buy-btn{display:block;width:100%;padding:18px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(59,130,246,0.3);margin-bottom:12px;}
+.buy-btn:hover{background:var(--blue-dark);transform:translateY(-2px);}
+.buy-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.skip-link{display:block;text-align:center;font-size:14px;color:var(--muted);text-decoration:none;padding:8px;cursor:pointer;}
+.skip-link:hover{color:var(--text2);}
+
+@media(max-width:500px){.feat-grid,.price-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<nav><div class="logo-text">ASIN <span>Analyzer</span></div></nav>
+
+<div class="wrap">
+  <div class="up-hero">
+    <div class="congrats">✅ Your Implementation Plan is ready!</div>
+    <h1>You fixed one listing.<br>You have more.</h1>
+    <p>With the Seller Plan, every report you run includes the full diagnosis AND the implementation plan automatically. Track your improvements over time.</p>
+  </div>
+
+  <div class="up-pitch">
+    <h3>Everything in the Seller Plan</h3>
+    <div class="feat-grid">
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 10 full reports per month</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Implementation plan every report</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Score tracking over time</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Competitor ASIN analysis</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Category benchmarking</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Keyword priority lists</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 30-day action calendars</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Quick wins checklists</div>
+    </div>
+    <p style="font-size:13px;color:var(--muted);">That's everything you just bought for $7 — included automatically with every single report.</p>
+  </div>
+
+  <div class="price-row">
+    <div class="price-opt selected" id="optMonthly" onclick="selectPlan('monthly')">
+      <h4>Monthly</h4>
+      <div class="p-amount"><sup>$</sup>19</div>
+      <div class="p-per">per month</div>
+    </div>
+    <div class="price-opt best" id="optAnnual" onclick="selectPlan('annual')">
+      <div class="badge">Save 35%</div>
+      <h4>Annual</h4>
+      <div class="p-amount"><sup>$</sup>149</div>
+      <div class="p-per">per year ($12.42/mo)</div>
+    </div>
+  </div>
+
+  <button class="buy-btn" id="buyBtn" onclick="handleUpgrade()">Start My Seller Plan →</button>
+  <a class="skip-link" id="skipLink" onclick="handleSkipUpgrade(event)">Not right now — just deliver my plan</a>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const analysisId = params.get('analysis');
+let selectedPlan = 'monthly';
+
+function selectPlan(plan) {
+  selectedPlan = plan;
+  document.getElementById('optMonthly').classList.toggle('selected', plan === 'monthly');
+  document.getElementById('optAnnual').classList.toggle('selected', plan === 'annual');
+  document.getElementById('buyBtn').textContent = plan === 'annual'
+    ? 'Start My Seller Plan → $149/year'
+    : 'Start My Seller Plan → $19/month';
+}
+
+async function handleUpgrade() {
+  const btn = document.getElementById('buyBtn');
+  btn.disabled = true;
+  btn.textContent = 'Redirecting to checkout...';
+
+  try {
+    const email = sessionStorage.getItem('asinEmail') || '';
+    const priceId = selectedPlan === 'annual' ? 'price_1T8YvhLhOMEKeqYhyqxhGszT' : 'price_1T8YvhLhOMEKeqYhIln1TduM';
+
+    const resp = await fetch('/api/stripe/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ priceId, email, analysisId, mode: 'subscription' }),
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.url) {
+        sessionStorage.setItem('purchasePath', 'seller_plan');
+        window.location.href = data.url;
+      }
+    } else {
+      const err = await resp.json();
+      alert(err.error || 'Something went wrong.');
+      btn.disabled = false;
+      btn.textContent = 'Start My Seller Plan →';
+    }
+  } catch (err) {
+    alert('Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Start My Seller Plan →';
+  }
+}
+
+function handleSkipUpgrade(e) {
+  e.preventDefault();
+  const path = sessionStorage.getItem('purchasePath');
+  if (path === 'tripwire') {
+    // $7 buyer declining $19/mo → show $39/mo OTO
+    window.location.href = `/oto?analysis=${analysisId || ''}`;
+  } else {
+    // Downsell buyer → thank you page (no OTO per funnel rules)
+    window.location.href = `/thank-you?analysis=${analysisId || ''}`;
+  }
+}
+</script>
+</body>
+</html>
