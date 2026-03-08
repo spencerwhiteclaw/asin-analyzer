@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- GA4 — Replace G-XRNTK9YM1L with your Measurement ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XRNTK9YM1L');</script>
+<!-- GA4 — Replace G-XXXXXXXXXX with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
 <!-- Facebook Pixel — Replace PIXEL_ID_HERE with your Pixel ID -->
 <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','PIXEL_ID_HERE');fbq('track','PageView');</script>
 
@@ -479,7 +479,7 @@ footer a { color: var(--blue); text-decoration: none; }
     <a href="#proof">Results</a>
     <a href="#pricing">Pricing</a>
     <a href="#faq">FAQ</a>
-    <a href="#top" class="nav-btn">Analyze Free →</a>
+    <a href="#top" class="nav-btn">Free Diagnosis →</a>
   </div>
 </nav>
 
@@ -499,7 +499,8 @@ footer a { color: var(--blue); text-decoration: none; }
 
     <div class="search-bar" id="searchBar">
       <input type="text" id="asinInput" placeholder="Paste your ASIN (e.g. B08N5WRWNW)" maxlength="10" />
-      <button id="analyzeBtn" onclick="startAnalysis()">Diagnose My Listing →</button>
+      <button id="analyzeBtn" onclick="startAnalysis()">Get My Free Diagnosis →</button>
+      <div style="margin-top:10px;font-size:13px;color:var(--text-muted);font-weight:500;">100% free · No credit card required · Results in 30 seconds</div>
     </div>
     <div id="searchError" style="display:none;margin-top:8px;font-size:13px;color:var(--red);font-weight:600;"></div>
 
@@ -540,17 +541,18 @@ footer a { color: var(--blue); text-decoration: none; }
         </div>
       </div>
       <div class="metrics-section">
+        <div class="metric-row"><div class="metric-label">Keyword Rank</div><div class="metric-bar-wrap"><div class="metric-bar good" style="width:70%"></div></div><div class="metric-score">70</div></div>
         <div class="metric-row"><div class="metric-label">Title Quality</div><div class="metric-bar-wrap"><div class="metric-bar warning" style="width:55%"></div></div><div class="metric-score">55</div></div>
         <div class="metric-row"><div class="metric-label">Bullet Points</div><div class="metric-bar-wrap"><div class="metric-bar good" style="width:80%"></div></div><div class="metric-score">80</div></div>
         <div class="metric-row"><div class="metric-label">Competitive Position</div><div class="metric-bar-wrap"><div class="metric-bar excellent" style="width:92%"></div></div><div class="metric-score">92</div></div>
-        <div class="metric-row"><div class="metric-label">Keyword Rank</div><div class="metric-bar-wrap"><div class="metric-bar good" style="width:70%"></div></div><div class="metric-score">70</div></div>
-        <div class="metric-row"><div class="metric-label">Descriptions & A+</div><div class="metric-bar-wrap"><div class="metric-bar danger" style="width:38%"></div></div><div class="metric-score">38</div></div>
-        <div style="text-align:center; padding:12px 0 4px;">
-          <div style="font-size:13px; color:var(--text-muted); font-weight:500;">Plus 6 More Diagnoses</div>
-          <a href="#top" style="display:inline-block; margin-top:6px; font-size:13px; font-weight:700; color:var(--blue); text-decoration:none; transition:color .2s;">Get all 12 Action Steps →</a>
+        <div class="metric-row"><div class="metric-label">Description & A+</div><div class="metric-bar-wrap"><div class="metric-bar danger" style="width:38%"></div></div><div class="metric-score">38</div></div>
+        <div class="metric-row"><div class="metric-label">Listing Completeness</div><div class="metric-bar-wrap"><div class="metric-bar warning" style="width:58%"></div></div><div class="metric-score">58</div></div>
+        <div style="text-align:center; padding:14px 0 6px;">
+          <div style="font-size:15px; color:var(--text-secondary); font-weight:700;">Plus 6 More Categories Scored</div>
+          <a href="#top" style="display:inline-block; margin-top:8px; font-size:15px; font-weight:800; color:var(--blue); text-decoration:none; transition:color .2s;">Get Your Full Diagnosis →</a>
         </div>
       </div>
-      <div class="alert-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div>⚠ 23% of 1–2 star reviews share the same complaint — <b>fix plan ready</b></div></div>
+      <div class="alert-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div>⚠ We found a few critical errors in your listing that need <b>immediate attention</b></div></div>
       <div class="card-footer"><div class="footer-status"><div class="footer-status-dot"></div>Analyzed just now</div><a href="#" class="footer-link">View full report <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
     </div>
   </div>
@@ -693,7 +695,7 @@ footer a { color: var(--blue); text-decoration: none; }
   <h2 class="sh">Don't take our word for it.</h2>
   <div class="testi-grid">
     <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"Ran my competitor's ASIN and found 4 weaknesses I could exploit. Launched a new variation targeting those gaps. $12K in the first month."</blockquote><div class="testi-foot"><div class="testi-av">RB</div><div><div class="testi-name">Ryan B.</div><div class="testi-role">Supplements · 8-Figure Brand</div></div></div></div>
-    <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"I manage 120+ ASINs for clients. The Agency plan lets me white-label reports and deliver them as my own. My clients think I'm a genius."</blockquote><div class="testi-foot"><div class="testi-av">AT</div><div><div class="testi-name">Amanda T.</div><div class="testi-role">Amazon Agency Owner</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"I manage 120+ ASINs for clients. The Enterprise plan's white-label reports let me deliver branded audits as my own. My clients think I'm a genius."</blockquote><div class="testi-foot"><div class="testi-av">AT</div><div><div class="testi-name">Amanda T.</div><div class="testi-role">Amazon Agency Owner</div></div></div></div>
     <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"The sentiment analysis found 'chemical smell' in 31% of my 1-stars. Changed the packaging. Returns dropped 45% in three weeks."</blockquote><div class="testi-foot"><div class="testi-av">PG</div><div><div class="testi-name">Paul G.</div><div class="testi-role">Home Goods · 7-Figure</div></div></div></div>
   </div>
 </section>
@@ -714,43 +716,43 @@ footer a { color: var(--blue); text-decoration: none; }
     <div class="stk-row"><span class="n">✅ Weekly Seller Intelligence</span><span class="v">$47/mo</span></div>
   </div>
   <div class="stk-box"><span class="l">Total value: <span style="text-decoration:line-through;opacity:0.4">$2,126</span></span><span class="p">FREE</span></div>
-  <a href="#top" class="btn-primary" style="margin-top:32px;">Diagnose My Listing — Free →</a>
-  <div class="stack-note">No credit card · Email only · Full report, no blur, no tricks</div>
+  <a href="#top" class="btn-primary" style="margin-top:32px;">Get My Free Diagnosis →</a>
+  <div class="stack-note">No credit card · No login · Email only · Results in 30 seconds</div>
 </div>
 
 <!-- PRICING -->
 <section class="section ao" id="pricing" style="text-align:center;">
   <div class="tag">Plans</div>
   <h2 class="sh">Start free. Upgrade when you're addicted.</h2>
-  <p class="sp" style="margin:0 auto 16px;">The free report is real. Full detail, no blur, no paywall. Upgrade only when you want more.</p>
+  <p class="sp" style="margin:0 auto 16px;">Your free report shows what's broken. Paid plans show how to fix it — with implementation plans, score tracking, and more.</p>
   <div class="pricing-grid">
     <div class="price-card">
       <div class="price-tier">Free</div>
       <div class="price-amt">0 <span class="period">forever</span></div>
-      <div class="price-desc">One report per month. Full detail.</div>
-      <ul class="price-features"><li>1 full ASIN report/month</li><li>All 12 categories scored</li><li>Complete action plan</li><li>Weekly seller newsletter</li></ul>
-      <a href="#top" class="price-btn btn-outline">Analyze Free →</a>
+      <div class="price-desc">One report per email. See what's broken.</div>
+      <ul class="price-features"><li>1 ASIN report (per email, ever)</li><li>All 12 categories scored</li><li>Problems identified (no fix instructions)</li><li>Weekly seller newsletter</li></ul>
+      <a href="#top" class="price-btn btn-outline">Get Free Diagnosis →</a>
     </div>
     <div class="price-card popular">
       <div class="price-tier">Seller</div>
-      <div class="price-amt"><span class="currency">$</span>29 <span class="period">/mo</span></div>
+      <div class="price-amt"><span class="currency">$</span>19 <span class="period">/mo</span></div>
       <div class="price-desc">For active sellers optimizing listings.</div>
-      <ul class="price-features"><li>10 reports/month</li><li>Re-run tracking & score history</li><li>Competitor ASIN analysis</li><li>Category benchmarking</li><li>Priority support</li></ul>
-      <button class="price-btn btn-fill">Start Seller Plan →</button>
+      <ul class="price-features"><li>10 reports/month</li><li>Implementation plans included</li><li>Re-run tracking & score history</li><li>Competitor ASIN analysis</li><li>PDF report export</li></ul>
+      <button class="price-btn btn-fill" onclick="window.location.href='/pricing'">Start Seller Plan →</button>
     </div>
     <div class="price-card">
       <div class="price-tier">Agency</div>
-      <div class="price-amt"><span class="currency">$</span>99 <span class="period">/mo</span></div>
-      <div class="price-desc">For agencies managing client accounts.</div>
-      <ul class="price-features"><li>50 reports/month</li><li>White-label PDF reports</li><li>Client dashboard</li><li>All Seller features included</li><li>Dedicated support</li></ul>
-      <button class="price-btn btn-fill">Start Agency Plan →</button>
+      <div class="price-amt"><span class="currency">$</span>49 <span class="period">/mo</span></div>
+      <div class="price-desc">For sellers and agencies running more ASINs.</div>
+      <ul class="price-features"><li>50 reports/month</li><li>Everything in Seller</li><li>Priority support</li><li>Perfect for multi-ASIN catalogs</li><li>Team-friendly volume</li></ul>
+      <button class="price-btn btn-fill" onclick="window.location.href='/pricing'">Start Agency Plan →</button>
     </div>
     <div class="price-card">
       <div class="price-tier">Enterprise</div>
-      <div class="price-amt"><span class="currency">$</span>299 <span class="period">/mo</span></div>
-      <div class="price-desc">For brands and tools at scale.</div>
-      <ul class="price-features"><li>Unlimited reports</li><li>Raw API access</li><li>Custom scoring weights</li><li>All Agency features</li><li>SLA & onboarding call</li></ul>
-      <button class="price-btn btn-outline">Contact Sales →</button>
+      <div class="price-amt"><span class="currency">$</span>199 <span class="period">/mo</span></div>
+      <div class="price-desc">For brands and agencies at scale.</div>
+      <ul class="price-features"><li>300 reports/month</li><li style="background:linear-gradient(90deg,#EFF6FF,#DBEAFE); margin:4px -8px; padding:8px 8px; border-radius:8px; border:1px solid #93C5FD; color:var(--text-primary); font-weight:700;">🔍 Keyword Rank Tracking <span style="font-size:10px; font-weight:800; background:var(--blue); color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px; vertical-align:middle; letter-spacing:0.5px;">EXCLUSIVE</span></li><li>Auto Monthly Re-scans</li><li>White-label branded reports</li><li>Category intelligence</li></ul>
+      <button class="price-btn btn-outline" onclick="window.location.href='/pricing'">Start Enterprise →</button>
     </div>
   </div>
   <div class="price-guarantee">🔒 <strong>30-day money-back guarantee.</strong> Cancel anytime. No contracts.</div>
@@ -762,14 +764,14 @@ footer a { color: var(--blue); text-decoration: none; }
   <div class="tag" style="text-align:center;">FAQ</div>
   <h2 class="sh" style="text-align:center;">Questions you should be asking.</h2>
   <div class="faq">
-    <div class="fq open"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Is the free report actually free? No catch?<span class="ic">+</span></div><div class="fq-a">Yes. One full 12-point report per month, completely free. No blur, no paywall, no "upgrade to see your results" tricks. We ask for your email to deliver the report and send weekly seller tips. That's it.</div></div>
+    <div class="fq open"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Is the free report actually free? No catch?<span class="ic">+</span></div><div class="fq-a">Yes. Enter your email and ASIN, get a full 12-point diagnosis with scores across all categories and a list of every problem we find. No credit card, no login required. The free report shows you WHAT's wrong — our paid plans show you HOW to fix it with step-by-step implementation plans.</div></div>
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">How is this different from Helium 10 or Jungle Scout?<span class="ic">+</span></div><div class="fq-a">Those tools are for product research — finding what to sell. ASIN Analyzer is for listing optimization — making what you've already launched convert better. They find products. We fix listings. Complementary, not competitors.</div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I analyze my competitor's listing?<span class="ic">+</span></div><div class="fq-a">Absolutely. Any public ASIN works. Smart sellers run their top 5 competitors through the tool to find gaps and vulnerabilities. The Seller plan includes dedicated competitor analysis features.</div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What does "re-run tracking" mean?<span class="ic">+</span></div><div class="fq-a">On the Seller plan and above, you can re-scan the same ASIN over time and see how your score changes. Made a title change? Re-run and see if your Title Quality score improved. It's a feedback loop so you know what's working.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I analyze my competitor's listing?<span class="ic">+</span></div><div class="fq-a">Absolutely. Any public ASIN works. Smart sellers run their top 5 competitors through the tool to find gaps and vulnerabilities. The Seller plan includes competitor comparison features so you can see scores side by side.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What do I get with the Seller plan that's not in the free report?<span class="ic">+</span></div><div class="fq-a">The free report shows you what's broken. The Seller plan ($19/mo) gives you 10 reports per month, implementation plans with step-by-step fix instructions for every issue, score tracking over time so you can see your listing improve, competitor analysis, and PDF exports. It's the difference between knowing the problem and knowing the solution.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What's the difference between Agency and Enterprise?<span class="ic">+</span></div><div class="fq-a">Agency ($49/mo) gives you 50 reports per month — same features as Seller, just more volume for bigger catalogs. Enterprise ($199/mo) gives you 300 reports plus keyword rank tracking, automatic monthly re-scans, white-label branded reports, and category intelligence data.</div></div>
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">How accurate is the data?<span class="ic">+</span></div><div class="fq-a">We pull real-time data directly from Amazon product pages — pricing, reviews, BSR, images, A+ content, Q&A, everything. The scoring algorithm is calibrated against top 1% seller practices.</div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What's in the white-label Agency reports?<span class="ic">+</span></div><div class="fq-a">Everything in the standard report, but with your branding. Your logo, your colors, your agency name. Deliver it to clients as a professional PDF audit. They'll never know it took 30 seconds instead of 30 hours.</div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Where do I find my ASIN?<span class="ic">+</span></div><div class="fq-a">It's the 10-character code starting with "B0" in any Amazon product URL. You'll also find it in the "Product Information" section of any listing page.</div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I cancel anytime?<span class="ic">+</span></div><div class="fq-a">Yes. No contracts, no commitments. Cancel in one click. 30-day money-back guarantee on all paid plans.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Where do I find my ASIN?<span class="ic">+</span></div><div class="fq-a">It's the 10-character code starting with "B0" in any Amazon product URL. You'll also find it in the "Product Information" section of any listing page. You can also paste the full Amazon URL — we'll extract the ASIN automatically.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I cancel anytime?<span class="ic">+</span></div><div class="fq-a">Yes. No contracts, no commitments. Cancel in one click from your account settings. 30-day money-back guarantee on all paid plans.</div></div>
   </div>
 </section>
 </div>
@@ -784,7 +786,7 @@ footer a { color: var(--blue); text-decoration: none; }
 <section class="cta-end ao">
   <h2>Your listing has a problem.<br>We'll find it in <em>30 seconds.</em></h2>
   <p>Free. No login. No credit card. The only cost is not knowing.</p>
-  <a href="#top" class="btn-primary">Diagnose My Listing — Free →</a>
+  <a href="#top" class="btn-primary">Get My Free Diagnosis →</a>
   <div class="cta-note">Join 14,000+ sellers who stopped guessing and started knowing.</div>
 </section>
 
