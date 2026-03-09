@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XRNTK9YM1L');</script>
+<!-- Facebook Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','938316492034344');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compare Listings — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-soft:rgba(59,130,246,0.06);--green:#10B981;--green-bg:#ECFDF5;--yellow:#F59E0B;--yellow-bg:#FFFBEB;--red:#EF4444;--red-bg:#FEF2F2;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+nav{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:16px 40px;}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);text-decoration:none;}
+.logo-text span{color:var(--blue);}
+.nav-links{display:flex;gap:20px;align-items:center;}
+.nav-links a{color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;}
+.nav-links a:hover{color:var(--blue);}
+.wrap{max-width:1200px;margin:0 auto;padding:0 40px 80px;}
+
+/* Page Header */
+.page-header{margin-bottom:28px;text-align:center;padding-top:12px;}
+.page-header h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;}
+.page-header p{font-size:15px;color:var(--text2);margin-top:4px;}
+
+/* Input Section */
+.input-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:28px;margin-bottom:28px;}
+.input-card h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;margin-bottom:14px;}
+.asin-inputs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;}
+.asin-inputs input{flex:1;min-width:180px;padding:11px 16px;border:1px solid var(--border);border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;}
+.asin-inputs input:focus{border-color:var(--blue);}
+.input-actions{display:flex;gap:10px;align-items:center;}
+.add-more-btn{padding:10px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.add-more-btn:hover{border-color:var(--blue);color:var(--blue);}
+.compare-btn{padding:12px 28px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
+.compare-btn:hover{background:var(--blue-dark);}
+.compare-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.input-error{color:var(--red);font-size:13px;margin-top:8px;display:none;}
+
+/* Loading */
+.loading{text-align:center;padding:60px 20px;}
+.loading h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px;}
+.loading p{color:var(--text2);font-size:14px;}
+.spinner{width:40px;height:40px;border:3px solid var(--bg3);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Results */
+.results{display:none;}
+
+/* Winner Banner */
+.winner-banner{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:var(--r3);padding:24px 28px;display:flex;align-items:center;gap:20px;color:#fff;margin-bottom:24px;}
+.winner-crown{font-size:36px;}
+.winner-info h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;}
+.winner-info p{font-size:13px;color:rgba(255,255,255,0.6);}
+.winner-grade{font-family:'Plus Jakarta Sans',sans-serif;font-size:40px;font-weight:800;margin-left:auto;}
+
+/* Comparison Table */
+.comp-table-wrap{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow-x:auto;margin-bottom:24px;}
+.comp-table{width:100%;border-collapse:collapse;min-width:600px;}
+.comp-table th,.comp-table td{padding:12px 16px;text-align:center;border-bottom:1px solid var(--bg3);font-size:13px;}
+.comp-table th{background:var(--bg2);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);position:sticky;top:0;}
+.comp-table td:first-child,.comp-table th:first-child{text-align:left;font-weight:600;color:var(--text2);padding-left:20px;}
+.comp-table tr:last-child td{border-bottom:none;}
+.comp-table .winner-cell{background:var(--green-bg);font-weight:700;color:var(--green);position:relative;}
+.comp-table .overall-row{background:var(--bg2);font-weight:700;}
+.comp-table .overall-row td{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:800;padding:16px;}
+.comp-table .grade-cell{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;}
+.comp-table .product-header{font-size:11px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* Radar Chart */
+.radar-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:24px;margin-bottom:24px;}
+.radar-card h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;margin-bottom:16px;text-align:center;}
+.radar-wrap{max-width:500px;margin:0 auto;aspect-ratio:1;}
+
+/* Product Cards Row */
+.product-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:24px;}
+.prod-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:18px;text-align:center;transition:transform .2s;}
+.prod-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.prod-card.is-winner{border-color:var(--green);border-width:2px;}
+.prod-card .pc-grade{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;line-height:1;margin-bottom:4px;}
+.prod-card .pc-score{font-size:14px;color:var(--text2);margin-bottom:8px;}
+.prod-card .pc-title{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.prod-card .pc-asin{font-size:11px;color:var(--muted);margin-top:2px;}
+.prod-card .pc-meta{font-size:12px;color:var(--text2);margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.prod-card a{font-size:12px;color:var(--blue);font-weight:600;text-decoration:none;margin-top:10px;display:inline-block;}
+
+@media(max-width:768px){
+  .asin-inputs{flex-direction:column;}
+  .asin-inputs input{min-width:auto;}
+  .winner-banner{flex-direction:column;text-align:center;}
+  .winner-grade{margin-left:0;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo-text">ASIN <span>Analyzer</span></a>
+  <div class="nav-links">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/pricing">Pricing</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="page-header">
+    <h1>Compare Amazon Listings</h1>
+    <p>See how multiple ASINs stack up across 12 scoring categories</p>
+  </div>
+
+  <!-- Input -->
+  <div class="input-card">
+    <h2>Enter ASINs to compare</h2>
+    <div class="asin-inputs" id="asinInputs">
+      <input type="text" placeholder="ASIN #1 (e.g., B0BSHF7WHW)" class="asin-field" />
+      <input type="text" placeholder="ASIN #2" class="asin-field" />
+    </div>
+    <div class="input-actions">
+      <button class="add-more-btn" onclick="addAsinInput()" id="addMoreBtn">+ Add ASIN</button>
+      <button class="compare-btn" onclick="runComparison()" id="compareBtn">Compare →</button>
+    </div>
+    <div class="input-error" id="inputError"></div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading" id="loadingState" style="display:none;">
+    <div class="spinner"></div>
+    <h3>Analyzing listings...</h3>
+    <p>Scraping Amazon data and scoring each listing. This may take a moment.</p>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+    <!-- Winner Banner -->
+    <div class="winner-banner" id="winnerBanner" style="display:none;">
+      <div class="winner-crown">👑</div>
+      <div class="winner-info">
+        <h3 id="winnerTitle">—</h3>
+        <p id="winnerSub">—</p>
+      </div>
+      <div class="winner-grade" id="winnerGrade">—</div>
+    </div>
+
+    <!-- Product Summary Cards -->
+    <div class="product-cards" id="productCards"></div>
+
+    <!-- Radar Chart -->
+    <div class="radar-card">
+      <h2>Score Comparison</h2>
+      <div class="radar-wrap">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="comp-table-wrap">
+      <table class="comp-table" id="compTable">
+        <thead id="compHead"></thead>
+        <tbody id="compBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const COLORS = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6'];
+const SCORE_LABELS = {
+  title: 'Title Quality', images: 'Image Score', bullet_points: 'Bullet Points',
+  a_plus: 'A+ Content', reviews: 'Review Profile', price_competitiveness: 'Price Position',
+  keyword_optimization: 'Keywords', brand_story: 'Brand Story', inventory_status: 'Inventory',
+  listing_completeness: 'Completeness', competitive_position: 'Competitive', conversion_elements: 'Conversion',
+};
+const SCORE_KEYS = Object.keys(SCORE_LABELS);
+
+let radarChartInstance = null;
+let comparisonData = null;
+
+function addAsinInput() {
+  const container = document.getElementById('asinInputs');
+  const count = container.querySelectorAll('.asin-field').length;
+  if (count >= 5) return;
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = `ASIN #${count + 1}`;
+  input.className = 'asin-field';
+  container.appendChild(input);
+  input.focus();
+  if (count + 1 >= 5) document.getElementById('addMoreBtn').style.display = 'none';
+}
+
+function getColor(s) {
+  return s >= 80 ? 'var(--green)' : s >= 60 ? 'var(--blue)' : s >= 40 ? 'var(--yellow)' : 'var(--red)';
+}
+
+async function runComparison() {
+  const errEl = document.getElementById('inputError');
+  const btn = document.getElementById('compareBtn');
+  errEl.style.display = 'none';
+
+  const inputs = document.querySelectorAll('.asin-field');
+  const asins = [];
+  inputs.forEach(inp => {
+    let val = inp.value.trim().toUpperCase();
+    const urlMatch = val.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
+    if (urlMatch) val = urlMatch[1].toUpperCase();
+    if (val) asins.push(val);
+  });
+
+  if (asins.length < 2) {
+    errEl.textContent = 'Enter at least 2 ASINs to compare.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  for (const a of asins) {
+    if (!/^B0[A-Z0-9]{8}$/i.test(a)) {
+      errEl.textContent = `Invalid ASIN: ${a}. Must be 10 characters starting with B0.`;
+      errEl.style.display = 'block';
+      return;
+    }
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Comparing...';
+  document.getElementById('loadingState').style.display = 'block';
+  document.getElementById('results').style.display = 'none';
+
+  try {
+    const token = localStorage.getItem('sb_access_token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    const resp = await fetch('/api/compare', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ asins }),
+    });
+
+    if (!resp.ok) {
+      const data = await resp.json();
+      throw new Error(data.error || 'Comparison failed');
+    }
+
+    comparisonData = await resp.json();
+    renderResults(comparisonData);
+
+    if(typeof gtag==='function')gtag('event','compare_listings',{asin_count:asins.length});
+  } catch (err) {
+    errEl.textContent = err.message || 'Comparison failed. Please try again.';
+    errEl.style.display = 'block';
+  }
+
+  document.getElementById('loadingState').style.display = 'none';
+  btn.disabled = false;
+  btn.textContent = 'Compare →';
+}
+
+function renderResults(data) {
+  const valid = data.comparison.filter(r => !r.error);
+  if (valid.length < 2) {
+    document.getElementById('inputError').textContent = 'Could not analyze enough ASINs. Check the ASINs and try again.';
+    document.getElementById('inputError').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('results').style.display = 'block';
+
+  // Winner banner
+  if (data.winner) {
+    const w = valid.find(r => r.asin === data.winner.asin);
+    const banner = document.getElementById('winnerBanner');
+    banner.style.display = 'flex';
+    document.getElementById('winnerTitle').textContent = w?.product?.title || data.winner.asin;
+    document.getElementById('winnerSub').textContent = `${data.winner.asin} · Highest overall score at ${data.winner.score}/100`;
+    document.getElementById('winnerGrade').textContent = data.winner.grade;
+    document.getElementById('winnerGrade').style.color = getColor(data.winner.score).replace('var(--green)','#10B981').replace('var(--blue)','#3B82F6').replace('var(--yellow)','#F59E0B').replace('var(--red)','#EF4444');
+  }
+
+  // Product cards
+  const cardsHtml = valid.map((r, i) => {
+    const isWinner = data.winner && r.asin === data.winner.asin;
+    return `
+      <div class="prod-card ${isWinner ? 'is-winner' : ''}">
+        <div class="pc-grade" style="color:${getColor(r.overall)}">${r.grade}</div>
+        <div class="pc-score">${r.overall}/100</div>
+        <div class="pc-title">${r.product?.title || r.asin}</div>
+        <div class="pc-asin">${r.asin}${r.product?.brand ? ' · ' + r.product.brand : ''}</div>
+        <div class="pc-meta">
+          ${r.product?.price ? `<span>$${parseFloat(r.product.price).toFixed(2)}</span>` : ''}
+          ${r.product?.rating ? `<span>${r.product.rating}★</span>` : ''}
+          ${r.product?.reviewCount ? `<span>${r.product.reviewCount.toLocaleString()} reviews</span>` : ''}
+        </div>
+        ${r.reportId ? `<a href="/report/${r.reportId}">View full report →</a>` : ''}
+      </div>
+    `;
+  }).join('');
+  document.getElementById('productCards').innerHTML = cardsHtml;
+
+  // Comparison table
+  const thead = document.getElementById('compHead');
+  const tbody = document.getElementById('compBody');
+
+  thead.innerHTML = `<tr>
+    <th>Category</th>
+    ${valid.map((r, i) => `<th><div class="product-header" style="color:${COLORS[i]}">${r.product?.title || r.asin}</div><div style="font-size:10px;color:var(--muted);font-weight:500;">${r.asin}</div></th>`).join('')}
+  </tr>`;
+
+  // Overall row
+  let rows = `<tr class="overall-row">
+    <td>Overall Score</td>
+    ${valid.map(r => {
+      const isW = data.winner && r.asin === data.winner.asin;
+      return `<td class="grade-cell ${isW ? 'winner-cell' : ''}" style="color:${getColor(r.overall)}">${r.grade} <span style="font-size:13px;font-weight:600;color:var(--text2)">${r.overall}</span></td>`;
+    }).join('')}
+  </tr>`;
+
+  // Category rows
+  SCORE_KEYS.forEach(key => {
+    const vals = valid.map(r => r.scores?.[key] || 0);
+    const maxVal = Math.max(...vals);
+
+    rows += `<tr>
+      <td>${SCORE_LABELS[key]}</td>
+      ${valid.map((r, i) => {
+        const val = r.scores?.[key] || 0;
+        const isW = val === maxVal && vals.filter(v => v === maxVal).length === 1;
+        const pct = val * 10;
+        const color = getColor(pct);
+        return `<td class="${isW ? 'winner-cell' : ''}"><span style="color:${color};font-weight:700;">${val}</span>/10</td>`;
+      }).join('')}
+    </tr>`;
+  });
+
+  // Extra metric rows
+  const metricRows = [
+    { label: 'Price', fn: r => r.product?.price ? `$${parseFloat(r.product.price).toFixed(2)}` : '—' },
+    { label: 'Rating', fn: r => r.product?.rating ? `${r.product.rating}★` : '—' },
+    { label: 'Reviews', fn: r => r.product?.reviewCount ? r.product.reviewCount.toLocaleString() : '—' },
+    { label: 'Images', fn: r => r.product?.imageCount ?? '—' },
+    { label: 'Bullets', fn: r => r.product?.bulletCount ?? '—' },
+    { label: 'A+ Content', fn: r => r.product?.hasAPlus ? '✓' : '✗' },
+    { label: 'Video', fn: r => r.product?.hasVideo ? '✓' : '✗' },
+  ];
+
+  metricRows.forEach(m => {
+    rows += `<tr><td>${m.label}</td>${valid.map(r => `<td>${m.fn(r)}</td>`).join('')}</tr>`;
+  });
+
+  tbody.innerHTML = rows;
+
+  // Radar chart
+  renderRadarChart(valid);
+}
+
+function renderRadarChart(listings) {
+  if (radarChartInstance) radarChartInstance.destroy();
+
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  const labels = SCORE_KEYS.map(k => SCORE_LABELS[k]);
+
+  const datasets = listings.map((r, i) => ({
+    label: r.product?.title?.substring(0, 30) || r.asin,
+    data: SCORE_KEYS.map(k => r.scores?.[k] || 0),
+    borderColor: COLORS[i],
+    backgroundColor: COLORS[i] + '20',
+    borderWidth: 2,
+    pointBackgroundColor: COLORS[i],
+    pointRadius: 3,
+  }));
+
+  radarChartInstance = new Chart(ctx, {
+    type: 'radar',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        r: {
+          beginAtZero: true,
+          max: 10,
+          ticks: { stepSize: 2, font: { size: 10 } },
+          pointLabels: { font: { size: 11, weight: '600' } },
+          grid: { color: 'rgba(0,0,0,0.06)' },
+        },
+      },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { font: { size: 12, weight: '600' }, padding: 16, usePointStyle: true },
+        },
+      },
+    },
+  });
+}
+
+// Pre-fill from URL params
+const urlParams = new URLSearchParams(window.location.search);
+const urlAsins = urlParams.get('asins');
+if (urlAsins) {
+  const asinList = urlAsins.split(',').map(a => a.trim()).filter(Boolean);
+  const inputs = document.querySelectorAll('.asin-field');
+  asinList.forEach((a, i) => {
+    if (i < 2) {
+      inputs[i].value = a;
+    } else if (i < 5) {
+      addAsinInput();
+      document.querySelectorAll('.asin-field')[i].value = a;
+    }
+  });
+  if (asinList.length >= 2) {
+    setTimeout(() => runComparison(), 300);
+  }
+}
+</script>
+</body>
+</html>

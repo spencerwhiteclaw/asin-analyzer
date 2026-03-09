@@ -12,7 +12,7 @@
 <title>Dashboard — ASIN Analyzer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-soft:rgba(59,130,246,0.06);--green:#10B981;--green-bg:#ECFDF5;--yellow:#F59E0B;--red:#EF4444;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-soft:rgba(59,130,246,0.06);--green:#10B981;--green-bg:#ECFDF5;--yellow:#F59E0B;--red:#EF4444;--red-bg:#FEF2F2;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
 /* Dashboard Nav */
@@ -71,6 +71,47 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-w
 .rr-link:hover{text-decoration:underline;}
 .empty-state{padding:48px 24px;text-align:center;color:var(--muted);}
 .empty-state h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;}
+
+/* Tracked ASINs Grid */
+.tracked-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;margin-bottom:28px;}
+.tc-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.tc-header h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;}
+.tc-header button{padding:8px 16px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+.tc-header button:hover{background:var(--blue-dark);}
+.asin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;padding:20px 24px;}
+.asin-tile{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:18px;transition:transform .2s,box-shadow .2s;position:relative;}
+.asin-tile:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
+.at-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.at-grade{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;line-height:1;}
+.at-delta{font-size:12px;font-weight:700;padding:2px 8px;border-radius:100px;}
+.at-delta.up{background:var(--green-bg);color:var(--green);}
+.at-delta.down{background:var(--red-bg);color:var(--red);}
+.at-delta.flat{background:var(--bg3);color:var(--muted);}
+.at-nickname{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
+.at-asin{font-size:12px;color:var(--muted);margin-bottom:10px;}
+.at-meta{display:flex;gap:12px;font-size:12px;color:var(--text2);margin-bottom:10px;}
+.at-meta span{display:flex;align-items:center;gap:3px;}
+.at-sparkline{height:40px;width:100%;margin-bottom:10px;}
+.at-footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--bg3);}
+.at-footer a{font-size:12px;color:var(--blue);font-weight:600;text-decoration:none;}
+.at-footer a:hover{text-decoration:underline;}
+.at-remove{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;padding:2px 6px;border-radius:4px;transition:all .15s;}
+.at-remove:hover{color:var(--red);background:var(--red-bg);}
+.at-empty{padding:48px;text-align:center;color:var(--muted);grid-column:1/-1;}
+.at-empty h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;}
+
+/* Add ASIN Modal */
+.add-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);z-index:100;place-items:center;}
+.add-modal-overlay.show{display:grid;}
+.add-modal{background:var(--bg);border-radius:var(--r3);padding:32px;width:90%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,0.15);}
+.add-modal h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;margin-bottom:16px;}
+.add-modal input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:var(--r);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:10px;transition:border .2s;}
+.add-modal input:focus{border-color:var(--blue);}
+.add-modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;}
+.add-modal-btns button{padding:10px 20px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;}
+.add-modal-btns .cancel-btn{background:var(--bg2);border:1px solid var(--border);color:var(--text2);}
+.add-modal-btns .save-btn{background:var(--blue);border:none;color:#fff;}
+.add-modal-btns .save-btn:hover{background:var(--blue-dark);}
 
 /* Upgrade banner */
 .upgrade-banner{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:var(--r3);padding:24px 28px;display:flex;align-items:center;justify-content:space-between;color:#fff;margin-bottom:28px;}
@@ -140,6 +181,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-w
     <a href="/pricing" id="upgradeLink">See Plans →</a>
   </div>
 
+  <!-- Tracked ASINs -->
+  <div class="tracked-card" id="trackedCard" style="display:none;">
+    <div class="tc-header">
+      <h2>Tracked ASINs</h2>
+      <button onclick="showAddModal()">+ Track ASIN</button>
+    </div>
+    <div class="asin-grid" id="asinGrid">
+      <div class="at-empty">
+        <h3>No tracked ASINs yet</h3>
+        <p>Track ASINs to monitor score changes over time.</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Quick Analyze -->
   <div class="quick-card">
     <h2>Run a new analysis</h2>
@@ -164,6 +219,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-w
     </div>
   </div>
 
+</div>
+
+<!-- Add ASIN Modal -->
+<div class="add-modal-overlay" id="addModalOverlay" onclick="if(event.target===this)hideAddModal()">
+  <div class="add-modal">
+    <h3>Track an ASIN</h3>
+    <input type="text" id="modalAsin" placeholder="ASIN (e.g., B0BSHF7WHW)" />
+    <input type="text" id="modalNickname" placeholder="Nickname (optional, e.g., Main Widget)" />
+    <div id="modalError" style="color:var(--red);font-size:13px;display:none;"></div>
+    <div class="add-modal-btns">
+      <button class="cancel-btn" onclick="hideAddModal()">Cancel</button>
+      <button class="save-btn" id="modalSaveBtn" onclick="saveTrackedAsin()">Track</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -305,7 +374,229 @@ async function quickAnalyze() {
   btn.textContent = 'Analyze →';
 }
 
+// ─── Tracked ASINs ───
+let savedAsinsData = [];
+
+async function loadSavedAsins() {
+  try {
+    const resp = await fetch('/api/saved-asins', {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (!resp.ok) return;
+    const data = await resp.json();
+    savedAsinsData = data.asins || [];
+    renderTrackedAsins();
+  } catch (err) {
+    console.error('Failed to load saved ASINs:', err);
+  }
+}
+
+function renderTrackedAsins() {
+  const card = document.getElementById('trackedCard');
+  const grid = document.getElementById('asinGrid');
+
+  // Always show for logged-in users
+  card.style.display = 'block';
+
+  if (!savedAsinsData.length) {
+    grid.innerHTML = `<div class="at-empty"><h3>No tracked ASINs yet</h3><p>Track ASINs to monitor score changes over time.</p></div>`;
+    return;
+  }
+
+  const getColor = (s) => s >= 80 ? 'var(--green)' : s >= 60 ? 'var(--blue)' : s >= 40 ? 'var(--yellow)' : 'var(--red)';
+
+  grid.innerHTML = savedAsinsData.map(a => {
+    const grade = a.latest_grade || '—';
+    const score = a.latest_score != null ? a.latest_score : '—';
+    const scans = a.total_scans || 0;
+
+    // Delta badge
+    let deltaBadge = '';
+    if (a.delta != null && a.delta !== 0) {
+      const cls = a.delta > 0 ? 'up' : 'down';
+      const sign = a.delta > 0 ? '+' : '';
+      deltaBadge = `<span class="at-delta ${cls}">${sign}${a.delta}</span>`;
+    } else if (scans >= 2) {
+      deltaBadge = `<span class="at-delta flat">±0</span>`;
+    }
+
+    // Sparkline data points
+    const sparkId = `spark-${a.asin}`;
+    const sparkData = (a.sparkline || []).map(s => s.score);
+
+    return `
+      <div class="asin-tile">
+        <div class="at-top">
+          <div>
+            <div class="at-nickname">${a.nickname || a.asin}</div>
+            <div class="at-asin">${a.asin}${a.nickname ? '' : ''}</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="at-grade" style="color:${getColor(score)}">${grade}</div>
+            ${deltaBadge}
+          </div>
+        </div>
+        <div class="at-meta">
+          <span>Score: <strong>${score}</strong>/100</span>
+          <span>${scans} scan${scans !== 1 ? 's' : ''}</span>
+        </div>
+        <canvas class="at-sparkline" id="${sparkId}" height="40"></canvas>
+        <div class="at-footer">
+          <a href="#" onclick="quickAnalyzeAsin('${a.asin}');return false;">Re-analyze →</a>
+          <button class="at-remove" onclick="removeTrackedAsin('${a.asin}')">Remove</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Draw sparklines
+  savedAsinsData.forEach(a => {
+    const sparkData = (a.sparkline || []).map(s => s.score);
+    if (sparkData.length >= 2) drawSparkline(`spark-${a.asin}`, sparkData);
+  });
+}
+
+function drawSparkline(canvasId, data) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.offsetWidth;
+  const h = 40;
+  canvas.width = w * 2;
+  canvas.height = h * 2;
+  ctx.scale(2, 2);
+
+  const min = Math.min(...data) - 5;
+  const max = Math.max(...data) + 5;
+  const range = max - min || 1;
+  const step = w / (data.length - 1);
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0, 0, 0, h);
+  const lastVal = data[data.length - 1];
+  const color = lastVal >= 80 ? '#10B981' : lastVal >= 60 ? '#3B82F6' : lastVal >= 40 ? '#F59E0B' : '#EF4444';
+  grad.addColorStop(0, color + '30');
+  grad.addColorStop(1, color + '00');
+
+  // Fill area
+  ctx.beginPath();
+  ctx.moveTo(0, h);
+  data.forEach((v, i) => {
+    const x = i * step;
+    const y = h - ((v - min) / range) * (h - 8) - 4;
+    if (i === 0) ctx.lineTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.lineTo(w, h);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  data.forEach((v, i) => {
+    const x = i * step;
+    const y = h - ((v - min) / range) * (h - 8) - 4;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  // End dot
+  const lastX = (data.length - 1) * step;
+  const lastY = h - ((lastVal - min) / range) * (h - 8) - 4;
+  ctx.beginPath();
+  ctx.arc(lastX, lastY, 3, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+// Modal
+function showAddModal() {
+  document.getElementById('modalAsin').value = '';
+  document.getElementById('modalNickname').value = '';
+  document.getElementById('modalError').style.display = 'none';
+  document.getElementById('addModalOverlay').classList.add('show');
+  setTimeout(() => document.getElementById('modalAsin').focus(), 100);
+}
+
+function hideAddModal() {
+  document.getElementById('addModalOverlay').classList.remove('show');
+}
+
+async function saveTrackedAsin() {
+  const errEl = document.getElementById('modalError');
+  const btn = document.getElementById('modalSaveBtn');
+  let asin = document.getElementById('modalAsin').value.trim().toUpperCase();
+  const nickname = document.getElementById('modalNickname').value.trim();
+  errEl.style.display = 'none';
+
+  // Extract from URL
+  const urlMatch = asin.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
+  if (urlMatch) asin = urlMatch[1].toUpperCase();
+
+  if (!asin || !/^B0[A-Z0-9]{8}$/i.test(asin)) {
+    errEl.textContent = 'Enter a valid ASIN (10 characters starting with B0).';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  if (savedAsinsData.length >= 20) {
+    errEl.textContent = 'Maximum 20 tracked ASINs. Remove one first.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  try {
+    const resp = await fetch('/api/saved-asins', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ asin, nickname: nickname || null }),
+    });
+
+    if (resp.ok) {
+      hideAddModal();
+      await loadSavedAsins();
+    } else {
+      const data = await resp.json();
+      errEl.textContent = data.error || 'Failed to save.';
+      errEl.style.display = 'block';
+    }
+  } catch (err) {
+    errEl.textContent = 'Connection error. Try again.';
+    errEl.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Track';
+}
+
+async function removeTrackedAsin(asin) {
+  if (!confirm(`Remove ${asin} from tracked ASINs?`)) return;
+  try {
+    await fetch(`/api/saved-asins/${asin}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    await loadSavedAsins();
+  } catch (err) {
+    console.error('Remove failed:', err);
+  }
+}
+
+function quickAnalyzeAsin(asin) {
+  document.getElementById('quickAsin').value = asin;
+  quickAnalyze();
+}
+
 loadDashboard();
+loadSavedAsins();
 </script>
 </body>
 </html>

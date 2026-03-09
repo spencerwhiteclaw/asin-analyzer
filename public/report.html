@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ASIN Report — ASIN Analyzer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-light:#60A5FA;--blue-soft:rgba(59,130,246,0.06);--gold:#F5A623;--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--yellow:#F59E0B;--yellow-bg:#FFFBEB;--yellow-border:#FDE68A;--red:#EF4444;--red-bg:#FEF2F2;--red-border:#FECACA;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -33,6 +34,11 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:1200
 .grade-score{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;color:var(--text);}
 .grade-score em{font-style:normal;font-size:16px;color:var(--muted);font-weight:500;}
 .grade-label{font-size:13px;color:var(--muted);margin-top:4px;}
+.pdf-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s;text-decoration:none;margin-top:12px;font-family:'DM Sans',sans-serif;}
+.pdf-btn:hover{background:var(--blue-soft);color:var(--blue);border-color:var(--blue);}
+.pdf-btn svg{width:14px;height:14px;}
+.pdf-btn:disabled{opacity:0.5;cursor:not-allowed;}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 /* Verdict bar */
 .verdict-bar{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:20px 28px;margin-bottom:20px;display:flex;align-items:center;gap:12px;}
@@ -149,6 +155,23 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:1200
 .bg-blue{background:linear-gradient(90deg,#3B82F6,#60A5FA);}
 .bg-yellow{background:linear-gradient(90deg,#F59E0B,#FBBF24);}
 .bg-red{background:linear-gradient(90deg,#EF4444,#F87171);}
+
+/* Score History Chart */
+.history-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;margin-bottom:20px;}
+.hc-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.hc-header h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);}
+.hc-delta{display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:100px;font-size:13px;font-weight:700;}
+.hc-delta.positive{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.hc-delta.negative{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.hc-delta.neutral{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
+.hc-body{padding:20px 24px;}
+.hc-chart-wrap{position:relative;height:280px;width:100%;}
+.hc-empty{padding:40px 24px;text-align:center;color:var(--muted);font-size:14px;}
+.hc-empty strong{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.hc-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.hc-tab{padding:4px 12px;border-radius:100px;font-size:12px;font-weight:600;border:1px solid var(--border);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .2s;}
+.hc-tab:hover{border-color:var(--blue);color:var(--blue);}
+.hc-tab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
 
 /* Toast notification */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#0F172A;color:#fff;padding:14px 28px;border-radius:var(--r);font-size:14px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:1000;transition:transform .4s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;gap:8px;}
@@ -289,6 +312,10 @@ function renderReport(r, unlocked, email) {
           ${p.rating ? `<span class="rpt-tag">⭐ ${p.rating}/5 (${(p.reviewCount || 0).toLocaleString()} reviews)</span>` : ''}
           ${p.bsr ? `<span class="rpt-tag">📊 #${p.bsr.toLocaleString()} in ${p.category || 'N/A'}</span>` : ''}
         </div>
+        <button class="pdf-btn" onclick="downloadPDF(${r.id})" id="pdfBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </button>
       </div>
       <div class="rpt-grade">
         <div class="grade-letter" style="color:${gc}">${r.grade}</div>
@@ -408,6 +435,29 @@ function renderReport(r, unlocked, email) {
       </div>
     </div>
 
+    <!-- SCORE HISTORY CHART -->
+    <div class="history-card" id="scoreHistoryCard" style="display:none;">
+      <div class="hc-header">
+        <div>
+          <h2>📈 Score History — ${r.asin}</h2>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="hc-tabs" id="chartTabs">
+            <button class="hc-tab active" data-metric="overall" onclick="switchChartMetric('overall',this)">Overall</button>
+            <button class="hc-tab" data-metric="title" onclick="switchChartMetric('title',this)">Title</button>
+            <button class="hc-tab" data-metric="images" onclick="switchChartMetric('images',this)">Images</button>
+            <button class="hc-tab" data-metric="bullets" onclick="switchChartMetric('bullets',this)">Bullets</button>
+            <button class="hc-tab" data-metric="description" onclick="switchChartMetric('description',this)">A+</button>
+            <button class="hc-tab" data-metric="reviewQuality" onclick="switchChartMetric('reviewQuality',this)">Reviews</button>
+          </div>
+          <span class="hc-delta" id="historyDelta"></span>
+        </div>
+      </div>
+      <div class="hc-body">
+        <div class="hc-chart-wrap"><canvas id="scoreChart"></canvas></div>
+      </div>
+    </div>
+
     <!-- BOTTOM CTA -->
     <div class="rpt-cta">
       <h2>Track your score over time</h2>
@@ -434,6 +484,9 @@ function renderReport(r, unlocked, email) {
 
   // Store report data for unlock function
   window.__report = r;
+
+  // Load score history chart (needs 2+ scans to show)
+  loadScoreHistory(r.asin);
 }
 
 // Unlock report when email is entered
@@ -488,6 +541,188 @@ async function unlockReport(e) {
     btn.textContent = 'Unlock Full Report →';
     btn.disabled = false;
   }
+}
+
+// ═══════════════════════════════════════════
+// SCORE HISTORY CHART
+// ═══════════════════════════════════════════
+
+let scoreHistoryData = null;
+let scoreChart = null;
+let currentMetric = 'overall';
+
+async function loadScoreHistory(asin) {
+  try {
+    const resp = await fetch(`/api/score-history/${asin}`);
+    if (!resp.ok) return;
+    const data = await resp.json();
+
+    if (!data.history || data.history.length < 2) return; // Need 2+ scans to show chart
+
+    scoreHistoryData = data;
+    document.getElementById('scoreHistoryCard').style.display = 'block';
+    renderScoreChart('overall');
+  } catch (err) {
+    console.error('Score history load failed:', err);
+  }
+}
+
+function renderScoreChart(metric) {
+  if (!scoreHistoryData || !scoreHistoryData.history.length) return;
+
+  currentMetric = metric;
+  const history = scoreHistoryData.history;
+
+  // Build labels and data
+  const labels = history.map(h => {
+    const d = new Date(h.date);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  });
+
+  let dataPoints, label, maxVal;
+  if (metric === 'overall') {
+    dataPoints = history.map(h => h.score);
+    label = 'Overall Score';
+    maxVal = 100;
+  } else {
+    dataPoints = history.map(h => (h.scores && h.scores[metric]) || 0);
+    const metricNames = {
+      title: 'Title Quality', images: 'Image Score', bullets: 'Bullet Points',
+      description: 'A+ Content', reviewQuality: 'Review Quality', reviewQuantity: 'Review Volume',
+      qa: 'Q&A Presence', bsr: 'BSR Rank', categoryRank: 'Category Rank',
+      keywords: 'Keyword Visibility', completeness: 'Completeness', pricing: 'Pricing'
+    };
+    label = metricNames[metric] || metric;
+    maxVal = 10;
+  }
+
+  // Update delta badge
+  const deltaEl = document.getElementById('historyDelta');
+  if (dataPoints.length >= 2) {
+    const first = dataPoints[0];
+    const last = dataPoints[dataPoints.length - 1];
+    const change = last - first;
+    const sign = change > 0 ? '+' : '';
+    deltaEl.textContent = `${sign}${change}${metric === 'overall' ? ' pts' : '/10'}`;
+    deltaEl.className = 'hc-delta ' + (change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral');
+  } else {
+    deltaEl.textContent = '';
+    deltaEl.className = 'hc-delta neutral';
+  }
+
+  // Color based on latest value
+  const latestVal = dataPoints[dataPoints.length - 1];
+  const normVal = metric === 'overall' ? latestVal : latestVal * 10;
+  const lineColor = normVal >= 80 ? '#10B981' : normVal >= 60 ? '#3B82F6' : normVal >= 40 ? '#F59E0B' : '#EF4444';
+  const fillColor = normVal >= 80 ? 'rgba(16,185,129,0.08)' : normVal >= 60 ? 'rgba(59,130,246,0.08)' : normVal >= 40 ? 'rgba(245,158,11,0.08)' : 'rgba(239,68,68,0.08)';
+
+  // Destroy existing chart
+  if (scoreChart) scoreChart.destroy();
+
+  const ctx = document.getElementById('scoreChart').getContext('2d');
+  scoreChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label,
+        data: dataPoints,
+        borderColor: lineColor,
+        backgroundColor: fillColor,
+        borderWidth: 2.5,
+        pointBackgroundColor: lineColor,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        tension: 0.3,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0F172A',
+          titleFont: { family: 'Plus Jakarta Sans', weight: '700', size: 13 },
+          bodyFont: { family: 'DM Sans', size: 12 },
+          padding: 12,
+          cornerRadius: 8,
+          displayColors: false,
+          callbacks: {
+            title: (items) => items[0].label,
+            label: (item) => {
+              const idx = item.dataIndex;
+              const h = scoreHistoryData.history[idx];
+              if (metric === 'overall') {
+                return `Score: ${item.raw}/100 (${h.grade})`;
+              }
+              return `${label}: ${item.raw}/10`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          min: 0,
+          max: maxVal,
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          ticks: {
+            font: { family: 'DM Sans', size: 12 },
+            color: '#94A3B8',
+            callback: (val) => metric === 'overall' ? val : val + '/10',
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: {
+            font: { family: 'DM Sans', size: 12 },
+            color: '#94A3B8',
+          }
+        }
+      }
+    }
+  });
+}
+
+function switchChartMetric(metric, btn) {
+  document.querySelectorAll('.hc-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderScoreChart(metric);
+}
+
+// PDF Download
+async function downloadPDF(reportId) {
+  const btn = document.getElementById('pdfBtn');
+  if (!btn) return;
+  btn.disabled = true;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;animation:spin 1s linear infinite"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg> Generating...`;
+
+  try {
+    const resp = await fetch(`/api/report/${reportId}/pdf`);
+    if (!resp.ok) throw new Error('PDF generation failed');
+
+    const blob = await resp.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = resp.headers.get('Content-Disposition')?.match(/filename="(.+)"/)?.[1] || `ASIN-Report-${reportId}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    if(typeof gtag==='function')gtag('event','pdf_download',{report_id:reportId});
+  } catch (err) {
+    console.error('PDF download failed:', err);
+    alert('Failed to generate PDF. Please try again.');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download PDF`;
 }
 </script>
 </body>

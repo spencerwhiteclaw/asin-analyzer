@@ -144,6 +144,19 @@ async function initDB() {
       CREATE INDEX IF NOT EXISTS idx_user_profiles_stripe ON user_profiles(stripe_customer_id);
     `);
 
+    // Sprint 3: saved_asins table for multi-ASIN dashboard
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS saved_asins (
+        id SERIAL PRIMARY KEY,
+        user_id UUID NOT NULL,
+        asin VARCHAR(10) NOT NULL,
+        nickname VARCHAR(255),
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+        UNIQUE(user_id, asin)
+      );
+      CREATE INDEX IF NOT EXISTS idx_saved_asins_user ON saved_asins(user_id);
+    `).catch(() => {});
+
     // Add implementation_plan column if missing (migration for existing DBs)
     await pool.query(`
       ALTER TABLE analyses ADD COLUMN IF NOT EXISTS implementation_plan JSONB;
@@ -817,32 +830,6 @@ async function triggerGHL(email, asin, score, grade, reportId, product, event = 
     else if (event === 'subscription_cancelled')    tagsToAdd.push('subscription_cancelled');
     await ghlAddTags(contactId, tagsToAdd);
 
-    // Determine grade tag
-    const gradeTag = (grade || '').startsWith('A') ? 'grade_a' :
-                     (grade || '').startsWith('B') ? 'grade_b' :
-                     (grade || '').startsWith('C') ? 'grade_c' :
-                     (grade || '').startsWith('D') ? 'grade_d' : 'grade_f';
-
-    // Apply grade tag via GHL Contacts API
-    try {
-      const gradeTagRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer pit-0ec4239a-cc6e-4275-baad-95d27ed39808',
-          'Content-Type': 'application/json',
-          'Version': '2021-07-28'
-        },
-        body: JSON.stringify({
-          email: email,
-          tags: [gradeTag],
-          locationId: 'FkRY7SKAXibyjuH3c7Ew'
-        })
-      });
-      console.log(`🏷️ GHL grade tag applied: ${gradeTag} for ${email}`);
-    } catch (err) {
-      console.error('GHL grade tag failed:', err.message);
-    }
-
     console.log(`✅ GHL: ${email} → upserted, tags: [${tagsToAdd.join(', ')}]`);
   } catch (err) {
     console.error('GHL triggerGHL failed:', err.message);
@@ -1084,6 +1071,158 @@ app.get('/api/report/:id', async (req, res) => {
   }
 });
 
+// ── GET /api/report/:id/pdf — Generate PDF export of report ──
+app.get('/api/report/:id/pdf', async (req, res) => {
+  let browser;
+  try {
+    const { id } = req.params;
+    const result = await pool.query('SELECT * FROM analyses WHERE id = $1', [parseInt(id, 10)]);
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Report not found' });
+
+    const r = result.rows[0];
+    const puppeteer = require('puppeteer');
+
+    browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
+    });
+
+    const page = await browser.newPage();
+    await page.setViewport({ width: 1200, height: 800 });
+
+    // Build self-contained HTML for the PDF
+    const getColor = (s) => s >= 80 ? '#10B981' : s >= 60 ? '#3B82F6' : s >= 40 ? '#F59E0B' : '#EF4444';
+    const scores = r.scores || {};
+    const scoreKeys = [
+      { key: 'title', label: 'Title Quality' },
+      { key: 'images', label: 'Image Quality' },
+      { key: 'bullet_points', label: 'Bullet Points' },
+      { key: 'a_plus', label: 'A+ Content' },
+      { key: 'reviews', label: 'Review Profile' },
+      { key: 'price_competitiveness', label: 'Price Position' },
+      { key: 'keyword_optimization', label: 'Keyword Optimization' },
+      { key: 'brand_story', label: 'Brand Story' },
+      { key: 'inventory_status', label: 'Inventory Status' },
+      { key: 'listing_completeness', label: 'Listing Completeness' },
+      { key: 'competitive_position', label: 'Competitive Position' },
+      { key: 'conversion_elements', label: 'Conversion Elements' },
+    ];
+
+    const actionItems = r.action_items || [];
+    const problems = actionItems.map(a => ({
+      category: a.category,
+      problem: a.problem || a.text,
+      priority: a.priority,
+    }));
+
+    const scoreRows = scoreKeys.map(sk => {
+      const val = scores[sk.key];
+      if (val == null) return '';
+      const pct = val * 10;
+      const color = getColor(pct);
+      return `
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9;">
+          <div style="width:180px;font-size:13px;font-weight:600;color:#475569;">${sk.label}</div>
+          <div style="flex:1;height:8px;background:#f1f5f9;border-radius:100px;overflow:hidden;">
+            <div style="width:${pct}%;height:100%;background:${color};border-radius:100px;"></div>
+          </div>
+          <div style="width:50px;text-align:right;font-size:14px;font-weight:700;color:${color};">${val}/10</div>
+        </div>
+      `;
+    }).join('');
+
+    const actionRows = problems.slice(0, 12).map((a, i) => {
+      const prioColor = a.priority === 'High' ? '#EF4444' : a.priority === 'Medium' ? '#F59E0B' : '#94A3B8';
+      return `
+        <div style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:700;color:${prioColor};text-transform:uppercase;">${a.priority || 'Medium'}</span>
+            <span style="font-size:11px;color:#94a3b8;">·</span>
+            <span style="font-size:11px;color:#94a3b8;">${a.category}</span>
+          </div>
+          <div style="font-size:13px;color:#0f172a;line-height:1.5;">${a.problem}</div>
+        </div>
+      `;
+    }).join('');
+
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; color: #0f172a; background: #fff; padding: 40px; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; padding-bottom: 24px; border-bottom: 2px solid #f1f5f9; }
+    .logo { font-size: 20px; font-weight: 800; }
+    .logo span { color: #3B82F6; }
+    .grade-box { text-align: center; }
+    .grade { font-size: 56px; font-weight: 800; line-height: 1; }
+    .score { font-size: 14px; color: #475569; margin-top: 4px; }
+    .product-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; max-width: 600px; }
+    .product-meta { font-size: 13px; color: #475569; }
+    .section { margin-bottom: 28px; }
+    .section-title { font-size: 16px; font-weight: 800; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #3B82F6; display: inline-block; }
+    .footer { margin-top: 32px; padding-top: 16px; border-top: 2px solid #f1f5f9; font-size: 11px; color: #94a3b8; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <div class="logo">ASIN <span>Analyzer</span></div>
+      <div style="margin-top:12px;">
+        <div class="product-title">${r.product_title || r.asin}</div>
+        <div class="product-meta">ASIN: ${r.asin}${r.brand ? ' · ' + r.brand : ''}${r.category ? ' · ' + r.category : ''}</div>
+        <div class="product-meta" style="margin-top:4px;">Generated: ${new Date(r.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+      </div>
+    </div>
+    <div class="grade-box">
+      <div class="grade" style="color:${getColor(r.overall_score)}">${r.overall_grade}</div>
+      <div class="score">${r.overall_score} / 100</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Score Breakdown</div>
+    ${scoreRows}
+  </div>
+
+  <div class="section">
+    <div class="section-title">Issues Found (${problems.length})</div>
+    ${actionRows || '<div style="font-size:13px;color:#94a3b8;">No issues detected.</div>'}
+  </div>
+
+  <div class="footer">
+    ASIN Analyzer Report · asinanalyzer.app · Report #${r.id} · Confidential
+  </div>
+</body>
+</html>`;
+
+    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 15000 });
+
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      margin: { top: '20mm', bottom: '20mm', left: '15mm', right: '15mm' },
+      printBackground: true,
+    });
+
+    await browser.close();
+    browser = null;
+
+    const filename = `ASIN-Report-${r.asin}-${r.id}.pdf`;
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename="${filename}"`,
+      'Content-Length': pdfBuffer.length,
+    });
+    res.send(pdfBuffer);
+
+  } catch (err) {
+    console.error('PDF export error:', err.message);
+    if (browser) await browser.close().catch(() => {});
+    res.status(500).json({ error: 'Failed to generate PDF' });
+  }
+});
+
 // ── POST /api/subscribe ──
 app.post('/api/subscribe', async (req, res) => {
   try {
@@ -1099,7 +1238,160 @@ app.post('/api/subscribe', async (req, res) => {
   }
 });
 
+// ── GET /api/score-history/:asin — Score tracking over time ──
+app.get('/api/score-history/:asin', async (req, res) => {
+  try {
+    const asin = (req.params.asin || '').trim().toUpperCase();
+    if (!asin || !/^B0[A-Z0-9]{8}$/i.test(asin)) {
+      return res.status(400).json({ error: 'Invalid ASIN.' });
+    }
+
+    const result = await pool.query(
+      `SELECT id, overall_score, overall_grade, scores, created_at
+       FROM analyses WHERE UPPER(asin) = $1
+       ORDER BY created_at ASC LIMIT 50`,
+      [asin]
+    );
+
+    // Build per-category trend data
+    const history = result.rows.map(r => ({
+      id: r.id,
+      score: r.overall_score,
+      grade: r.overall_grade,
+      scores: r.scores || {},
+      date: r.created_at,
+    }));
+
+    // Calculate delta if 2+ data points
+    let delta = null;
+    if (history.length >= 2) {
+      const first = history[0].score;
+      const last = history[history.length - 1].score;
+      delta = { from: first, to: last, change: last - first };
+    }
+
+    res.json({ asin, history, delta, totalScans: history.length });
+  } catch (err) {
+    console.error('Score history error:', err.message);
+    res.status(500).json({ error: 'Failed to load score history.' });
+  }
+});
+
 // ── GET /api/stats ──
+// ── POST /api/compare — Competitor Comparison (2-5 ASINs) ──
+app.post('/api/compare', optionalAuth, async (req, res) => {
+  try {
+    const { asins } = req.body;
+    if (!Array.isArray(asins) || asins.length < 2 || asins.length > 5) {
+      return res.status(400).json({ error: 'Provide 2 to 5 ASINs for comparison.' });
+    }
+
+    // Validate all ASINs
+    const cleanAsins = asins.map(a => (a || '').trim().toUpperCase());
+    for (const a of cleanAsins) {
+      if (!/^B0[A-Z0-9]{8}$/i.test(a)) {
+        return res.status(400).json({ error: `Invalid ASIN: ${a}` });
+      }
+    }
+
+    // De-duplicate
+    const uniqueAsins = [...new Set(cleanAsins)];
+    if (uniqueAsins.length < 2) {
+      return res.status(400).json({ error: 'Provide at least 2 different ASINs.' });
+    }
+
+    // For each ASIN, check if we have a recent analysis (last 7 days), otherwise scrape fresh
+    const results = [];
+    for (const asin of uniqueAsins) {
+      // Check for recent analysis
+      const existing = await pool.query(
+        `SELECT * FROM analyses WHERE UPPER(asin) = $1 AND created_at > NOW() - INTERVAL '7 days'
+         ORDER BY created_at DESC LIMIT 1`,
+        [asin]
+      );
+
+      if (existing.rows.length > 0) {
+        const row = existing.rows[0];
+        results.push({
+          asin,
+          product: {
+            title: row.product_title, brand: row.brand, price: row.price,
+            rating: row.rating, reviewCount: row.review_count, bsr: row.bsr,
+            category: row.category, imageCount: row.image_count,
+            bulletCount: row.bullet_count, hasAPlus: row.has_aplus,
+            hasVideo: row.has_video, qaCount: row.qa_count,
+          },
+          scores: row.scores || {},
+          overall: row.overall_score,
+          grade: row.overall_grade,
+          reportId: row.id,
+          cached: true,
+        });
+      } else {
+        // Scrape and score fresh
+        try {
+          const product = await scrapeAmazon(asin);
+          const { scores, overall, grade } = scoreProduct(product);
+          results.push({
+            asin,
+            product: {
+              title: product.title, brand: product.brand, price: product.price,
+              rating: product.rating, reviewCount: product.reviewCount, bsr: product.bsr,
+              category: product.category, imageCount: product.imageCount,
+              bulletCount: product.bulletCount, hasAPlus: product.hasAPlus,
+              hasVideo: product.hasVideo, qaCount: product.qaCount,
+            },
+            scores, overall, grade,
+            reportId: null,
+            cached: false,
+          });
+        } catch (scrapeErr) {
+          results.push({
+            asin,
+            error: `Failed to analyze ${asin}: ${scrapeErr.message}`,
+          });
+        }
+      }
+    }
+
+    // Build comparison summary
+    const valid = results.filter(r => !r.error);
+    let winner = null;
+    if (valid.length >= 2) {
+      winner = valid.reduce((best, r) => r.overall > best.overall ? r : best, valid[0]);
+    }
+
+    // Score categories for comparison
+    const categories = [
+      'title', 'images', 'bullet_points', 'a_plus', 'reviews',
+      'price_competitiveness', 'keyword_optimization', 'brand_story',
+      'inventory_status', 'listing_completeness', 'competitive_position', 'conversion_elements',
+    ];
+
+    // Find who wins each category
+    const categoryWinners = {};
+    categories.forEach(cat => {
+      let best = null;
+      let bestScore = -1;
+      valid.forEach(r => {
+        const val = r.scores?.[cat] || 0;
+        if (val > bestScore) { bestScore = val; best = r.asin; }
+      });
+      categoryWinners[cat] = best;
+    });
+
+    res.json({
+      comparison: results,
+      winner: winner ? { asin: winner.asin, score: winner.overall, grade: winner.grade } : null,
+      categoryWinners,
+    });
+
+  } catch (err) {
+    console.error('Compare error:', err.message);
+    res.status(500).json({ error: 'Comparison failed. Please try again.' });
+  }
+});
+
 app.get('/api/stats', async (req, res) => {
   try {
     const analyses = await pool.query('SELECT COUNT(*) as count FROM analyses');
@@ -1460,6 +1752,136 @@ app.get('/api/history', requireAuth, async (req, res) => {
   }
 });
 
+// ═══════════════════════════════════════════════════════════════
+// SAVED ASINS — Multi-ASIN dashboard (Sprint 3)
+// ═══════════════════════════════════════════════════════════════
+
+// ── GET /api/saved-asins — List saved ASINs with latest scores ──
+app.get('/api/saved-asins', requireAuth, async (req, res) => {
+  try {
+    // Get all saved ASINs for this user
+    const saved = await pool.query(
+      'SELECT id, asin, nickname, created_at FROM saved_asins WHERE user_id = $1 ORDER BY created_at ASC',
+      [req.user.id]
+    );
+
+    if (saved.rows.length === 0) {
+      return res.json({ asins: [] });
+    }
+
+    // For each saved ASIN, get the latest analysis + score history
+    const asins = await Promise.all(saved.rows.map(async (sa) => {
+      // Latest analysis
+      const latest = await pool.query(
+        `SELECT id, overall_score, overall_grade, scores, product_title, brand, price, rating, review_count, bsr, category, created_at
+         FROM analyses WHERE UPPER(asin) = $1 ORDER BY created_at DESC LIMIT 1`,
+        [sa.asin.toUpperCase()]
+      );
+
+      // Score history (last 10 for sparkline)
+      const history = await pool.query(
+        `SELECT overall_score, created_at FROM analyses WHERE UPPER(asin) = $1 ORDER BY created_at DESC LIMIT 10`,
+        [sa.asin.toUpperCase()]
+      );
+
+      const latestRow = latest.rows[0] || null;
+      const sparkline = history.rows.reverse().map(h => h.overall_score);
+
+      // Calculate delta (latest vs previous)
+      let delta = null;
+      if (sparkline.length >= 2) {
+        delta = sparkline[sparkline.length - 1] - sparkline[sparkline.length - 2];
+      }
+
+      return {
+        id: sa.id,
+        asin: sa.asin,
+        nickname: sa.nickname,
+        savedAt: sa.created_at,
+        latest: latestRow ? {
+          reportId: latestRow.id,
+          score: latestRow.overall_score,
+          grade: latestRow.overall_grade,
+          scores: latestRow.scores,
+          title: latestRow.product_title,
+          brand: latestRow.brand,
+          price: parseFloat(latestRow.price || 0),
+          rating: parseFloat(latestRow.rating || 0),
+          reviewCount: latestRow.review_count,
+          bsr: latestRow.bsr,
+          category: latestRow.category,
+          date: latestRow.created_at,
+        } : null,
+        sparkline,
+        delta,
+        totalScans: sparkline.length,
+      };
+    }));
+
+    res.json({ asins });
+  } catch (err) {
+    console.error('Saved ASINs error:', err.message);
+    res.status(500).json({ error: 'Failed to load saved ASINs.' });
+  }
+});
+
+// ── POST /api/saved-asins — Save an ASIN to track ──
+app.post('/api/saved-asins', requireAuth, async (req, res) => {
+  try {
+    const { asin, nickname } = req.body;
+    const cleanASIN = (asin || '').trim().toUpperCase();
+
+    if (!cleanASIN || !/^B0[A-Z0-9]{8}$/i.test(cleanASIN)) {
+      return res.status(400).json({ error: 'Invalid ASIN.' });
+    }
+
+    // Check limit (max 20 saved ASINs per user)
+    const countResult = await pool.query('SELECT COUNT(*) as count FROM saved_asins WHERE user_id = $1', [req.user.id]);
+    if (parseInt(countResult.rows[0].count, 10) >= 20) {
+      return res.status(400).json({ error: 'Maximum 20 saved ASINs. Remove one to add another.' });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO saved_asins (user_id, asin, nickname) VALUES ($1, $2, $3)
+       ON CONFLICT (user_id, asin) DO UPDATE SET nickname = COALESCE($3, saved_asins.nickname)
+       RETURNING *`,
+      [req.user.id, cleanASIN, nickname || null]
+    );
+
+    res.json({ saved: result.rows[0] });
+  } catch (err) {
+    console.error('Save ASIN error:', err.message);
+    res.status(500).json({ error: 'Failed to save ASIN.' });
+  }
+});
+
+// ── DELETE /api/saved-asins/:asin — Remove a saved ASIN ──
+app.delete('/api/saved-asins/:asin', requireAuth, async (req, res) => {
+  try {
+    const asin = (req.params.asin || '').trim().toUpperCase();
+    await pool.query('DELETE FROM saved_asins WHERE user_id = $1 AND UPPER(asin) = $2', [req.user.id, asin]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Delete saved ASIN error:', err.message);
+    res.status(500).json({ error: 'Failed to remove ASIN.' });
+  }
+});
+
+// ── PATCH /api/saved-asins/:asin — Update nickname ──
+app.patch('/api/saved-asins/:asin', requireAuth, async (req, res) => {
+  try {
+    const asin = (req.params.asin || '').trim().toUpperCase();
+    const { nickname } = req.body;
+    await pool.query(
+      'UPDATE saved_asins SET nickname = $1 WHERE user_id = $2 AND UPPER(asin) = $3',
+      [nickname || null, req.user.id, asin]
+    );
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update ASIN.' });
+  }
+});
+
 // ── POST /api/account/update — Update user profile ──
 app.post('/api/account/update', requireAuth, async (req, res) => {
   try {
@@ -1761,6 +2183,7 @@ app.get('/reset-password', (req, res) => res.sendFile(path.join(__dirname, 'publ
 app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'public', 'dashboard.html')));
 app.get('/dashboard/history', (req, res) => res.sendFile(path.join(__dirname, 'public', 'history.html')));
 app.get('/dashboard/account', (req, res) => res.sendFile(path.join(__dirname, 'public', 'account.html')));
+app.get('/compare', (req, res) => res.sendFile(path.join(__dirname, 'public', 'compare.html')));
 
 // Catch-all → landing page
 app.get('*', (req, res) => {
