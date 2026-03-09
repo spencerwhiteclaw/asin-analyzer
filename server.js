@@ -816,6 +816,33 @@ async function triggerGHL(email, asin, score, grade, reportId, product, event = 
     else if (event === 'payment_failed')            tagsToAdd.push('payment_failed');
     else if (event === 'subscription_cancelled')    tagsToAdd.push('subscription_cancelled');
     await ghlAddTags(contactId, tagsToAdd);
+
+    // Determine grade tag
+    const gradeTag = (grade || '').startsWith('A') ? 'grade_a' :
+                     (grade || '').startsWith('B') ? 'grade_b' :
+                     (grade || '').startsWith('C') ? 'grade_c' :
+                     (grade || '').startsWith('D') ? 'grade_d' : 'grade_f';
+
+    // Apply grade tag via GHL Contacts API
+    try {
+      const gradeTagRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer pit-0ec4239a-cc6e-4275-baad-95d27ed39808',
+          'Content-Type': 'application/json',
+          'Version': '2021-07-28'
+        },
+        body: JSON.stringify({
+          email: email,
+          tags: [gradeTag],
+          locationId: 'FkRY7SKAXibyjuH3c7Ew'
+        })
+      });
+      console.log(`🏷️ GHL grade tag applied: ${gradeTag} for ${email}`);
+    } catch (err) {
+      console.error('GHL grade tag failed:', err.message);
+    }
+
     console.log(`✅ GHL: ${email} → upserted, tags: [${tagsToAdd.join(', ')}]`);
   } catch (err) {
     console.error('GHL triggerGHL failed:', err.message);
