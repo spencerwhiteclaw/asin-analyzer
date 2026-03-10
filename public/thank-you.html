@@ -12,7 +12,7 @@
 <title>Thank You — ASIN Analyzer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--purple:#8B5CF6;--orange:#F97316;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--r:12px;--r2:16px;--r3:20px;}
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--red:#EF4444;--purple:#8B5CF6;--orange:#F97316;--gold:#F5A623;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
 nav{display:flex;align-items:center;justify-content:space-between;max-width:800px;margin:0 auto;padding:16px 40px;}
@@ -27,6 +27,7 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 .ty-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;margin-bottom:8px;}
 .ty-hero p{font-size:16px;color:var(--text2);}
 
+/* Deliverables */
 .delivery-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:28px;margin-bottom:20px;}
 .delivery-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .delivery-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bg2);}
@@ -35,11 +36,79 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 .delivery-item span{font-size:14px;color:var(--text2);}
 .delivery-item a{color:var(--blue);font-weight:600;text-decoration:none;}
 .delivery-item a:hover{text-decoration:underline;}
-
 .plan-loading{text-align:center;padding:24px;color:var(--muted);font-size:14px;}
-.plan-content{display:none;}
 
-/* A/B Test Next Steps — the hero section */
+/* Title style tag on deliverables */
+.style-tag{display:inline-block;background:rgba(59,130,246,0.08);color:var(--blue);font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;margin-left:6px;}
+
+/* ═══ UPGRADE VALUE STACK ═══ */
+.upgrade-section{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:var(--r3);padding:0;margin-bottom:24px;overflow:hidden;position:relative;}
+.upgrade-section::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at top center,rgba(59,130,246,0.12),transparent 60%);pointer-events:none;}
+.upgrade-flash{background:linear-gradient(90deg,var(--green),#059669);text-align:center;padding:8px 16px;font-size:12px;font-weight:700;color:#fff;letter-spacing:0.5px;text-transform:uppercase;}
+.upgrade-body{padding:32px 28px;position:relative;}
+.upgrade-body h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:800;color:#fff;margin-bottom:6px;text-align:center;line-height:1.25;}
+.upgrade-body h2 em{font-style:normal;color:var(--green);}
+.upgrade-sub{font-size:15px;color:rgba(255,255,255,0.5);text-align:center;margin-bottom:24px;max-width:520px;margin-left:auto;margin-right:auto;}
+
+/* 3 Title Styles */
+.title-styles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;}
+.ts-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r2);padding:16px;text-align:center;transition:border-color .2s;}
+.ts-card.got{border-color:var(--green);background:rgba(16,185,129,0.06);}
+.ts-card.new{border-color:var(--blue);background:rgba(59,130,246,0.06);}
+.ts-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding:2px 8px;border-radius:100px;display:inline-block;}
+.ts-card.got .ts-badge{background:rgba(16,185,129,0.15);color:var(--green);}
+.ts-card.new .ts-badge{background:rgba(59,130,246,0.15);color:var(--blue-dark);color:#60A5FA;}
+.ts-icon{font-size:24px;margin-bottom:6px;}
+.ts-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;color:#fff;margin-bottom:4px;}
+.ts-desc{font-size:11.5px;color:rgba(255,255,255,0.4);line-height:1.4;}
+
+/* Value stack items */
+.uv-items{margin-bottom:20px;}
+.uv-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+.uv-item:last-child{border:none;}
+.uv-item .uv-left{display:flex;align-items:center;gap:8px;}
+.uv-item .uv-left svg{width:16px;height:16px;color:var(--green);flex-shrink:0;}
+.uv-item .uv-left span{font-size:14px;color:rgba(255,255,255,0.8);}
+.uv-item .uv-val{font-size:13px;color:rgba(255,255,255,0.3);text-decoration:line-through;}
+
+/* Savings math */
+.savings-card{background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:var(--r2);padding:20px;margin-bottom:20px;}
+.savings-row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;}
+.savings-row .label{color:rgba(255,255,255,0.55);}
+.savings-row .val{font-weight:700;color:#fff;}
+.savings-row .val.strike{text-decoration:line-through;color:rgba(255,255,255,0.3);}
+.savings-row .val.green{color:var(--green);}
+.savings-total{display:flex;justify-content:space-between;padding:12px 0 0;margin-top:8px;border-top:2px solid rgba(16,185,129,0.2);}
+.savings-total .label{font-size:16px;font-weight:700;color:#fff;}
+.savings-total .val{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;color:var(--green);line-height:1;}
+.savings-total .val sup{font-size:12px;vertical-align:super;}
+
+/* Competitor callout */
+.comp-callout{background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:var(--r);padding:14px 18px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;}
+.comp-callout .comp-icon{font-size:20px;flex-shrink:0;}
+.comp-callout p{font-size:13px;color:rgba(255,255,255,0.65);line-height:1.5;}
+.comp-callout strong{color:#fff;}
+
+/* Price row */
+.upgrade-price-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.up-opt{background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.1);border-radius:var(--r2);padding:16px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+.up-opt.selected{border-color:var(--green);box-shadow:0 0 0 3px rgba(16,185,129,0.15);}
+.up-opt .up-badge{position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:100px;white-space:nowrap;display:none;}
+.up-opt.best .up-badge{display:block;}
+.up-opt h4{font-size:12px;font-weight:700;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.up-opt .up-amount{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;color:#fff;line-height:1;}
+.up-opt .up-amount sup{font-size:12px;vertical-align:super;}
+.up-opt .up-per{font-size:12px;color:rgba(255,255,255,0.35);margin-top:2px;}
+
+.upgrade-btn{display:block;width:100%;padding:18px;background:linear-gradient(135deg,var(--green),#059669);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(16,185,129,0.3);margin-bottom:10px;letter-spacing:-0.01em;}
+.upgrade-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(16,185,129,0.4);}
+.upgrade-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.upgrade-skip{display:block;text-align:center;font-size:13px;color:rgba(255,255,255,0.25);text-decoration:none;padding:4px;cursor:pointer;}
+.upgrade-skip:hover{color:rgba(255,255,255,0.4);}
+.upgrade-trust{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:12px;}
+.upgrade-trust span{font-size:11px;color:rgba(255,255,255,0.25);}
+
+/* A/B Test Next Steps */
 .ab-card{background:linear-gradient(135deg,rgba(139,92,246,0.06),rgba(59,130,246,0.06));border:2px solid rgba(139,92,246,0.2);border-radius:var(--r3);padding:28px;margin-bottom:20px;}
 .ab-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;color:var(--text);}
 .ab-card .ab-sub{font-size:14px;color:var(--text2);margin-bottom:16px;}
@@ -52,6 +121,13 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 .ab-content p{font-size:13px;color:var(--text2);}
 .ab-content .time{font-size:12px;color:var(--purple);font-weight:600;margin-top:2px;}
 
+/* Re-score reminder */
+.rescore-card{background:var(--bg);border:2px solid var(--blue);border-radius:var(--r3);padding:24px;text-align:center;margin-bottom:20px;}
+.rescore-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px;}
+.rescore-card p{font-size:14px;color:var(--text2);margin-bottom:16px;}
+.rescore-btn{display:inline-flex;padding:14px 32px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
+.rescore-btn:hover{background:var(--blue-dark);transform:translateY(-1px);}
+
 /* Referral */
 .referral-card{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:var(--r3);padding:32px;text-align:center;color:#fff;margin-bottom:20px;}
 .referral-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px;}
@@ -61,16 +137,15 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 .referral-link button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;white-space:nowrap;}
 .referral-link button:hover{background:var(--blue-dark);}
 
-/* Re-score reminder */
-.rescore-card{background:var(--bg);border:2px solid var(--blue);border-radius:var(--r3);padding:24px;text-align:center;margin-bottom:20px;}
-.rescore-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px;}
-.rescore-card p{font-size:14px;color:var(--text2);margin-bottom:16px;}
-.rescore-btn{display:inline-flex;padding:14px 32px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
-.rescore-btn:hover{background:var(--blue-dark);transform:translateY(-1px);}
-
 /* Disclaimer */
 .disclaimer{border-top:1px solid var(--border);padding:24px 0 0;margin-top:12px;}
 .disclaimer p{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:8px;}
+
+@media(max-width:600px){
+  .title-styles{grid-template-columns:1fr;}
+  .upgrade-price-row{grid-template-columns:1fr;}
+  .upgrade-body h2{font-size:20px;}
+}
 </style>
 </head>
 <body>
@@ -85,10 +160,10 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
   <div class="ty-hero">
     <div class="ty-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
     <h1>You're all set!</h1>
-    <p id="tySubtext">Your purchase is confirmed. Here's your plan and your next steps.</p>
+    <p id="tySubtext">Your purchase is confirmed. Here's your optimized copy and implementation plan.</p>
   </div>
 
-  <!-- What they purchased -->
+  <!-- ═══ DELIVERABLES — Their $7 results ═══ -->
   <div class="delivery-card" id="deliveryCard">
     <h3>Your Deliverables</h3>
     <div id="deliveryItems">
@@ -96,7 +171,123 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
     </div>
   </div>
 
-  <!-- A/B Test Next Steps — THE KEY SECTION -->
+  <!-- ═══ UPGRADE VALUE STACK — Right after they see the value ═══ -->
+  <div class="upgrade-section" id="upgradeSection">
+    <div class="upgrade-flash">EXCLUSIVE OFFER FOR NEW CUSTOMERS — AVAILABLE NOW</div>
+    <div class="upgrade-body">
+      <h2>You got 1 optimized title.<br>Want <em>2 more styles</em> — instantly?</h2>
+      <p class="upgrade-sub">The title above was written with <strong>Balanced SEO</strong> — great all-around optimization. But what if you could A/B test against two completely different approaches?</p>
+
+      <!-- 3 Title Optimization Styles -->
+      <div class="title-styles">
+        <div class="ts-card got">
+          <div class="ts-badge">YOU HAVE THIS</div>
+          <div class="ts-icon">⚖️</div>
+          <div class="ts-name">Balanced SEO</div>
+          <div class="ts-desc">Equal weight on keywords, readability, and conversion. Great baseline for any category.</div>
+        </div>
+        <div class="ts-card new">
+          <div class="ts-badge">NEW — INSTANT</div>
+          <div class="ts-icon">🎯</div>
+          <div class="ts-name">Strong Keyword Density</div>
+          <div class="ts-desc">Maximum keyword coverage for ranking. Front-loads high-volume search terms to dominate search results.</div>
+        </div>
+        <div class="ts-card new">
+          <div class="ts-badge">NEW — INSTANT</div>
+          <div class="ts-icon">✨</div>
+          <div class="ts-name">Premium Style</div>
+          <div class="ts-desc">Conversion-first copywriting. Clean, benefit-driven language that makes shoppers click "Add to Cart."</div>
+        </div>
+      </div>
+
+      <!-- Value Stack -->
+      <div class="uv-items">
+        <div class="uv-item">
+          <div class="uv-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>2 additional optimized titles (Strong Keyword + Premium Style) — <strong>delivered instantly</strong></span></div>
+          <div class="uv-val">$14</div>
+        </div>
+        <div class="uv-item">
+          <div class="uv-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>10 full reports per month — each with optimized titles + bullets</span></div>
+          <div class="uv-val">$70</div>
+        </div>
+        <div class="uv-item">
+          <div class="uv-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>A/B test instructions with every report</span></div>
+          <div class="uv-val">$29</div>
+        </div>
+        <div class="uv-item">
+          <div class="uv-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Competitor ASIN analysis — run their listings through the analyzer</span></div>
+          <div class="uv-val">$49</div>
+        </div>
+        <div class="uv-item">
+          <div class="uv-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Score tracking over time — watch your numbers climb</span></div>
+          <div class="uv-val">$19</div>
+        </div>
+        <div class="uv-item">
+          <div class="uv-left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span>Category benchmarking + keyword priority lists</span></div>
+          <div class="uv-val">$15</div>
+        </div>
+      </div>
+
+      <!-- Savings Math -->
+      <div class="savings-card">
+        <div class="savings-row">
+          <span class="label">You just paid for 1 listing</span>
+          <span class="val">$7</span>
+        </div>
+        <div class="savings-row">
+          <span class="label">10 listings at $7 each would cost</span>
+          <span class="val strike">$70/mo</span>
+        </div>
+        <div class="savings-row">
+          <span class="label">+ 2 bonus title styles (instant)</span>
+          <span class="val strike">$14</span>
+        </div>
+        <div class="savings-row">
+          <span class="label">+ Competitor analysis, score tracking, benchmarks</span>
+          <span class="val strike">$83</span>
+        </div>
+        <div class="savings-total">
+          <span class="label">All of it — $19/month</span>
+          <span class="val"><sup>$</sup>19<span style="font-size:14px;font-weight:500;">/mo</span></span>
+        </div>
+        <div style="text-align:center;margin-top:8px;font-size:13px;font-weight:700;color:var(--green);">That's 73% less than buying reports individually. You save $148+/month.</div>
+      </div>
+
+      <!-- Competitor callout -->
+      <div class="comp-callout">
+        <div class="comp-icon">🔍</div>
+        <p><strong>Run your competitors' ASINs right now.</strong> You just optimized YOUR listing. Now see exactly where your top 3 competitors are weak. Find their gaps. Exploit them. Every report shows you their scores across all 12 categories.</p>
+      </div>
+
+      <!-- Price Toggle -->
+      <div class="upgrade-price-row">
+        <div class="up-opt selected" id="upOptMonthly" onclick="selectUpgradePlan('monthly')">
+          <h4>Monthly</h4>
+          <div class="up-amount"><sup>$</sup>19</div>
+          <div class="up-per">per month · cancel anytime</div>
+        </div>
+        <div class="up-opt best" id="upOptAnnual" onclick="selectUpgradePlan('annual')">
+          <div class="up-badge">Save 35%</div>
+          <h4>Annual</h4>
+          <div class="up-amount"><sup>$</sup>149</div>
+          <div class="up-per">per year ($12.42/mo)</div>
+        </div>
+      </div>
+
+      <button class="upgrade-btn" id="upgradeBtn" onclick="handleUpgrade()">Get 2 More Title Styles + 10 Reports/Month →</button>
+      <a class="upgrade-skip" id="upgradeSkip" onclick="dismissUpgrade(event)">No thanks, I'll stick with the one title for now</a>
+
+      <div class="upgrade-trust">
+        <span>14-day money-back guarantee</span>
+        <span>·</span>
+        <span>Cancel anytime</span>
+        <span>·</span>
+        <span>2 bonus titles delivered instantly</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ A/B Test Next Steps ═══ -->
   <div class="ab-card">
     <h3>Your A/B Test Game Plan</h3>
     <p class="ab-sub">Here's exactly what to do next to start getting real data on your optimized copy.</p>
@@ -167,6 +358,7 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
     <p><strong>Earnings &amp; Results Disclaimer:</strong> Results from A/B testing and listing optimization vary based on product, category, competition, and market conditions. We make no guarantees about specific sales increases, conversion improvements, or ranking changes.</p>
     <p><strong>Amazon Disclaimer:</strong> ASIN Analyzer is not affiliated with Amazon.com, Inc. A/B testing via Manage Your Experiments requires Brand Registry enrollment. Features and availability may change without notice.</p>
     <p><strong>AI-Generated Content:</strong> Optimized copy is AI-generated and should be reviewed before use. You are responsible for compliance with Amazon's Terms of Service.</p>
+    <p><strong>Subscription:</strong> The Seller Plan is a recurring subscription billed monthly or annually. Cancel anytime from your account settings. 14-day money-back guarantee applies to first payment.</p>
   </div>
 </div>
 
@@ -181,6 +373,59 @@ const purchasePath = sessionStorage.getItem('purchasePath') || '';
 if(typeof gtag==='function')gtag('event','purchase',{transaction_id:sessionId||'unknown',value:7,currency:'USD'});
 if(typeof fbq==='function')fbq('track','Purchase',{value:7,currency:'USD'});
 
+// ═══ UPGRADE PLAN LOGIC ═══
+let selectedUpgradePlan = 'monthly';
+
+function selectUpgradePlan(plan) {
+  selectedUpgradePlan = plan;
+  document.getElementById('upOptMonthly').classList.toggle('selected', plan === 'monthly');
+  document.getElementById('upOptAnnual').classList.toggle('selected', plan === 'annual');
+  document.getElementById('upgradeBtn').textContent = plan === 'annual'
+    ? 'Get 2 More Title Styles + 10 Reports/Month → $149/yr'
+    : 'Get 2 More Title Styles + 10 Reports/Month →';
+}
+
+async function handleUpgrade() {
+  const btn = document.getElementById('upgradeBtn');
+  btn.disabled = true;
+  btn.textContent = 'Redirecting to checkout...';
+
+  if(typeof gtag==='function')gtag('event','begin_checkout',{value:19,currency:'USD',items:[{item_name:'Seller Plan from Thank You'}]});
+  if(typeof fbq==='function')fbq('track','InitiateCheckout',{value:19,currency:'USD'});
+
+  try {
+    const priceId = selectedUpgradePlan === 'annual' ? 'price_1T8YvhLhOMEKeqYhyqxhGszT' : 'price_1T8YvhLhOMEKeqYhIln1TduM';
+    const resp = await fetch('/api/stripe/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ priceId, email, analysisId, mode: 'subscription' }),
+    });
+
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data.url) {
+        sessionStorage.setItem('purchasePath', 'seller_plan_from_thankyou');
+        window.location.href = data.url;
+      }
+    } else {
+      const err = await resp.json();
+      alert(err.error || 'Something went wrong.');
+      btn.disabled = false;
+      btn.textContent = 'Get 2 More Title Styles + 10 Reports/Month →';
+    }
+  } catch (err) {
+    alert('Connection error. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Get 2 More Title Styles + 10 Reports/Month →';
+  }
+}
+
+function dismissUpgrade(e) {
+  e.preventDefault();
+  document.getElementById('upgradeSection').style.display = 'none';
+}
+
+// ═══ LOAD PLAN ═══
 async function loadPlan() {
   if (!analysisId) {
     document.getElementById('planLoading').textContent = 'Check your email for your implementation plan and optimized copy.';
@@ -201,9 +446,10 @@ async function loadPlan() {
 
       let html = '';
 
-      // Title rewrite
+      // Title rewrite — with style tag
       if (plan.titleRewrite) {
-        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Your Optimized Title:</strong> ${plan.titleRewrite.after || plan.titleRewrite}</span></div>`;
+        const titleText = plan.titleRewrite.after || plan.titleRewrite;
+        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Your Optimized Title</strong> <span class="style-tag">Balanced SEO</span><br>${titleText}</span></div>`;
       }
 
       // Bullet rewrites
@@ -211,7 +457,7 @@ async function loadPlan() {
         html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>5 Optimized Bullet Points:</strong></span></div>`;
         plan.bulletRewrites.forEach((b, i) => {
           const text = typeof b === 'string' ? b : b.after || b.text || '';
-          html += `<div class="delivery-item" style="padding-left:30px;"><span>${i+1}. ${text.substring(0, 150)}${text.length > 150 ? '...' : ''}</span></div>`;
+          html += `<div class="delivery-item" style="padding-left:30px;"><span>${i+1}. ${text.substring(0, 200)}${text.length > 200 ? '...' : ''}</span></div>`;
         });
       }
 
@@ -239,7 +485,7 @@ async function loadPlan() {
 
       // A/B Testing plan
       if (plan.abTestingPlan) {
-        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>A/B Testing Plan:</strong> ${plan.abTestingPlan.summary || 'Included — see instructions above'}</span></div>`;
+        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>A/B Testing Plan:</strong> ${plan.abTestingPlan.summary || 'Included — see instructions below'}</span></div>`;
       }
 
       // Weekly calendar
@@ -271,9 +517,9 @@ function copyRef() {
   setTimeout(() => btn.textContent = 'Copy Link', 2000);
 }
 
-// Clean up session storage
-sessionStorage.removeItem('purchasePath');
-sessionStorage.removeItem('asinOffer');
+// Don't clean up session storage yet — they might still upgrade
+// sessionStorage.removeItem('purchasePath');
+// sessionStorage.removeItem('asinOffer');
 </script>
 </body>
 </html>

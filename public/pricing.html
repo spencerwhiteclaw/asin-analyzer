@@ -109,6 +109,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .feat-divider{height:1px;background:var(--bg3);margin:10px 0;}
 .plan-reports{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;}
 
+/* Savings callout inside plan cards */
+.plan-savings{background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--r);padding:10px 14px;margin-bottom:16px;}
+.plan-savings .ps-math{font-size:12px;color:var(--text2);margin-bottom:2px;}
+.plan-savings .ps-math .strike{text-decoration:line-through;color:var(--red);}
+.plan-savings .ps-result{font-size:13px;font-weight:700;color:var(--green);}
+
+/* Title styles mini */
+.plan-styles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:12px;}
+.ps-style{background:var(--bg2);border-radius:6px;padding:6px;text-align:center;}
+.ps-style .ps-icon{font-size:14px;}
+.ps-style .ps-label{font-size:9px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;}
+
 /* Guarantee */
 .guarantee-bar{background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--r2);padding:20px 28px;margin-bottom:48px;display:flex;align-items:center;gap:14px;}
 .guarantee-icon{font-size:28px;flex-shrink:0;}
@@ -232,16 +244,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
     <div class="plan-card popular">
       <div class="pop-badge">Most Popular</div>
       <div class="plan-name">Seller</div>
-      <div class="plan-desc">The optimization loop for your top listings. A/B test your way to page one.</div>
+      <div class="plan-desc">10 listings optimized monthly. 3 title styles per report. A/B test your way to page one.</div>
       <div class="plan-price">
         <div class="plan-amount" id="sellerPrice"><sup>$</sup>19</div>
         <div class="plan-per" id="sellerPer">per month</div>
         <div class="plan-annual" id="sellerAnnual">$149/year — save 35%</div>
       </div>
+      <!-- Savings callout -->
+      <div class="plan-savings">
+        <div class="ps-math">10 reports at $7 each = <span class="strike">$70/mo</span></div>
+        <div class="ps-result">You pay $19 — save 73% ($51/mo)</div>
+      </div>
+      <!-- 3 Title Styles -->
+      <div class="plan-styles">
+        <div class="ps-style"><div class="ps-icon">⚖️</div><div class="ps-label">Balanced SEO</div></div>
+        <div class="ps-style"><div class="ps-icon">🎯</div><div class="ps-label">Keyword Dense</div></div>
+        <div class="ps-style"><div class="ps-icon">✨</div><div class="ps-label">Premium Style</div></div>
+      </div>
       <button class="plan-btn primary" onclick="checkout('seller')">Start Seller Plan</button>
       <div class="plan-features">
         <div class="plan-reports">10 reports / month</div>
-        <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> AI-optimized title + bullets every report</div>
+        <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 3 AI-optimized title styles per report</div>
+        <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 5 bullet rewrites per report</div>
         <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> A/B test setup instructions</div>
         <div class="feat-divider"></div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Full 12-point diagnosis</div>
@@ -256,15 +280,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
     <!-- AGENCY -->
     <div class="plan-card">
       <div class="plan-name">Agency</div>
-      <div class="plan-desc">Run the optimization loop for clients at scale. White-label everything.</div>
+      <div class="plan-desc">50 client listings optimized monthly. 150 title variations. White-label everything.</div>
       <div class="plan-price">
         <div class="plan-amount" id="agencyPrice"><sup>$</sup>49</div>
         <div class="plan-per" id="agencyPer">per month</div>
         <div class="plan-annual" id="agencyAnnual">$449/year — save 24%</div>
       </div>
+      <!-- Savings callout -->
+      <div class="plan-savings">
+        <div class="ps-math">50 reports at $7 each = <span class="strike">$350/mo</span></div>
+        <div class="ps-result">You pay $49 — save 86% ($301/mo)</div>
+      </div>
+      <!-- 3 Title Styles -->
+      <div class="plan-styles">
+        <div class="ps-style"><div class="ps-icon">⚖️</div><div class="ps-label">Balanced SEO</div></div>
+        <div class="ps-style"><div class="ps-icon">🎯</div><div class="ps-label">Keyword Dense</div></div>
+        <div class="ps-style"><div class="ps-icon">✨</div><div class="ps-label">Premium Style</div></div>
+      </div>
       <button class="plan-btn primary" onclick="checkout('agency')">Start Agency Plan</button>
       <div class="plan-features">
-        <div class="plan-reports">50 reports / month</div>
+        <div class="plan-reports">50 reports / month = 150 title variations</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Everything in Seller</div>
         <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> White-label PDF reports</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Team / client organization</div>
@@ -276,15 +311,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
     <!-- ENTERPRISE -->
     <div class="plan-card">
       <div class="plan-name">Enterprise</div>
-      <div class="plan-desc">Keyword tracking, auto re-scans, and category intelligence at scale.</div>
+      <div class="plan-desc">300 listings. 900 title variations/mo. Keyword tracking + auto re-scans.</div>
       <div class="plan-price">
         <div class="plan-amount" id="entPrice"><sup>$</sup>199</div>
         <div class="plan-per" id="entPer">per month</div>
         <div class="plan-annual" id="entAnnual">$1,899/year — save 20%</div>
       </div>
+      <!-- Savings callout -->
+      <div class="plan-savings">
+        <div class="ps-math">300 reports at $7 each = <span class="strike">$2,100/mo</span></div>
+        <div class="ps-result">You pay $199 — save 91% ($1,901/mo)</div>
+      </div>
+      <!-- 3 Title Styles -->
+      <div class="plan-styles">
+        <div class="ps-style"><div class="ps-icon">⚖️</div><div class="ps-label">Balanced SEO</div></div>
+        <div class="ps-style"><div class="ps-icon">🎯</div><div class="ps-label">Keyword Dense</div></div>
+        <div class="ps-style"><div class="ps-icon">✨</div><div class="ps-label">Premium Style</div></div>
+      </div>
       <button class="plan-btn primary" onclick="checkout('enterprise')">Start Enterprise Plan</button>
       <div class="plan-features">
-        <div class="plan-reports">300 reports / month</div>
+        <div class="plan-reports">300 reports / month = 900 title variations</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Everything in Agency</div>
         <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Keyword Rank Tracking</strong></div>
         <div class="plan-feat" style="padding-left:24px;font-size:12px;color:var(--muted);">Track 50 keywords/ASIN in Amazon search results</div>
