@@ -928,6 +928,14 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { bar.style.width = tw; }, 600 + i * 120);
   });
 
+  // Auto-start if ?asin= param present (from pricing page cold redirect)
+  const urlParams = new URLSearchParams(window.location.search);
+  const prefilledASIN = urlParams.get('asin');
+  if (prefilledASIN) {
+    document.getElementById('asinInput').value = prefilledASIN.toUpperCase();
+    setTimeout(() => startAnalysis(), 400);
+  }
+
   // Enter key on ASIN input
   document.getElementById('asinInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') startAnalysis();

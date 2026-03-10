@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- GA4 — Replace G-XRNTK9YM1L with your Measurement ID -->
+<!-- GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XRNTK9YM1L');</script>
-<!-- Facebook Pixel — Replace 938316492034344 with your Pixel ID -->
+<!-- Facebook Pixel -->
 <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','938316492034344');fbq('track','PageView');</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pricing — ASIN Analyzer</title>
@@ -26,10 +25,41 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .nav-btn:hover{background:var(--blue-dark)!important;transform:translateY(-1px);}
 .wrap{max-width:1200px;margin:0 auto;padding:100px 40px 80px;}
 
-/* Hero */
-.pricing-hero{text-align:center;padding:40px 0 48px;}
-.pricing-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:44px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:12px;}
-.pricing-hero p{font-size:18px;color:var(--text2);max-width:560px;margin:0 auto;}
+/* ═══ COLD PATH: "Try it first" hero ═══ */
+.cold-hero{text-align:center;padding:60px 0 48px;display:none;}
+.cold-hero.active{display:block;}
+.cold-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:42px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:14px;}
+.cold-hero h1 em{font-style:italic;color:var(--blue);}
+.cold-hero p{font-size:17px;color:var(--text2);max-width:520px;margin:0 auto 32px;line-height:1.7;}
+.cold-search{display:flex;align-items:center;background:var(--bg);border:2px solid var(--border);border-radius:var(--r2);padding:6px;max-width:520px;margin:0 auto;transition:border-color .3s,box-shadow .3s;}
+.cold-search:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px rgba(59,130,246,0.08);}
+.cold-search input{flex:1;min-width:0;border:none;outline:none;font-size:15px;padding:14px 18px;color:var(--text);font-family:'DM Sans',sans-serif;background:transparent;}
+.cold-search input::placeholder{color:var(--muted);}
+.cold-search button{background:var(--blue);color:#fff;border:none;padding:14px 28px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;box-shadow:0 2px 8px rgba(59,130,246,0.25);}
+.cold-search button:hover{background:var(--blue-dark);}
+.cold-search-note{margin-top:10px;font-size:13px;color:var(--muted);text-align:center;}
+.cold-search-error{display:none;margin-top:8px;font-size:13px;color:var(--red);font-weight:600;text-align:center;}
+.cold-social{display:flex;justify-content:center;gap:24px;margin-top:28px;flex-wrap:wrap;}
+.cold-social-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);font-weight:500;}
+.cold-social-item svg{width:16px;height:16px;color:var(--green);flex-shrink:0;}
+.cold-divider{text-align:center;padding:28px 0 12px;color:var(--muted);font-size:14px;font-weight:500;}
+
+/* ═══ WARM PATH: Personalized hero ═══ */
+.warm-hero{text-align:center;padding:40px 0 40px;display:none;}
+.warm-hero.active{display:block;}
+.warm-grade-badge{display:inline-flex;align-items:center;gap:12px;background:var(--bg2);border:2px solid var(--border);border-radius:var(--r2);padding:12px 24px;margin-bottom:20px;}
+.warm-grade-letter{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;line-height:1;}
+.warm-grade-info{text-align:left;}
+.warm-grade-asin{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+.warm-grade-score{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:var(--text);}
+.warm-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:38px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:12px;}
+.warm-hero h1 em{font-style:italic;color:var(--red);}
+.warm-hero p{font-size:17px;color:var(--text2);max-width:560px;margin:0 auto 12px;line-height:1.7;}
+
+/* ═══ SHARED: Pricing hero heading ═══ */
+.pricing-hero{text-align:center;padding:20px 0 32px;}
+.pricing-hero h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:8px;}
+.pricing-hero p{font-size:16px;color:var(--text2);max-width:480px;margin:0 auto;}
 
 /* Toggle */
 .toggle-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:40px;}
@@ -42,45 +72,37 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .save-badge{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:12px;font-weight:700;padding:2px 10px;border-radius:100px;}
 
 /* Pricing Grid */
-.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:60px;}
-.plan-card{background:var(--bg);border:2px solid var(--border);border-radius:var(--r3);padding:28px;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:60px;}
+.plan-card{background:var(--bg);border:2px solid var(--border);border-radius:var(--r3);padding:32px;display:flex;flex-direction:column;position:relative;transition:transform .2s,box-shadow .2s;}
 .plan-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.08);}
 .plan-card.popular{border-color:var(--blue);box-shadow:0 8px 30px rgba(59,130,246,0.12);}
 .pop-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:4px 16px;border-radius:100px;white-space:nowrap;text-transform:uppercase;letter-spacing:0.5px;}
-.plan-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.plan-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px;}
 .plan-desc{font-size:13px;color:var(--muted);margin-bottom:16px;min-height:36px;}
 .plan-price{margin-bottom:20px;}
-.plan-amount{font-family:'Plus Jakarta Sans',sans-serif;font-size:42px;font-weight:800;color:var(--text);line-height:1;}
-.plan-amount sup{font-size:16px;vertical-align:super;}
-.plan-amount.free{color:var(--green);}
+.plan-amount{font-family:'Plus Jakarta Sans',sans-serif;font-size:48px;font-weight:800;color:var(--text);line-height:1;}
+.plan-amount sup{font-size:18px;vertical-align:super;}
 .plan-per{font-size:13px;color:var(--muted);margin-top:2px;}
 .plan-annual{font-size:12px;color:var(--green);font-weight:600;display:none;}
 .plan-annual.show{display:block;}
-.plan-btn{display:block;width:100%;padding:12px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;text-align:center;text-decoration:none;transition:all .2s;margin-bottom:20px;cursor:pointer;border:none;}
+.plan-btn{display:block;width:100%;padding:14px;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;text-align:center;text-decoration:none;transition:all .2s;margin-bottom:20px;cursor:pointer;border:none;}
 .plan-btn.primary{background:var(--blue);color:#fff;box-shadow:0 2px 8px rgba(59,130,246,0.25);}
 .plan-btn.primary:hover{background:var(--blue-dark);transform:translateY(-1px);}
 .plan-btn.secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border);}
 .plan-btn.secondary:hover{background:var(--bg3);}
 .plan-features{flex:1;}
-.plan-feat{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:13px;color:var(--text2);}
+.plan-feat{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:13px;color:var(--text2);}
 .plan-feat svg{width:16px;height:16px;color:var(--green);flex-shrink:0;margin-top:2px;}
 .plan-feat.disabled{color:var(--muted);}
 .plan-feat.disabled svg{color:var(--border);}
 .feat-divider{height:1px;background:var(--bg3);margin:10px 0;}
-.plan-reports{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;}
+.plan-reports{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px;}
 
-/* Comparison Table */
-.compare-section{margin-bottom:60px;}
-.compare-section h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;text-align:center;margin-bottom:8px;}
-.compare-section>p{text-align:center;color:var(--text2);font-size:15px;margin-bottom:28px;}
-.compare-table{width:100%;border-collapse:separate;border-spacing:0;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;}
-.compare-table th,.compare-table td{padding:12px 16px;text-align:center;font-size:13px;border-bottom:1px solid var(--bg3);}
-.compare-table th{background:var(--bg2);font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--text);font-size:14px;}
-.compare-table th:first-child,.compare-table td:first-child{text-align:left;font-weight:600;color:var(--text2);min-width:200px;}
-.compare-table tr:last-child td{border-bottom:none;}
-.compare-table .check{color:var(--green);font-weight:700;}
-.compare-table .dash{color:var(--border);}
-.compare-table .highlight{background:rgba(59,130,246,0.03);}
+/* Guarantee */
+.guarantee-bar{background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--r2);padding:20px 28px;margin-bottom:48px;display:flex;align-items:center;gap:14px;}
+.guarantee-icon{font-size:28px;flex-shrink:0;}
+.guarantee-text{font-size:14px;color:var(--text2);line-height:1.6;}
+.guarantee-text strong{color:var(--text);font-weight:700;}
 
 /* FAQ */
 .faq-section{max-width:720px;margin:0 auto 60px;}
@@ -101,8 +123,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .bottom-cta a{display:inline-flex;padding:14px 36px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
 .bottom-cta a:hover{background:var(--blue-dark);transform:translateY(-1px);}
 
-@media(max-width:900px){.pricing-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:560px){.pricing-grid{grid-template-columns:1fr;}}
+@media(max-width:900px){.pricing-grid{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto;}}
+@media(max-width:640px){
+  .cold-hero h1,.warm-hero h1{font-size:30px;}
+  .cold-search{flex-direction:column;}
+  .cold-search button{width:100%;}
+  nav{padding:14px 20px;}
+  .nav-r a:not(.nav-btn){display:none;}
+}
 </style>
 </head>
 <body>
@@ -118,10 +146,41 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 
 <div class="wrap">
 
-  <!-- Hero -->
+  <!-- ═══ COLD PATH: No report data — get them into the funnel first ═══ -->
+  <div class="cold-hero" id="coldHero">
+    <h1>Before you pick a plan,<br><em>see your listing's score free.</em></h1>
+    <p>14,000+ Amazon sellers ran their free diagnosis and discovered exactly what was costing them sales. Takes 30 seconds. No credit card.</p>
+    <div class="cold-search">
+      <input type="text" id="coldAsinInput" placeholder="Paste your ASIN (e.g. B08N5WRWNW)" maxlength="10" />
+      <button onclick="coldStartAnalysis()">Get My Free Diagnosis →</button>
+    </div>
+    <div class="cold-search-note">100% free · No credit card · Results in 30 seconds</div>
+    <div class="cold-search-error" id="coldError"></div>
+    <div class="cold-social">
+      <div class="cold-social-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>14,000+ sellers</div>
+      <div class="cold-social-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>12-point diagnosis</div>
+      <div class="cold-social-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Same audit agencies bill $2k+</div>
+    </div>
+    <div class="cold-divider">— or preview our plans below —</div>
+  </div>
+
+  <!-- ═══ WARM PATH: Has report data — personalized pitch ═══ -->
+  <div class="warm-hero" id="warmHero">
+    <div class="warm-grade-badge" id="warmBadge">
+      <div class="warm-grade-letter" id="warmGradeLetter">—</div>
+      <div class="warm-grade-info">
+        <div class="warm-grade-asin" id="warmAsin">—</div>
+        <div class="warm-grade-score" id="warmScore">— / 100</div>
+      </div>
+    </div>
+    <h1>Your listing scored <em id="warmGradeText">—</em>.<br>Here's how to fix it.</h1>
+    <p>You've seen what's broken. Now get the tools to fix it — score tracking, competitor analysis, keyword priorities, and step-by-step implementation plans with every report.</p>
+  </div>
+
+  <!-- ═══ SHARED: Plans section ═══ -->
   <div class="pricing-hero">
-    <h1>Simple pricing.<br>Serious results.</h1>
-    <p>Start free. Upgrade when you're ready to fix more listings and track your progress.</p>
+    <h2>Pick the plan that fits your business</h2>
+    <p>Start with the Implementation Plan or go straight to monthly monitoring.</p>
   </div>
 
   <!-- Toggle -->
@@ -132,31 +191,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
     <span class="save-badge">Save up to 35%</span>
   </div>
 
-  <!-- Pricing Cards -->
+  <!-- Pricing Cards — 3 plans, Seller is the hero -->
   <div class="pricing-grid">
 
-    <!-- FREE -->
-    <div class="plan-card">
-      <div class="plan-name">Free</div>
-      <div class="plan-desc">See what's broken. One report to prove it works.</div>
-      <div class="plan-price">
-        <div class="plan-amount free">$0</div>
-        <div class="plan-per">forever</div>
-      </div>
-      <a href="/" class="plan-btn secondary">Run Free Analysis →</a>
-      <div class="plan-features">
-        <div class="plan-reports">1 report total</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Full 12-point diagnosis</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Letter grade + scores</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Prioritized issue list</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Report emailed to you</div>
-        <div class="feat-divider"></div>
-        <div class="plan-feat disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Implementation plan</div>
-        <div class="plan-feat disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Score tracking</div>
-      </div>
-    </div>
-
-    <!-- SELLER -->
+    <!-- SELLER — Most Popular -->
     <div class="plan-card popular">
       <div class="pop-badge">Most Popular</div>
       <div class="plan-name">Seller</div>
@@ -169,8 +207,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
       <button class="plan-btn primary" onclick="checkout('seller')">Start Seller Plan →</button>
       <div class="plan-features">
         <div class="plan-reports">10 reports / month</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Everything in Free</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Implementation plan every report</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Full 12-point diagnosis every report</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Implementation plan with every report</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Score tracking over time</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Competitor ASIN comparison</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Category benchmarking</div>
@@ -182,7 +220,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
     <!-- AGENCY -->
     <div class="plan-card">
       <div class="plan-name">Agency</div>
-      <div class="plan-desc">Manage client listings at scale. Look like a hero.</div>
+      <div class="plan-desc">Manage client listings at scale. Look like a hero to every client.</div>
       <div class="plan-price">
         <div class="plan-amount" id="agencyPrice"><sup>$</sup>49</div>
         <div class="plan-per" id="agencyPer">per month</div>
@@ -195,6 +233,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Team / client organization</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Priority support</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Bulk analysis</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> White-label PDF reports</div>
       </div>
     </div>
 
@@ -221,64 +260,27 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
     </div>
   </div>
 
-  <!-- Comparison Table -->
-  <div class="compare-section">
-    <h2>Compare plans</h2>
-    <p>Every plan includes the 12-point diagnosis. Here's what's different.</p>
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th>Feature</th>
-          <th>Free</th>
-          <th class="highlight">Seller</th>
-          <th>Agency</th>
-          <th>Enterprise</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>Reports per month</td><td>1 total</td><td class="highlight">10</td><td>50</td><td>300</td></tr>
-        <tr><td>12-point diagnosis</td><td class="check">✓</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Implementation plan</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Score tracking over time</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Competitor ASIN analysis</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Category benchmarking</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Keyword priority lists</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>30-day action calendars</td><td class="dash">—</td><td class="check highlight">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Team / client organization</td><td class="dash">—</td><td class="dash highlight">—</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Priority support</td><td class="dash">—</td><td class="dash highlight">—</td><td class="check">✓</td><td class="check">✓</td></tr>
-        <tr><td>Keyword Rank Tracking</td><td class="dash">—</td><td class="dash highlight">—</td><td class="dash">—</td><td class="check">✓</td></tr>
-        <tr><td>Automated Monthly Re-Scans</td><td class="dash">—</td><td class="dash highlight">—</td><td class="dash">—</td><td class="check">✓</td></tr>
-        <tr><td>Category Intelligence</td><td class="dash">—</td><td class="dash highlight">—</td><td class="dash">—</td><td class="check">✓</td></tr>
-        <tr>
-          <td><strong>Price</strong></td>
-          <td><strong>$0</strong></td>
-          <td class="highlight"><strong>$19/mo</strong></td>
-          <td><strong>$49/mo</strong></td>
-          <td><strong>$199/mo</strong></td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Guarantee -->
+  <div class="guarantee-bar">
+    <div class="guarantee-icon">🛡️</div>
+    <div class="guarantee-text">
+      <strong>14-day money-back guarantee.</strong> If you're not happy with your plan for any reason, email us within 14 days and we'll refund 100% of your payment. No questions asked. We can do this because 97% of sellers who upgrade never cancel.
+    </div>
   </div>
 
   <!-- FAQ -->
   <div class="faq-section">
     <h2>Questions? Answers.</h2>
-
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I cancel anytime?<span class="ic">+</span></div><div class="fq-a"><p>Yes. Cancel any time from your account settings. No contracts, no cancellation fees. If you cancel, you keep access through the end of your billing period.</p></div></div>
-
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What counts as a "report"?<span class="ic">+</span></div><div class="fq-a"><p>Each ASIN you analyze counts as one report. Re-running the same ASIN counts as a new report (because we pull fresh data each time). Your quota resets on the 1st of every month.</p></div></div>
-
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What's the difference between the free report and paid?<span class="ic">+</span></div><div class="fq-a"><p>The free report tells you WHAT is wrong — all 12 categories scored with specific findings. Paid plans add the Implementation Plan — step-by-step instructions on HOW to fix every issue, plus keyword priorities, action calendars, and score tracking over time.</p></div></div>
-
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I upgrade or downgrade later?<span class="ic">+</span></div><div class="fq-a"><p>Absolutely. Upgrade any time and the price difference is prorated. Downgrade takes effect at your next billing cycle. Your reports and history are always preserved.</p></div></div>
-
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What is Keyword Rank Tracking?<span class="ic">+</span></div><div class="fq-a"><p>Enterprise-only feature. We check where your ASIN appears in Amazon search results for up to 50 keywords. You can see if you rank #3 or #300 for "silicone nipple covers" — and track how your ranking changes over time as you optimize. This replaces the need for tools like Helium 10's keyword tracker.</p></div></div>
-
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What about the $7 Implementation Plan?<span class="ic">+</span></div><div class="fq-a"><p>The $7 Implementation Plan is a one-time purchase for a single ASIN — it gives you the full fix-it playbook for that listing. If you have multiple ASINs or want ongoing monitoring, the Seller or Agency plan is a better fit since it includes implementation plans with every report plus score tracking.</p></div></div>
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Is my data secure?<span class="ic">+</span></div><div class="fq-a"><p>All data is encrypted in transit and at rest. We only access publicly available Amazon data. We never access your Seller Central account or store any Amazon credentials.</p></div></div>
   </div>
 
   <!-- Bottom CTA -->
-  <div class="bottom-cta">
+  <div class="bottom-cta" id="bottomCta">
     <h2>Start with a free analysis</h2>
     <p>See your listing's score in 30 seconds. No credit card required.</p>
     <a href="/">Analyze My Listing Free →</a>
@@ -287,30 +289,103 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 </div>
 
 <script>
-let isAnnual = false;
+// ═══ DUAL PATH DETECTION ═══
+document.addEventListener('DOMContentLoaded', () => {
+  const offer = sessionStorage.getItem('asinOffer');
+  const report = sessionStorage.getItem('asinReport');
 
+  if (offer || report) {
+    // WARM PATH — user has report data
+    document.getElementById('warmHero').classList.add('active');
+
+    let data = null;
+    if (offer) data = JSON.parse(offer);
+    else if (report) data = JSON.parse(report);
+
+    if (data) {
+      const grade = data.grade || 'C';
+      const overall = data.overall || 0;
+      const asin = data.asin || '—';
+      const gc = gradeColor(grade);
+
+      document.getElementById('warmGradeLetter').textContent = grade;
+      document.getElementById('warmGradeLetter').style.color = gc;
+      document.getElementById('warmAsin').textContent = asin;
+      document.getElementById('warmScore').textContent = overall + ' / 100';
+      document.getElementById('warmGradeText').textContent = grade;
+      document.getElementById('warmBadge').style.borderColor = gc;
+
+      // Update bottom CTA for warm users
+      document.getElementById('bottomCta').innerHTML = `
+        <h2>Your listing won't fix itself.</h2>
+        <p>You scored ${grade}. Every day you wait is another day of lost sales.</p>
+        <a href="/" style="display:inline-flex;padding:14px 36px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;">Get Started Now →</a>
+      `;
+    }
+  } else {
+    // COLD PATH — no data, push them to try the tool first
+    document.getElementById('coldHero').classList.add('active');
+  }
+
+  // Enter key on cold ASIN input
+  const coldInput = document.getElementById('coldAsinInput');
+  if (coldInput) {
+    coldInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') coldStartAnalysis();
+    });
+  }
+});
+
+function gradeColor(grade) {
+  if (!grade) return '#94A3B8';
+  const g = grade.replace(/[+-]/g,'').toUpperCase();
+  return {A:'#10B981',B:'#3B82F6',C:'#F59E0B',D:'#F97316',F:'#EF4444'}[g] || '#94A3B8';
+}
+
+// Cold path: redirect to homepage with ASIN prefilled
+function coldStartAnalysis() {
+  const input = document.getElementById('coldAsinInput');
+  const asin = input.value.trim().toUpperCase();
+  const errEl = document.getElementById('coldError');
+  errEl.style.display = 'none';
+
+  let cleanASIN = asin;
+  const urlMatch = asin.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
+  if (urlMatch) cleanASIN = urlMatch[1].toUpperCase();
+
+  if (!cleanASIN || !/^B0[A-Z0-9]{8}$/i.test(cleanASIN)) {
+    errEl.textContent = 'Please enter a valid ASIN (10 characters starting with B0) or paste an Amazon URL.';
+    errEl.style.display = 'block';
+    input.focus();
+    return;
+  }
+
+  // Redirect to homepage with ASIN in URL param — homepage will auto-start analysis
+  window.location.href = '/?asin=' + cleanASIN;
+}
+
+// Billing toggle
+let isAnnual = false;
 function toggleBilling() {
   isAnnual = !isAnnual;
   document.getElementById('billingToggle').classList.toggle('on', isAnnual);
   document.getElementById('monthlyLabel').classList.toggle('active', !isAnnual);
   document.getElementById('annualLabel').classList.toggle('active', isAnnual);
 
-  // Seller
   document.getElementById('sellerPrice').innerHTML = isAnnual ? '<sup>$</sup>12<span style="font-size:16px;font-weight:500;">.42</span>' : '<sup>$</sup>19';
   document.getElementById('sellerPer').textContent = isAnnual ? 'per month, billed annually' : 'per month';
   document.getElementById('sellerAnnual').classList.toggle('show', isAnnual);
 
-  // Agency
   document.getElementById('agencyPrice').innerHTML = isAnnual ? '<sup>$</sup>37<span style="font-size:16px;font-weight:500;">.42</span>' : '<sup>$</sup>49';
   document.getElementById('agencyPer').textContent = isAnnual ? 'per month, billed annually' : 'per month';
   document.getElementById('agencyAnnual').classList.toggle('show', isAnnual);
 
-  // Enterprise
   document.getElementById('entPrice').innerHTML = isAnnual ? '<sup>$</sup>158<span style="font-size:16px;font-weight:500;">.25</span>' : '<sup>$</sup>199';
   document.getElementById('entPer').textContent = isAnnual ? 'per month, billed annually' : 'per month';
   document.getElementById('entAnnual').classList.toggle('show', isAnnual);
 }
 
+// Stripe checkout
 async function checkout(plan) {
   const priceMap = {
     seller: isAnnual ? 'price_1T8YvhLhOMEKeqYhyqxhGszT' : 'price_1T8YvhLhOMEKeqYhIln1TduM',
