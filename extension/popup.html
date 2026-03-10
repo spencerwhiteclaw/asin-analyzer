@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <div class="popup-header">
+      <div class="popup-logo">ASIN <span>Analyzer</span></div>
+      <div class="popup-version">v1.0</div>
+    </div>
+
+    <!-- Not authenticated -->
+    <div id="authView">
+      <div class="popup-section">
+        <div class="popup-title">Connect your account</div>
+        <p class="popup-desc">Enter your API key to see listing scores on Amazon. Get your key from your <a href="https://www.asinanalyzer.app/dashboard/account" target="_blank">account settings</a>.</p>
+        <input type="text" id="apiKeyInput" class="popup-input" placeholder="Paste your API key (aa_...)" />
+        <div class="popup-error" id="authError"></div>
+        <button class="popup-btn primary" id="saveKeyBtn">Connect →</button>
+      </div>
+    </div>
+
+    <!-- Authenticated -->
+    <div id="connectedView" style="display:none;">
+      <div class="popup-section">
+        <div class="popup-status">
+          <div class="status-dot"></div>
+          <span>Connected</span>
+        </div>
+        <div class="popup-info" id="userInfo">—</div>
+      </div>
+
+      <div class="popup-divider"></div>
+
+      <div class="popup-section">
+        <div class="popup-title">Quick Scan</div>
+        <div class="popup-row">
+          <input type="text" id="quickAsinInput" class="popup-input" placeholder="ASIN (B0...)" />
+          <button class="popup-btn small" id="quickScanBtn">Scan</button>
+        </div>
+        <div id="quickResult"></div>
+      </div>
+
+      <div class="popup-divider"></div>
+
+      <div class="popup-section">
+        <a href="https://www.asinanalyzer.app/dashboard" target="_blank" class="popup-link">Open Dashboard →</a>
+        <a href="https://www.asinanalyzer.app/compare" target="_blank" class="popup-link">Compare ASINs →</a>
+        <a href="https://www.asinanalyzer.app/keywords" target="_blank" class="popup-link">Keyword Tracker →</a>
+      </div>
+
+      <div class="popup-divider"></div>
+
+      <div class="popup-section">
+        <button class="popup-btn secondary" id="disconnectBtn">Disconnect</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -178,6 +178,11 @@ async function initDB() {
       ALTER TABLE analyses ADD COLUMN IF NOT EXISTS user_id UUID;
     `).catch(() => {});
 
+    // Add extension_api_key column to user_profiles (Sprint 6.1)
+    await pool.query(`
+      ALTER TABLE user_profiles ADD COLUMN IF NOT EXISTS extension_api_key VARCHAR(64);
+    `).catch(() => {});
+
     console.log('✅ Database tables ready');
   } catch (err) {
     console.error('⚠️  Database init failed (will retry on first request):', err.message);
@@ -975,16 +980,15 @@ app.post('/api/analyze', optionalAuth, async (req, res) => {
 
     // ── FREE USER PATH ──
     if (!isPaidUser) {
-      if (!cleanEmail || !cleanEmail.includes('@')) {
-        return res.status(400).json({ error: 'Email is required to run your free report.' });
-      }
-
-      const limit = await checkEmailLimit(cleanEmail);
-      if (!limit.allowed) {
-        return res.status(429).json({
-          error: limit.reason,
-          upgradeRequired: limit.upgradeRequired || false,
-        });
+      // If email provided, check free-tier limit; if no email (preview gate), allow analysis
+      if (cleanEmail && cleanEmail.includes('@')) {
+        const limit = await checkEmailLimit(cleanEmail);
+        if (!limit.allowed) {
+          return res.status(429).json({
+            error: limit.reason,
+            upgradeRequired: limit.upgradeRequired || false,
+          });
+        }
       }
     }
 
@@ -2477,6 +2481,228 @@ app.get('/dashboard/account', (req, res) => res.sendFile(path.join(__dirname, 'p
 app.get('/compare', (req, res) => res.sendFile(path.join(__dirname, 'public', 'compare.html')));
 app.get('/keywords', (req, res) => res.sendFile(path.join(__dirname, 'public', 'keywords.html')));
 
+// ═══════════════════════════════════════════════════════════════
+// CHROME EXTENSION API (Sprint 6.1)
+// ═══════════════════════════════════════════════════════════════
+
+// Extension API key auth middleware
+async function requireExtensionAuth(req, res, next) {
+  const apiKey = req.headers['x-api-key'] || req.query.apiKey;
+  if (!apiKey) return res.status(401).json({ error: 'API key required. Get yours at asinanalyzer.app/dashboard/account' });
+
+  try {
+    const result = await pool.query(
+      'SELECT id, email, subscription_tier, subscription_status FROM user_profiles WHERE extension_api_key = $1',
+      [apiKey]
+    );
+    if (result.rows.length === 0) return res.status(401).json({ error: 'Invalid API key.' });
+
+    req.extUser = result.rows[0];
+    req.extUser.isPaid = result.rows[0].subscription_status === 'active' && result.rows[0].subscription_tier !== 'free';
+    next();
+  } catch (err) {
+    console.error('Extension auth error:', err.message);
+    res.status(500).json({ error: 'Auth failed.' });
+  }
+}
+
+// Simple in-memory rate limiter for batch endpoint (1 req per 10s per key)
+const batchRateLimit = {};
+function checkBatchRate(apiKey) {
+  const now = Date.now();
+  const last = batchRateLimit[apiKey] || 0;
+  if (now - last < 10000) return false;
+  batchRateLimit[apiKey] = now;
+  return true;
+}
+
+// ── GET /api/auth/extension-key — Get or generate extension API key ──
+app.get('/api/auth/extension-key', requireAuth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const result = await pool.query('SELECT extension_api_key FROM user_profiles WHERE id = $1', [userId]);
+
+    if (result.rows.length === 0) return res.status(404).json({ error: 'Profile not found.' });
+
+    let apiKey = result.rows[0].extension_api_key;
+
+    if (!apiKey) {
+      // Generate new key: aa_ prefix + 48 random hex chars
+      const crypto = require('crypto');
+      apiKey = 'aa_' + crypto.randomBytes(24).toString('hex');
+      await pool.query('UPDATE user_profiles SET extension_api_key = $1 WHERE id = $2', [apiKey, userId]);
+    }
+
+    res.json({ apiKey });
+  } catch (err) {
+    console.error('Extension key error:', err.message);
+    res.status(500).json({ error: 'Failed to get API key.' });
+  }
+});
+
+// ── GET /api/extension/score/:asin — Cached score lookup (no scrape) ──
+app.get('/api/extension/score/:asin', requireExtensionAuth, async (req, res) => {
+  try {
+    const asin = (req.params.asin || '').trim().toUpperCase();
+    if (!asin || !/^B0[A-Z0-9]{8}$/i.test(asin)) {
+      return res.status(400).json({ error: 'Invalid ASIN.' });
+    }
+
+    const result = await pool.query(
+      `SELECT id, overall_score, overall_grade, product_title, brand, created_at
+       FROM analyses WHERE UPPER(asin) = $1
+       ORDER BY created_at DESC LIMIT 1`,
+      [asin]
+    );
+
+    if (result.rows.length === 0) {
+      return res.json({ asin, found: false, message: 'No analysis found. Scan this ASIN first.' });
+    }
+
+    const row = result.rows[0];
+    const response = {
+      asin,
+      found: true,
+      grade: row.overall_grade,
+      title: row.product_title,
+      brand: row.brand,
+      analyzedAt: row.created_at,
+      reportUrl: `https://www.asinanalyzer.app/report/${row.id}`,
+    };
+
+    // Paid users get full score; free users get grade only
+    if (req.extUser.isPaid) {
+      response.score = row.overall_score;
+      response.reportId = row.id;
+    }
+
+    res.json(response);
+  } catch (err) {
+    console.error('Extension score error:', err.message);
+    res.status(500).json({ error: 'Failed to get score.' });
+  }
+});
+
+// ── POST /api/extension/batch-scores — Batch cached scores (max 48 ASINs) ──
+app.post('/api/extension/batch-scores', requireExtensionAuth, async (req, res) => {
+  try {
+    const apiKey = req.headers['x-api-key'] || req.query.apiKey;
+    if (!checkBatchRate(apiKey)) {
+      return res.status(429).json({ error: 'Rate limited. 1 request per 10 seconds.' });
+    }
+
+    const { asins } = req.body;
+    if (!Array.isArray(asins) || asins.length === 0 || asins.length > 48) {
+      return res.status(400).json({ error: 'Provide 1-48 ASINs.' });
+    }
+
+    const cleanAsins = asins.map(a => (a || '').trim().toUpperCase()).filter(a => /^B0[A-Z0-9]{8}$/i.test(a));
+    if (cleanAsins.length === 0) return res.json({ scores: {} });
+
+    // Get latest score for each ASIN using DISTINCT ON
+    const placeholders = cleanAsins.map((_, i) => `$${i + 1}`).join(',');
+    const result = await pool.query(
+      `SELECT DISTINCT ON (UPPER(asin)) asin, id, overall_score, overall_grade, product_title, created_at
+       FROM analyses WHERE UPPER(asin) IN (${placeholders})
+       ORDER BY UPPER(asin), created_at DESC`,
+      cleanAsins
+    );
+
+    const scores = {};
+    result.rows.forEach(row => {
+      const key = row.asin.toUpperCase();
+      scores[key] = {
+        grade: row.overall_grade,
+        title: row.product_title,
+        reportUrl: `https://www.asinanalyzer.app/report/${row.id}`,
+      };
+      if (req.extUser.isPaid) {
+        scores[key].score = row.overall_score;
+        scores[key].reportId = row.id;
+      }
+    });
+
+    res.json({ scores, found: Object.keys(scores).length, total: cleanAsins.length });
+  } catch (err) {
+    console.error('Extension batch error:', err.message);
+    res.status(500).json({ error: 'Failed to get batch scores.' });
+  }
+});
+
+// ── POST /api/extension/analyze/:asin — Trigger full analysis from extension ──
+app.post('/api/extension/analyze/:asin', requireExtensionAuth, async (req, res) => {
+  try {
+    if (!req.extUser.isPaid) {
+      return res.status(403).json({ error: 'Full analysis requires a paid plan.' });
+    }
+
+    const asin = (req.params.asin || '').trim().toUpperCase();
+    if (!asin || !/^B0[A-Z0-9]{8}$/i.test(asin)) {
+      return res.status(400).json({ error: 'Invalid ASIN.' });
+    }
+
+    const userId = req.extUser.id;
+
+    // Check quota
+    const profile = await pool.query('SELECT * FROM user_profiles WHERE id = $1', [userId]);
+    if (profile.rows.length > 0) {
+      const p = profile.rows[0];
+      const tier = p.subscription_tier || 'free';
+      const limit = TIER_LIMITS[tier] || 1;
+      const used = p.analyses_this_month || 0;
+
+      if (used >= limit) {
+        return res.status(402).json({ error: `Quota exceeded (${used}/${limit}). Upgrade for more.` });
+      }
+    }
+
+    // Scrape and score
+    const product = await scrapeAmazon(asin);
+    const { scores, overall, grade, actions } = scoreProduct(product);
+
+    // Save to database
+    let reportId = null;
+    try {
+      const result = await pool.query(
+        `INSERT INTO analyses (asin, email, user_id, product_title, brand, price, currency, rating, review_count, bsr, category, image_count, bullet_count, has_aplus, has_video, qa_count, overall_score, overall_grade, scores, raw_data, action_items)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)
+         RETURNING id`,
+        [
+          asin, req.extUser.email, userId,
+          product.title, product.brand, product.price, product.currency,
+          product.rating, product.reviewCount, product.bsr, product.category,
+          product.imageCount, product.bulletCount, product.hasAPlus, product.hasVideo, product.qaCount,
+          overall, grade, JSON.stringify(scores), JSON.stringify(product), JSON.stringify(actions),
+        ]
+      );
+      reportId = result.rows[0].id;
+    } catch (dbErr) {
+      console.error('DB save from extension failed:', dbErr.message);
+    }
+
+    // Increment quota
+    await pool.query(
+      'UPDATE user_profiles SET analyses_this_month = analyses_this_month + 1 WHERE id = $1',
+      [userId]
+    ).catch(e => console.error('Quota increment failed:', e.message));
+
+    // GHL webhook
+    if (req.extUser.email) triggerGHL(req.extUser.email, asin, overall, grade, reportId, product);
+
+    console.log(`🔌 Extension scan: ${asin} → ${grade} (${overall}/100)`);
+
+    res.json({
+      asin, grade, score: overall,
+      reportId,
+      reportUrl: reportId ? `https://www.asinanalyzer.app/report/${reportId}` : null,
+      title: product.title,
+    });
+  } catch (err) {
+    console.error('Extension analyze error:', err.message);
+    res.status(500).json({ error: err.message || 'Analysis failed.' });
+  }
+});
+
 // Catch-all → landing page
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
@@ -2487,3 +2713,4 @@ app.listen(PORT, async () => {
   console.log(`🚀 ASIN Analyzer v3.0 running on port ${PORT}`);
   await initDB();
 });
+
