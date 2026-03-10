@@ -22,7 +22,7 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
 
 .ds-hero{text-align:center;padding:40px 0 32px;}
 .ds-hero .wait{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
-.ds-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;line-height:1.2;margin-bottom:12px;}
+.ds-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:30px;font-weight:800;line-height:1.2;margin-bottom:12px;}
 .ds-hero p{font-size:16px;color:var(--text2);max-width:500px;margin:0 auto;}
 
 .ds-card{background:var(--bg);border:2px solid var(--border);border-radius:var(--r3);padding:32px;margin-bottom:28px;text-align:center;}
@@ -31,17 +31,22 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
 .ds-card .ds-price{font-family:'Plus Jakarta Sans',sans-serif;font-size:56px;font-weight:800;color:var(--text);line-height:1;margin-bottom:4px;}
 .ds-card .ds-price sup{font-size:20px;vertical-align:super;}
 .ds-card .ds-was{font-size:14px;color:var(--muted);text-decoration:line-through;margin-bottom:16px;}
-.ds-card .ds-list{text-align:left;max-width:380px;margin:0 auto 20px;}
+.ds-card .ds-list{text-align:left;max-width:400px;margin:0 auto 20px;}
 .ds-card .ds-list div{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:14px;color:var(--text2);}
-.ds-card .ds-list svg{width:16px;height:16px;color:var(--green);flex-shrink:0;}
-.ds-card .ds-no{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:14px;color:var(--muted);}
-.ds-card .ds-no svg{width:16px;height:16px;color:var(--red);flex-shrink:0;}
+.ds-card .ds-list svg{width:16px;height:16px;flex-shrink:0;}
+.ds-card .ds-list .included svg{color:var(--green);}
+.ds-card .ds-list .excluded{color:var(--muted);}
+.ds-card .ds-list .excluded svg{color:var(--red);}
 
 .buy-btn{display:block;width:100%;max-width:620px;margin:0 auto 12px;padding:18px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(59,130,246,0.3);text-align:center;}
 .buy-btn:hover{background:var(--blue-dark);transform:translateY(-2px);}
 .buy-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
 .skip-link{display:block;text-align:center;font-size:14px;color:var(--muted);text-decoration:none;padding:8px;cursor:pointer;}
 .skip-link:hover{color:var(--text2);}
+
+/* Disclaimer */
+.disclaimer{border-top:1px solid var(--border);padding:24px 0 0;margin-top:28px;}
+.disclaimer p{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:8px;}
 </style>
 </head>
 <body>
@@ -51,28 +56,37 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
 <div class="wrap">
   <div class="ds-hero">
     <div class="wait">Wait — before you go</div>
-    <h1>Just the implementation plan.<br>Nothing else. $4.97.</h1>
-    <p>We get it — you just want to know how to fix your listing. No bonuses, no extras. Just the step-by-step fix plan.</p>
+    <h1>Just the fix plan and<br>optimized copy. $4.97.</h1>
+    <p>We get it — you just want to know how to fix your listing and get the rewritten title and bullets. No extras. Just the step-by-step plan.</p>
   </div>
 
   <div class="ds-card">
-    <h3>Implementation Plan Only</h3>
-    <p>Step-by-step fix instructions for every issue in your report</p>
+    <h3>Implementation Plan + Optimized Copy</h3>
+    <p>AI-rewritten title, bullet points, and step-by-step fix instructions for your listing</p>
     <div class="ds-was">Was $7</div>
     <div class="ds-price"><sup>$</sup>4<sup>.97</sup></div>
 
     <div class="ds-list">
-      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Step-by-step fix for every issue</div>
-      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Specific to your ASIN and scores</div>
-      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Category-specific guidance</div>
-      <div class="ds-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Keyword priority list</div>
-      <div class="ds-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> 30-day action calendar</div>
-      <div class="ds-no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> 30-day re-scan credit</div>
+      <div class="included"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> AI-optimized title rewrite</div>
+      <div class="included"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 5 rewritten bullet points</div>
+      <div class="included"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Step-by-step fix for every issue</div>
+      <div class="included"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Category-specific guidance</div>
+      <div class="excluded"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Keyword priority list</div>
+      <div class="excluded"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> A/B test setup instructions</div>
+      <div class="excluded"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> 30-day action calendar</div>
+      <div class="excluded"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Quick wins checklist</div>
     </div>
   </div>
 
-  <button class="buy-btn" id="buyBtn" onclick="handleDownsell()">Just Give Me the Plan → $4.97</button>
+  <button class="buy-btn" id="buyBtn" onclick="handleDownsell()">Just Give Me the Plan + Copy → $4.97</button>
   <a class="skip-link" id="skipLink" onclick="handleSkipAll(event)">No thanks, I don't need help fixing my listing</a>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <p><strong>Earnings &amp; Results Disclaimer:</strong> Individual results from listing optimization vary based on product, category, competition, and market conditions. We make no guarantees about specific sales increases or ranking changes.</p>
+    <p><strong>Amazon Disclaimer:</strong> ASIN Analyzer is not affiliated with Amazon.com, Inc. All Amazon trademarks belong to their respective owners.</p>
+    <p><strong>AI-Generated Content:</strong> Optimized copy is generated by AI and should be reviewed before use. You are responsible for compliance with Amazon's Terms of Service.</p>
+  </div>
 </div>
 
 <script>
@@ -105,18 +119,17 @@ async function handleDownsell() {
       const err = await resp.json();
       alert(err.error || 'Something went wrong.');
       btn.disabled = false;
-      btn.textContent = 'Just Give Me the Plan → $4.97';
+      btn.textContent = 'Just Give Me the Plan + Copy → $4.97';
     }
   } catch (err) {
     alert('Connection error. Please try again.');
     btn.disabled = false;
-    btn.textContent = 'Just Give Me the Plan → $4.97';
+    btn.textContent = 'Just Give Me the Plan + Copy → $4.97';
   }
 }
 
 function handleSkipAll(e) {
   e.preventDefault();
-  // Declined everything → email nurture sequence handles the rest
   sessionStorage.removeItem('purchasePath');
   window.location.href = '/';
 }

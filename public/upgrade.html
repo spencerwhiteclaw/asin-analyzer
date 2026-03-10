@@ -9,31 +9,64 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Upgrade to Seller Plan — ASIN Analyzer</title>
+<title>The Optimization Loop — ASIN Analyzer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--red:#EF4444;--yellow:#F59E0B;--purple:#8B5CF6;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--r:12px;--r2:16px;--r3:20px;}
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--red:#EF4444;--yellow:#F59E0B;--orange:#F97316;--purple:#8B5CF6;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
 nav{display:flex;align-items:center;justify-content:center;max-width:800px;margin:0 auto;padding:16px 40px;}
 .logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);}
 .logo-text span{color:var(--blue);}
-.wrap{max-width:680px;margin:0 auto;padding:0 24px 80px;}
+.wrap{max-width:700px;margin:0 auto;padding:0 24px 80px;}
 
-.up-hero{text-align:center;padding:40px 0 32px;}
-.up-hero .congrats{font-size:14px;font-weight:600;color:var(--green);margin-bottom:8px;}
+/* Congrats bar */
+.congrats-bar{background:var(--green-bg);border:1px solid var(--green-border);text-align:center;padding:10px 20px;font-size:13px;font-weight:700;color:var(--green);}
+
+/* Hero */
+.up-hero{text-align:center;padding:36px 0 28px;}
 .up-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;line-height:1.2;margin-bottom:12px;}
-.up-hero p{font-size:16px;color:var(--text2);max-width:540px;margin:0 auto;}
+.up-hero h1 em{font-style:normal;color:var(--blue);}
+.up-hero p{font-size:16px;color:var(--text2);max-width:560px;margin:0 auto;}
 
-.up-pitch{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:28px;margin-bottom:24px;}
-.up-pitch h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:12px;}
-.up-pitch p{font-size:14px;color:var(--text2);margin-bottom:16px;}
+/* Loop visualization */
+.loop-card{background:var(--bg);border:2px solid var(--blue);border-radius:var(--r3);overflow:hidden;margin-bottom:28px;}
+.loop-header{background:var(--blue);color:#fff;padding:14px 24px;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:0.5px;}
+.loop-body{padding:28px 24px;}
+.loop-cycle{display:flex;flex-direction:column;gap:0;}
+.loop-step{display:flex;gap:16px;position:relative;padding-bottom:20px;}
+.loop-step:last-child{padding-bottom:0;}
+.loop-step:not(:last-child)::after{content:'';position:absolute;left:17px;top:36px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--blue),rgba(59,130,246,0.15));}
+.loop-dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;color:#fff;position:relative;z-index:1;}
+.loop-dot.blue{background:var(--blue);}
+.loop-dot.green{background:var(--green);}
+.loop-dot.purple{background:var(--purple);}
+.loop-dot.orange{background:var(--orange);}
+.loop-info h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px;margin-top:6px;}
+.loop-info p{font-size:13px;color:var(--text2);}
+.loop-repeat{text-align:center;padding:16px;background:rgba(59,130,246,0.04);border-top:1px dashed var(--border);font-size:14px;font-weight:700;color:var(--blue);}
 
-.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-.feat-item{display:flex;align-items:flex-start;gap:8px;font-size:14px;color:var(--text2);}
-.feat-item svg{width:18px;height:18px;color:var(--green);flex-shrink:0;margin-top:2px;}
+/* Math block */
+.math-card{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:var(--r3);padding:28px;margin-bottom:28px;color:#fff;}
+.math-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;margin-bottom:16px;text-align:center;}
+.math-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:14px;}
+.math-row:last-child{border:none;}
+.math-row .label{color:rgba(255,255,255,0.55);}
+.math-row .val{font-weight:700;color:#fff;}
+.math-row .val.green{color:var(--green);}
+.math-row .val.red{color:var(--red);}
+.math-total{display:flex;justify-content:space-between;padding:16px 0 0;border-top:2px solid rgba(255,255,255,0.15);margin-top:8px;font-size:16px;font-weight:700;}
+.math-total .val{color:var(--green);font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;}
 
-.price-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+/* Features */
+.feat-section{margin-bottom:28px;}
+.feat-section h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;margin-bottom:16px;}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.feat-item{display:flex;align-items:flex-start;gap:8px;font-size:14px;color:var(--text2);background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;}
+.feat-item svg{width:18px;height:18px;color:var(--green);flex-shrink:0;margin-top:1px;}
+
+/* Price */
+.price-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
 .price-opt{background:var(--bg);border:2px solid var(--border);border-radius:var(--r2);padding:20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
 .price-opt.selected{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,0.1);}
 .price-opt .badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-size:11px;font-weight:700;padding:2px 12px;border-radius:100px;white-space:nowrap;display:none;}
@@ -49,35 +82,102 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
 .skip-link{display:block;text-align:center;font-size:14px;color:var(--muted);text-decoration:none;padding:8px;cursor:pointer;}
 .skip-link:hover{color:var(--text2);}
 
-@media(max-width:500px){.feat-grid,.price-row{grid-template-columns:1fr;}}
+/* Guarantee */
+.guarantee{display:flex;align-items:center;gap:12px;background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--r2);padding:16px 20px;margin-top:24px;margin-bottom:24px;}
+.guarantee p{font-size:13px;color:var(--text2);line-height:1.5;}
+.guarantee p strong{color:var(--text);}
+
+/* Disclaimer */
+.disclaimer{border-top:1px solid var(--border);padding:28px 0 0;margin-top:20px;}
+.disclaimer p{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:8px;}
+
+@media(max-width:600px){
+  .up-hero h1{font-size:26px;}
+  .feat-grid,.price-row{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
+<!-- Congrats bar -->
+<div class="congrats-bar">YOUR IMPLEMENTATION PLAN IS READY — HERE'S HOW TO 10x THE RESULTS</div>
+
 <nav><div class="logo-text">ASIN <span>Analyzer</span></div></nav>
 
 <div class="wrap">
+
+  <!-- Hero -->
   <div class="up-hero">
-    <div class="congrats">✅ Your Implementation Plan is ready!</div>
-    <h1>You fixed one listing.<br>You have more.</h1>
-    <p>With the Seller Plan, every report you run includes the full diagnosis AND the implementation plan automatically. Track your improvements over time.</p>
+    <h1>One A/B test is good.<br>An <em>optimization loop</em> is unstoppable.</h1>
+    <p>You just got your first set of optimized copy. But the sellers who dominate don't stop at one test — they run the loop every 2 weeks until their listing is untouchable.</p>
   </div>
 
-  <div class="up-pitch">
+  <!-- The Loop -->
+  <div class="loop-card">
+    <div class="loop-header">THE OPTIMIZATION LOOP — HOW TOP SELLERS STAY ON TOP</div>
+    <div class="loop-body">
+      <div class="loop-cycle">
+        <div class="loop-step">
+          <div class="loop-dot blue">1</div>
+          <div class="loop-info">
+            <h4>Get new AI-optimized title + bullets</h4>
+            <p>Every report comes with fresh, conversion-tested copy based on your latest scores and competitor landscape.</p>
+          </div>
+        </div>
+        <div class="loop-step">
+          <div class="loop-dot purple">2</div>
+          <div class="loop-info">
+            <h4>A/B test in Seller Central</h4>
+            <p>Set up the experiment in Manage Your Experiments. Our copy vs. your current copy. Amazon splits the traffic.</p>
+          </div>
+        </div>
+        <div class="loop-step">
+          <div class="loop-dot orange">3</div>
+          <div class="loop-info">
+            <h4>Wait 2 weeks — real data comes in</h4>
+            <p>Amazon tells you the winner. No guessing. Real shoppers, real conversions, real results.</p>
+          </div>
+        </div>
+        <div class="loop-step">
+          <div class="loop-dot green">4</div>
+          <div class="loop-info">
+            <h4>Re-score your listing on ASIN Analyzer</h4>
+            <p>See how your score improved. Identify the next category to optimize. Get a new round of optimized copy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="loop-repeat">Then repeat. Every 2 weeks your listing gets stronger.</div>
+  </div>
+
+  <!-- Math -->
+  <div class="math-card">
+    <h3>The Math on $19/month</h3>
+    <div class="math-row"><span class="label">Reports per month</span><span class="val">10</span></div>
+    <div class="math-row"><span class="label">New optimized titles + bullets per report</span><span class="val">Included</span></div>
+    <div class="math-row"><span class="label">A/B test instructions per report</span><span class="val">Included</span></div>
+    <div class="math-row"><span class="label">Score tracking over time</span><span class="val green">Included</span></div>
+    <div class="math-row"><span class="label">Competitor ASIN comparison</span><span class="val green">Included</span></div>
+    <div class="math-row"><span class="label">Equivalent agency service</span><span class="val red">$500+/listing</span></div>
+    <div class="math-total"><span class="label">Your cost to optimize 10 listings/month</span><span class="val">$19</span></div>
+  </div>
+
+  <!-- Features -->
+  <div class="feat-section">
     <h3>Everything in the Seller Plan</h3>
     <div class="feat-grid">
       <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 10 full reports per month</div>
-      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Implementation plan every report</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> AI-optimized title + bullets every report</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> A/B test setup instructions</div>
       <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Score tracking over time</div>
-      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Competitor ASIN analysis</div>
+      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Competitor ASIN comparison</div>
       <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Category benchmarking</div>
       <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Keyword priority lists</div>
       <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 30-day action calendars</div>
-      <div class="feat-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Quick wins checklists</div>
     </div>
-    <p style="font-size:13px;color:var(--muted);">That's everything you just bought for $7 — included automatically with every single report.</p>
   </div>
 
+  <!-- Price -->
   <div class="price-row">
     <div class="price-opt selected" id="optMonthly" onclick="selectPlan('monthly')">
       <h4>Monthly</h4>
@@ -92,8 +192,22 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
     </div>
   </div>
 
-  <button class="buy-btn" id="buyBtn" onclick="handleUpgrade()">Start My Seller Plan →</button>
+  <button class="buy-btn" id="buyBtn" onclick="handleUpgrade()">Start My Optimization Loop →</button>
   <a class="skip-link" id="skipLink" onclick="handleSkipUpgrade(event)">Not right now — just deliver my plan</a>
+
+  <!-- Guarantee -->
+  <div class="guarantee">
+    <div style="font-size:28px;flex-shrink:0;">🛡️</div>
+    <p><strong>14-day money-back guarantee.</strong> If the optimization loop isn't working for you, email us within 14 days for a full refund. No questions asked.</p>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <p><strong>Earnings &amp; Results Disclaimer:</strong> Results from A/B testing and listing optimization vary significantly based on product, category, competition, and market conditions. We make no guarantees about specific sales increases, conversion improvements, or ranking changes. The optimization loop described is a strategy — not a guaranteed outcome. Individual results will vary.</p>
+    <p><strong>Amazon Disclaimer:</strong> ASIN Analyzer is not affiliated with, endorsed by, or sponsored by Amazon.com, Inc. Amazon, Seller Central, Brand Registry, and Manage Your Experiments are trademarks of Amazon.com, Inc. A/B testing requires Brand Registry. Features may change without notice.</p>
+    <p><strong>AI-Generated Content:</strong> Optimized copy is generated by AI and should be reviewed before use. You are responsible for compliance with Amazon's Terms of Service.</p>
+    <p><strong>Subscription:</strong> The Seller Plan is a recurring subscription billed monthly or annually. You can cancel anytime from your account settings. No long-term contracts.</p>
+  </div>
 </div>
 
 <script>
@@ -106,8 +220,8 @@ function selectPlan(plan) {
   document.getElementById('optMonthly').classList.toggle('selected', plan === 'monthly');
   document.getElementById('optAnnual').classList.toggle('selected', plan === 'annual');
   document.getElementById('buyBtn').textContent = plan === 'annual'
-    ? 'Start My Seller Plan → $149/year'
-    : 'Start My Seller Plan → $19/month';
+    ? 'Start My Optimization Loop → $149/year'
+    : 'Start My Optimization Loop → $19/month';
 }
 
 async function handleUpgrade() {
@@ -135,12 +249,12 @@ async function handleUpgrade() {
       const err = await resp.json();
       alert(err.error || 'Something went wrong.');
       btn.disabled = false;
-      btn.textContent = 'Start My Seller Plan →';
+      btn.textContent = 'Start My Optimization Loop →';
     }
   } catch (err) {
     alert('Connection error. Please try again.');
     btn.disabled = false;
-    btn.textContent = 'Start My Seller Plan →';
+    btn.textContent = 'Start My Optimization Loop →';
   }
 }
 
@@ -148,10 +262,8 @@ function handleSkipUpgrade(e) {
   e.preventDefault();
   const path = sessionStorage.getItem('purchasePath');
   if (path === 'tripwire') {
-    // $7 buyer declining $19/mo → show $39/mo OTO
     window.location.href = `/oto?analysis=${analysisId || ''}`;
   } else {
-    // Downsell buyer → thank you page (no OTO per funnel rules)
     window.location.href = `/thank-you?analysis=${analysisId || ''}`;
   }
 }

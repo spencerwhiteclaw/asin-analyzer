@@ -18,16 +18,28 @@ body{font-family:'DM Sans',sans-serif;background:#0F172A;color:#fff;-webkit-font
 nav{display:flex;align-items:center;justify-content:center;max-width:800px;margin:0 auto;padding:16px 40px;}
 .logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:#fff;}
 .logo-text span{color:var(--gold);}
-.wrap{max-width:680px;margin:0 auto;padding:0 24px 80px;}
+.wrap{max-width:700px;margin:0 auto;padding:0 24px 80px;}
 
 /* Urgency bar */
 .urgency-bar{background:linear-gradient(90deg,#EF4444,#DC2626);text-align:center;padding:10px;font-size:13px;font-weight:700;letter-spacing:0.5px;}
 
-.oto-hero{text-align:center;padding:40px 0 28px;}
+/* Hero */
+.oto-hero{text-align:center;padding:36px 0 28px;}
 .oto-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:700;color:var(--gold);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;}
-.oto-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:34px;font-weight:800;line-height:1.15;margin-bottom:12px;}
+.oto-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;line-height:1.15;margin-bottom:12px;}
 .oto-hero h1 em{font-style:normal;color:var(--gold);}
-.oto-hero p{font-size:16px;color:rgba(255,255,255,0.6);max-width:520px;margin:0 auto;}
+.oto-hero p{font-size:16px;color:rgba(255,255,255,0.55);max-width:560px;margin:0 auto;}
+
+/* Loop visualization - dark theme */
+.loop-card{background:rgba(255,255,255,0.04);border:1px solid rgba(245,166,35,0.25);border-radius:var(--r3);overflow:hidden;margin-bottom:28px;}
+.loop-header{background:linear-gradient(90deg,rgba(245,166,35,0.2),rgba(245,166,35,0.1));padding:14px 24px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:0.5px;color:var(--gold);}
+.loop-body{padding:24px;}
+.loop-step{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.loop-step:last-child{border:none;}
+.loop-icon{font-size:20px;flex-shrink:0;width:32px;text-align:center;}
+.loop-text h4{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;}
+.loop-text p{font-size:13px;color:rgba(255,255,255,0.45);}
+.loop-repeat{text-align:center;padding:14px;background:rgba(245,166,35,0.06);border-top:1px dashed rgba(245,166,35,0.2);font-size:13px;font-weight:700;color:var(--gold);}
 
 /* Comparison */
 .compare-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--r3);overflow:hidden;margin-bottom:28px;}
@@ -58,20 +70,66 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
 .skip-link{display:block;text-align:center;font-size:14px;color:rgba(255,255,255,0.3);text-decoration:none;padding:8px;cursor:pointer;}
 .skip-link:hover{color:rgba(255,255,255,0.5);}
 .warning-text{text-align:center;font-size:12px;color:rgba(255,255,255,0.25);margin-top:16px;font-style:italic;}
+
+/* Disclaimer */
+.disclaimer{border-top:1px solid rgba(255,255,255,0.08);padding:28px 0 0;margin-top:28px;}
+.disclaimer p{font-size:11px;color:rgba(255,255,255,0.2);line-height:1.7;margin-bottom:8px;}
+
+@media(max-width:600px){
+  .oto-hero h1{font-size:26px;}
+  .price-compare{grid-template-columns:1fr;}
+  .compare-row{grid-template-columns:1fr auto auto;gap:8px;padding:10px 16px;}
+}
 </style>
 </head>
 <body>
 
 <!-- Urgency bar -->
-<div class="urgency-bar">⚠️ THIS OFFER DISAPPEARS WHEN YOU LEAVE THIS PAGE — YOU WILL NEVER SEE IT AGAIN</div>
+<div class="urgency-bar">THIS OFFER DISAPPEARS WHEN YOU LEAVE THIS PAGE — YOU WILL NEVER SEE IT AGAIN</div>
 
 <nav><div class="logo-text">ASIN <span>Analyzer</span></div></nav>
 
 <div class="wrap">
   <div class="oto-hero">
-    <div class="oto-badge">🔥 One-time offer</div>
-    <h1>Get <em>double the reports</em><br>for <em>less than Agency price</em></h1>
-    <p>100 reports per month. All Agency features. White-label PDFs. Client dashboard. Competitor analysis. $39/month — less than our public Agency plan.</p>
+    <div class="oto-badge">ONE-TIME OFFER</div>
+    <h1>Run the <em>optimization loop</em> at<br><em>agency scale</em> for less.</h1>
+    <p>100 reports per month. Every report comes with AI-optimized copy + A/B test instructions. Run the optimization loop across your entire catalog — or your clients' catalogs.</p>
+  </div>
+
+  <!-- The Loop reminder -->
+  <div class="loop-card">
+    <div class="loop-header">THE OPTIMIZATION LOOP — NOW AT 100 LISTINGS/MONTH</div>
+    <div class="loop-body">
+      <div class="loop-step">
+        <div class="loop-icon">📊</div>
+        <div class="loop-text">
+          <h4>Scan any ASIN — get optimized copy instantly</h4>
+          <p>AI-written titles + bullets + keyword list tailored to each listing</p>
+        </div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-icon">🧪</div>
+        <div class="loop-text">
+          <h4>A/B test in Manage Your Experiments</h4>
+          <p>Step-by-step instructions with every report. Set it and forget it.</p>
+        </div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-icon">📈</div>
+        <div class="loop-text">
+          <h4>Re-score in 2 weeks — see the improvement</h4>
+          <p>Track progress over time. Identify the next thing to optimize.</p>
+        </div>
+      </div>
+      <div class="loop-step">
+        <div class="loop-icon">🔄</div>
+        <div class="loop-text">
+          <h4>Get new optimized copy — test again</h4>
+          <p>Every cycle makes the listing stronger. Compound gains over time.</p>
+        </div>
+      </div>
+    </div>
+    <div class="loop-repeat">100 listings. Every 2 weeks. Always improving.</div>
   </div>
 
   <!-- Feature comparison -->
@@ -87,7 +145,12 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
       <div class="val reg">50</div>
     </div>
     <div class="compare-row">
-      <div class="feat">Implementation plans</div>
+      <div class="feat">AI-optimized copy per report</div>
+      <div class="val oto">✓</div>
+      <div class="val reg">✓</div>
+    </div>
+    <div class="compare-row">
+      <div class="feat">A/B test instructions</div>
       <div class="val oto">✓</div>
       <div class="val reg">✓</div>
     </div>
@@ -102,12 +165,12 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
       <div class="val reg">✓</div>
     </div>
     <div class="compare-row">
-      <div class="feat">Competitor analysis per ASIN</div>
+      <div class="feat">Score tracking &amp; history</div>
       <div class="val oto">✓</div>
       <div class="val reg">✓</div>
     </div>
     <div class="compare-row">
-      <div class="feat">Score tracking & history</div>
+      <div class="feat">Competitor analysis</div>
       <div class="val oto">✓</div>
       <div class="val reg">✓</div>
     </div>
@@ -132,10 +195,18 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
     </div>
   </div>
 
-  <button class="buy-btn" id="buyBtn" onclick="handleOTO()">Lock In $39/month → 100 Reports</button>
+  <button class="buy-btn" id="buyBtn" onclick="handleOTO()">Lock In $39/month — 100 Reports + Optimization Loop</button>
   <a class="skip-link" id="skipLink" onclick="handleDeclineOTO(event)">No thanks, I'll pass on this deal</a>
 
   <p class="warning-text">This offer is exclusive to this page. If you close this window or navigate away, this pricing will never be available to you again. The standard Agency Plan is $49/month for 50 reports.</p>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <p><strong>Earnings &amp; Results Disclaimer:</strong> Results from listing optimization vary based on product, category, competition, and market conditions. We make no guarantees about specific sales increases, conversion improvements, or ranking changes. The optimization loop is a strategy for continuous improvement — not a guaranteed outcome. Individual results will vary significantly.</p>
+    <p><strong>Amazon Disclaimer:</strong> ASIN Analyzer is not affiliated with, endorsed by, or sponsored by Amazon.com, Inc. Amazon, Seller Central, Brand Registry, and Manage Your Experiments are trademarks of Amazon.com, Inc. A/B testing requires Brand Registry enrollment. Features and availability may change without notice.</p>
+    <p><strong>AI-Generated Content:</strong> All optimized copy is generated by AI and should be reviewed before use. You are responsible for compliance with Amazon's Terms of Service and listing guidelines.</p>
+    <p><strong>One-Time Offer:</strong> The $39/month pricing shown is a promotional offer available only on this page during this session. Standard Agency Plan pricing is $49/month for 50 reports. This is a recurring subscription that can be cancelled anytime.</p>
+  </div>
 </div>
 
 <script>
@@ -188,13 +259,13 @@ async function handleOTO() {
       const err = await resp.json();
       alert(err.error || 'Something went wrong.');
       btn.disabled = false;
-      btn.textContent = 'Lock In $39/month → 100 Reports';
+      btn.textContent = 'Lock In $39/month — 100 Reports + Optimization Loop';
     }
   } catch (err) {
     purchased = false;
     alert('Connection error. Please try again.');
     btn.disabled = false;
-    btn.textContent = 'Lock In $39/month → 100 Reports';
+    btn.textContent = 'Lock In $39/month — 100 Reports + Optimization Loop';
   }
 }
 

@@ -12,7 +12,7 @@
 <title>Thank You — ASIN Analyzer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--r:12px;--r2:16px;--r3:20px;}
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--purple:#8B5CF6;--orange:#F97316;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--r:12px;--r2:16px;--r3:20px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
 nav{display:flex;align-items:center;justify-content:space-between;max-width:800px;margin:0 auto;padding:16px 40px;}
@@ -39,6 +39,19 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 .plan-loading{text-align:center;padding:24px;color:var(--muted);font-size:14px;}
 .plan-content{display:none;}
 
+/* A/B Test Next Steps — the hero section */
+.ab-card{background:linear-gradient(135deg,rgba(139,92,246,0.06),rgba(59,130,246,0.06));border:2px solid rgba(139,92,246,0.2);border-radius:var(--r3);padding:28px;margin-bottom:20px;}
+.ab-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;color:var(--text);}
+.ab-card .ab-sub{font-size:14px;color:var(--text2);margin-bottom:16px;}
+.ab-steps{counter-reset:abstep;}
+.ab-step{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid rgba(139,92,246,0.08);}
+.ab-step:last-child{border:none;}
+.ab-num{counter-increment:abstep;width:28px;height:28px;background:var(--purple);color:#fff;border-radius:50%;display:grid;place-items:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;flex-shrink:0;}
+.ab-num::before{content:counter(abstep);}
+.ab-content h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.ab-content p{font-size:13px;color:var(--text2);}
+.ab-content .time{font-size:12px;color:var(--purple);font-weight:600;margin-top:2px;}
+
 /* Referral */
 .referral-card{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:var(--r3);padding:32px;text-align:center;color:#fff;margin-bottom:20px;}
 .referral-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px;}
@@ -48,25 +61,23 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 .referral-link button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;white-space:nowrap;}
 .referral-link button:hover{background:var(--blue-dark);}
 
-/* Next steps */
-.next-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:28px;margin-bottom:20px;}
-.next-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px;}
-.next-step{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--bg2);}
-.next-step:last-child{border:none;}
-.ns-num{width:28px;height:28px;background:var(--blue);color:#fff;border-radius:50%;display:grid;place-items:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;flex-shrink:0;}
-.ns-text h4{font-size:14px;font-weight:700;color:var(--text);}
-.ns-text p{font-size:14px;color:var(--text2);}
+/* Re-score reminder */
+.rescore-card{background:var(--bg);border:2px solid var(--blue);border-radius:var(--r3);padding:24px;text-align:center;margin-bottom:20px;}
+.rescore-card h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px;}
+.rescore-card p{font-size:14px;color:var(--text2);margin-bottom:16px;}
+.rescore-btn{display:inline-flex;padding:14px 32px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
+.rescore-btn:hover{background:var(--blue-dark);transform:translateY(-1px);}
 
-.bottom-cta{text-align:center;padding:32px 0;}
-.bottom-cta a{display:inline-flex;padding:14px 32px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
-.bottom-cta a:hover{background:var(--blue-dark);transform:translateY(-1px);}
+/* Disclaimer */
+.disclaimer{border-top:1px solid var(--border);padding:24px 0 0;margin-top:12px;}
+.disclaimer p{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:8px;}
 </style>
 </head>
 <body>
 
 <nav>
   <a href="/" class="logo"><div class="logo-text">ASIN <span>Analyzer</span></div></a>
-  <a href="/" style="color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;">← Back to Analyzer</a>
+  <a href="/" style="color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;">Back to Analyzer</a>
 </nav>
 
 <div class="wrap">
@@ -74,15 +85,71 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
   <div class="ty-hero">
     <div class="ty-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
     <h1>You're all set!</h1>
-    <p id="tySubtext">Your purchase is confirmed. Here's everything you got.</p>
+    <p id="tySubtext">Your purchase is confirmed. Here's your plan and your next steps.</p>
   </div>
 
   <!-- What they purchased -->
   <div class="delivery-card" id="deliveryCard">
-    <h3>📦 Your Deliverables</h3>
+    <h3>Your Deliverables</h3>
     <div id="deliveryItems">
-      <div class="plan-loading" id="planLoading">Generating your Implementation Plan... this takes about 10 seconds.</div>
+      <div class="plan-loading" id="planLoading">Generating your optimized copy and implementation plan... this takes about 10 seconds.</div>
     </div>
+  </div>
+
+  <!-- A/B Test Next Steps — THE KEY SECTION -->
+  <div class="ab-card">
+    <h3>Your A/B Test Game Plan</h3>
+    <p class="ab-sub">Here's exactly what to do next to start getting real data on your optimized copy.</p>
+
+    <div class="ab-steps">
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Read your optimized title + bullets above</h4>
+          <p>Review the AI-written copy. Make any small tweaks to match your brand voice.</p>
+          <div class="time">5 minutes</div>
+        </div>
+      </div>
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Open "Manage Your Experiments" in Seller Central</h4>
+          <p>Go to Seller Central → Brands → Manage Your Experiments. Click "Create a New Experiment." Select your ASIN.</p>
+          <div class="time">2 minutes</div>
+        </div>
+      </div>
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Set up your A/B test</h4>
+          <p>Choose "Title" or "Bullet Points" as your test type. Paste our optimized version as Version B. Set duration to 2 weeks. Submit.</p>
+          <div class="time">3 minutes</div>
+        </div>
+      </div>
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Wait 2 weeks — Amazon does the work</h4>
+          <p>Amazon splits your traffic 50/50 between your current copy and ours. Real shoppers, real clicks, real data. You don't have to do anything.</p>
+          <div class="time">Set it and forget it</div>
+        </div>
+      </div>
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Come back to ASIN Analyzer and re-score</h4>
+          <p>After 2 weeks, run your ASIN through ASIN Analyzer again. See how your score changed. Identify the next area to optimize. Keep improving.</p>
+          <div class="time">30 seconds</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Re-score reminder -->
+  <div class="rescore-card">
+    <h3>Set a reminder: Re-score in 2 weeks</h3>
+    <p>After your A/B test runs for 2 weeks, come back and see how your listing improved. Bookmark this link.</p>
+    <a href="/" class="rescore-btn">Re-Score My Listing</a>
   </div>
 
   <!-- Referral -->
@@ -95,34 +162,11 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
     </div>
   </div>
 
-  <!-- Next steps -->
-  <div class="next-card">
-    <h3>What to do now</h3>
-    <div class="next-step">
-      <div class="ns-num">1</div>
-      <div class="ns-text">
-        <h4>Read your Implementation Plan</h4>
-        <p>Go through each section. Prioritize the "Quick Wins" — they take under 30 minutes.</p>
-      </div>
-    </div>
-    <div class="next-step">
-      <div class="ns-num">2</div>
-      <div class="ns-text">
-        <h4>Follow the 30-day calendar</h4>
-        <p>Week by week, implement the changes. Don't try to do everything at once.</p>
-      </div>
-    </div>
-    <div class="next-step">
-      <div class="ns-num">3</div>
-      <div class="ns-text">
-        <h4>Re-run your analysis in 30 days</h4>
-        <p>Come back and see how your score changed. Track what worked and what to improve next.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="bottom-cta">
-    <a href="/">Analyze Another ASIN →</a>
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <p><strong>Earnings &amp; Results Disclaimer:</strong> Results from A/B testing and listing optimization vary based on product, category, competition, and market conditions. We make no guarantees about specific sales increases, conversion improvements, or ranking changes.</p>
+    <p><strong>Amazon Disclaimer:</strong> ASIN Analyzer is not affiliated with Amazon.com, Inc. A/B testing via Manage Your Experiments requires Brand Registry enrollment. Features and availability may change without notice.</p>
+    <p><strong>AI-Generated Content:</strong> Optimized copy is AI-generated and should be reviewed before use. You are responsible for compliance with Amazon's Terms of Service.</p>
   </div>
 </div>
 
@@ -133,14 +177,13 @@ const sessionId = params.get('session_id');
 const email = sessionStorage.getItem('asinEmail') || '';
 const purchasePath = sessionStorage.getItem('purchasePath') || '';
 
-// Attempt to generate and show the implementation plan
 // Track purchase
 if(typeof gtag==='function')gtag('event','purchase',{transaction_id:sessionId||'unknown',value:7,currency:'USD'});
 if(typeof fbq==='function')fbq('track','Purchase',{value:7,currency:'USD'});
 
 async function loadPlan() {
   if (!analysisId) {
-    document.getElementById('planLoading').textContent = 'Check your email for your implementation plan.';
+    document.getElementById('planLoading').textContent = 'Check your email for your implementation plan and optimized copy.';
     return;
   }
 
@@ -158,6 +201,20 @@ async function loadPlan() {
 
       let html = '';
 
+      // Title rewrite
+      if (plan.titleRewrite) {
+        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Your Optimized Title:</strong> ${plan.titleRewrite.after || plan.titleRewrite}</span></div>`;
+      }
+
+      // Bullet rewrites
+      if (plan.bulletRewrites?.length) {
+        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>5 Optimized Bullet Points:</strong></span></div>`;
+        plan.bulletRewrites.forEach((b, i) => {
+          const text = typeof b === 'string' ? b : b.after || b.text || '';
+          html += `<div class="delivery-item" style="padding-left:30px;"><span>${i+1}. ${text.substring(0, 150)}${text.length > 150 ? '...' : ''}</span></div>`;
+        });
+      }
+
       // Executive summary
       if (plan.executiveSummary) {
         html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Executive Summary:</strong> ${plan.executiveSummary}</span></div>`;
@@ -171,6 +228,20 @@ async function loadPlan() {
         });
       }
 
+      // Keywords
+      if (plan.keywords) {
+        const kw = plan.keywords;
+        const primary = Array.isArray(kw.primary) ? kw.primary.join(', ') : '';
+        const longTail = Array.isArray(kw.longTail) ? kw.longTail.join(', ') : '';
+        if (primary) html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Primary Keywords:</strong> ${primary}</span></div>`;
+        if (longTail) html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Long-Tail Keywords:</strong> ${longTail}</span></div>`;
+      }
+
+      // A/B Testing plan
+      if (plan.abTestingPlan) {
+        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>A/B Testing Plan:</strong> ${plan.abTestingPlan.summary || 'Included — see instructions above'}</span></div>`;
+      }
+
       // Weekly calendar
       if (plan.weeklyCalendar) {
         Object.entries(plan.weeklyCalendar).forEach(([week, tasks]) => {
@@ -178,27 +249,14 @@ async function loadPlan() {
         });
       }
 
-      // Category plans
-      if (plan.categoryPlans?.length) {
-        plan.categoryPlans.forEach(cp => {
-          const steps = Array.isArray(cp.steps) ? cp.steps.join(' ') : (cp.steps || '');
-          html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>${cp.category}:</strong> ${steps.substring(0, 200)}${steps.length > 200 ? '...' : ''}</span></div>`;
-        });
-      }
-
-      // Keyword suggestions
-      if (plan.keywordSuggestions?.length) {
-        html += `<div class="delivery-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span><strong>Keyword Suggestions:</strong> ${plan.keywordSuggestions.join(', ')}</span></div>`;
-      }
-
       html += `<div class="delivery-item" style="margin-top:12px;"><span style="font-size:13px;color:var(--muted);">Full plan also sent to your email.</span></div>`;
 
       document.getElementById('deliveryItems').innerHTML += html;
     } else {
-      document.getElementById('planLoading').textContent = 'Your implementation plan will be emailed to you shortly.';
+      document.getElementById('planLoading').textContent = 'Your implementation plan and optimized copy will be emailed to you shortly.';
     }
   } catch (err) {
-    document.getElementById('planLoading').textContent = 'Your implementation plan will be emailed to you shortly.';
+    document.getElementById('planLoading').textContent = 'Your implementation plan and optimized copy will be emailed to you shortly.';
   }
 }
 

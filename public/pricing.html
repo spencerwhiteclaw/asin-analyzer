@@ -11,7 +11,7 @@
 <title>Pricing — ASIN Analyzer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-light:#60A5FA;--blue-soft:rgba(59,130,246,0.06);--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--gold:#F5A623;--red:#EF4444;--purple:#8B5CF6;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-light:#60A5FA;--blue-soft:rgba(59,130,246,0.06);--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--gold:#F5A623;--red:#EF4444;--purple:#8B5CF6;--orange:#F97316;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
 nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;max-width:1320px;margin:0 auto;padding:16px 40px;background:rgba(255,255,255,0.82);backdrop-filter:blur(20px) saturate(1.8);border-bottom:1px solid var(--border);}
@@ -56,6 +56,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .warm-hero h1 em{font-style:italic;color:var(--red);}
 .warm-hero p{font-size:17px;color:var(--text2);max-width:560px;margin:0 auto 12px;line-height:1.7;}
 
+/* Optimization Loop Banner */
+.loop-banner{background:linear-gradient(135deg,#0F172A,#1E293B);border-radius:var(--r3);padding:32px 40px;margin-bottom:40px;text-align:center;color:#fff;}
+.loop-banner h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;}
+.loop-banner p{font-size:15px;color:rgba(255,255,255,0.55);max-width:600px;margin:0 auto 20px;}
+.loop-steps{display:flex;justify-content:center;gap:0;flex-wrap:wrap;}
+.loop-step-item{display:flex;align-items:center;gap:8px;padding:8px 16px;}
+.loop-step-item .num{width:28px;height:28px;background:var(--blue);border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;flex-shrink:0;}
+.loop-step-item .txt{font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);}
+.loop-step-item .arrow{color:rgba(255,255,255,0.25);font-size:18px;margin:0 4px;}
+
 /* ═══ SHARED: Pricing hero heading ═══ */
 .pricing-hero{text-align:center;padding:20px 0 32px;}
 .pricing-hero h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:8px;}
@@ -93,6 +103,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .plan-features{flex:1;}
 .plan-feat{display:flex;align-items:flex-start;gap:8px;padding:6px 0;font-size:13px;color:var(--text2);}
 .plan-feat svg{width:16px;height:16px;color:var(--green);flex-shrink:0;margin-top:2px;}
+.plan-feat.highlight{font-weight:600;color:var(--text);}
 .plan-feat.disabled{color:var(--muted);}
 .plan-feat.disabled svg{color:var(--border);}
 .feat-divider{height:1px;background:var(--bg3);margin:10px 0;}
@@ -117,11 +128,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .fq.open .ic{transform:rotate(45deg);}
 
 /* Bottom CTA */
-.bottom-cta{background:var(--text);border-radius:var(--r3);padding:48px;text-align:center;color:#fff;}
+.bottom-cta{background:var(--text);border-radius:var(--r3);padding:48px;text-align:center;color:#fff;margin-bottom:40px;}
 .bottom-cta h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;}
 .bottom-cta p{color:rgba(255,255,255,0.5);margin-bottom:24px;}
 .bottom-cta a{display:inline-flex;padding:14px 36px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 16px rgba(59,130,246,0.3);}
 .bottom-cta a:hover{background:var(--blue-dark);transform:translateY(-1px);}
+
+/* Disclaimer */
+.disclaimer{max-width:720px;margin:0 auto;padding:0 0 40px;}
+.disclaimer p{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:8px;}
 
 @media(max-width:900px){.pricing-grid{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto;}}
 @media(max-width:640px){
@@ -130,6 +145,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
   .cold-search button{width:100%;}
   nav{padding:14px 20px;}
   .nav-r a:not(.nav-btn){display:none;}
+  .loop-steps{flex-direction:column;align-items:center;}
+  .loop-step-item .arrow{display:none;}
 }
 </style>
 </head>
@@ -140,7 +157,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
   <div class="nav-r">
     <a href="/#how">How It Works</a>
     <a href="/pricing" style="color:var(--text);font-weight:600;">Pricing</a>
-    <a href="/" class="nav-btn">Free Analysis →</a>
+    <a href="/" class="nav-btn">Free Analysis</a>
   </div>
 </nav>
 
@@ -152,7 +169,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
     <p>14,000+ Amazon sellers ran their free diagnosis and discovered exactly what was costing them sales. Takes 30 seconds. No credit card.</p>
     <div class="cold-search">
       <input type="text" id="coldAsinInput" placeholder="Paste your ASIN (e.g. B08N5WRWNW)" maxlength="10" />
-      <button onclick="coldStartAnalysis()">Get My Free Diagnosis →</button>
+      <button onclick="coldStartAnalysis()">Get My Free Diagnosis</button>
     </div>
     <div class="cold-search-note">100% free · No credit card · Results in 30 seconds</div>
     <div class="cold-search-error" id="coldError"></div>
@@ -173,14 +190,31 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
         <div class="warm-grade-score" id="warmScore">— / 100</div>
       </div>
     </div>
-    <h1>Your listing scored <em id="warmGradeText">—</em>.<br>Here's how to fix it.</h1>
-    <p>You've seen what's broken. Now get the tools to fix it — score tracking, competitor analysis, keyword priorities, and step-by-step implementation plans with every report.</p>
+    <h1>Your listing scored <em id="warmGradeText">—</em>.<br>Here's how to fix it — and keep improving.</h1>
+    <p>You've seen what's broken. Now get AI-optimized copy, A/B test it against your current listing, and keep improving every 2 weeks with real data.</p>
+  </div>
+
+  <!-- Optimization Loop Banner -->
+  <div class="loop-banner">
+    <h2>Every Plan Includes the Optimization Loop</h2>
+    <p>AI-written titles and bullets, A/B test instructions, re-score in 2 weeks, get new copy, test again. Every cycle your listing gets stronger.</p>
+    <div class="loop-steps">
+      <div class="loop-step-item"><div class="num">1</div><div class="txt">Get AI Copy</div></div>
+      <div class="loop-step-item"><div class="arrow">&rarr;</div></div>
+      <div class="loop-step-item"><div class="num">2</div><div class="txt">A/B Test</div></div>
+      <div class="loop-step-item"><div class="arrow">&rarr;</div></div>
+      <div class="loop-step-item"><div class="num">3</div><div class="txt">Wait 2 Weeks</div></div>
+      <div class="loop-step-item"><div class="arrow">&rarr;</div></div>
+      <div class="loop-step-item"><div class="num">4</div><div class="txt">Re-Score</div></div>
+      <div class="loop-step-item"><div class="arrow">&rarr;</div></div>
+      <div class="loop-step-item"><div class="num">5</div><div class="txt">Repeat</div></div>
+    </div>
   </div>
 
   <!-- ═══ SHARED: Plans section ═══ -->
   <div class="pricing-hero">
     <h2>Pick the plan that fits your business</h2>
-    <p>Start with the Implementation Plan or go straight to monthly monitoring.</p>
+    <p>Every plan includes AI-optimized copy and A/B test instructions with every report.</p>
   </div>
 
   <!-- Toggle -->
@@ -191,70 +225,72 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
     <span class="save-badge">Save up to 35%</span>
   </div>
 
-  <!-- Pricing Cards — 3 plans, Seller is the hero -->
+  <!-- Pricing Cards -->
   <div class="pricing-grid">
 
     <!-- SELLER — Most Popular -->
     <div class="plan-card popular">
       <div class="pop-badge">Most Popular</div>
       <div class="plan-name">Seller</div>
-      <div class="plan-desc">Fix your listings. Track your progress. Outsmart competitors.</div>
+      <div class="plan-desc">The optimization loop for your top listings. A/B test your way to page one.</div>
       <div class="plan-price">
         <div class="plan-amount" id="sellerPrice"><sup>$</sup>19</div>
         <div class="plan-per" id="sellerPer">per month</div>
         <div class="plan-annual" id="sellerAnnual">$149/year — save 35%</div>
       </div>
-      <button class="plan-btn primary" onclick="checkout('seller')">Start Seller Plan →</button>
+      <button class="plan-btn primary" onclick="checkout('seller')">Start Seller Plan</button>
       <div class="plan-features">
         <div class="plan-reports">10 reports / month</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Full 12-point diagnosis every report</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Implementation plan with every report</div>
+        <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> AI-optimized title + bullets every report</div>
+        <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> A/B test setup instructions</div>
+        <div class="feat-divider"></div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Full 12-point diagnosis</div>
+        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Implementation plan every report</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Score tracking over time</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Competitor ASIN comparison</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Category benchmarking</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Keyword priority lists</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> 30-day action calendars</div>
       </div>
     </div>
 
     <!-- AGENCY -->
     <div class="plan-card">
       <div class="plan-name">Agency</div>
-      <div class="plan-desc">Manage client listings at scale. Look like a hero to every client.</div>
+      <div class="plan-desc">Run the optimization loop for clients at scale. White-label everything.</div>
       <div class="plan-price">
         <div class="plan-amount" id="agencyPrice"><sup>$</sup>49</div>
         <div class="plan-per" id="agencyPer">per month</div>
         <div class="plan-annual" id="agencyAnnual">$449/year — save 24%</div>
       </div>
-      <button class="plan-btn primary" onclick="checkout('agency')">Start Agency Plan →</button>
+      <button class="plan-btn primary" onclick="checkout('agency')">Start Agency Plan</button>
       <div class="plan-features">
         <div class="plan-reports">50 reports / month</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Everything in Seller</div>
+        <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> White-label PDF reports</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Team / client organization</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Priority support</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Bulk analysis</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> White-label PDF reports</div>
       </div>
     </div>
 
     <!-- ENTERPRISE -->
     <div class="plan-card">
       <div class="plan-name">Enterprise</div>
-      <div class="plan-desc">Keyword tracking, auto re-scans, and category intelligence.</div>
+      <div class="plan-desc">Keyword tracking, auto re-scans, and category intelligence at scale.</div>
       <div class="plan-price">
         <div class="plan-amount" id="entPrice"><sup>$</sup>199</div>
         <div class="plan-per" id="entPer">per month</div>
         <div class="plan-annual" id="entAnnual">$1,899/year — save 20%</div>
       </div>
-      <button class="plan-btn primary" onclick="checkout('enterprise')">Start Enterprise Plan →</button>
+      <button class="plan-btn primary" onclick="checkout('enterprise')">Start Enterprise Plan</button>
       <div class="plan-features">
         <div class="plan-reports">300 reports / month</div>
         <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Everything in Agency</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Keyword Rank Tracking</strong></div>
+        <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Keyword Rank Tracking</strong></div>
         <div class="plan-feat" style="padding-left:24px;font-size:12px;color:var(--muted);">Track 50 keywords/ASIN in Amazon search results</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Automated Monthly Re-Scans</strong></div>
+        <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Automated Monthly Re-Scans</strong></div>
         <div class="plan-feat" style="padding-left:24px;font-size:12px;color:var(--muted);">All ASINs re-analyzed on the 1st with score-change alerts</div>
-        <div class="plan-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Category Intelligence</strong></div>
+        <div class="plan-feat highlight"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> <strong>Category Intelligence</strong></div>
         <div class="plan-feat" style="padding-left:24px;font-size:12px;color:var(--muted);">Benchmark against top 20 listings in your category</div>
       </div>
     </div>
@@ -271,11 +307,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
   <!-- FAQ -->
   <div class="faq-section">
     <h2>Questions? Answers.</h2>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What is the optimization loop?<span class="ic">+</span></div><div class="fq-a"><p>Every report includes AI-optimized titles, bullets, and keywords written for your specific listing. You A/B test them in Amazon's Manage Your Experiments, wait 2 weeks for real data, then come back to re-score and get a new round of optimized copy. Repeat every 2 weeks — each cycle makes your listing stronger.</p></div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Do I need Brand Registry for A/B testing?<span class="ic">+</span></div><div class="fq-a"><p>Amazon's Manage Your Experiments requires Brand Registry. If you don't have it, you can still use the AI-optimized copy — just swap it in directly instead of A/B testing. You'll still see improvements from better-optimized copy.</p></div></div>
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I cancel anytime?<span class="ic">+</span></div><div class="fq-a"><p>Yes. Cancel any time from your account settings. No contracts, no cancellation fees. If you cancel, you keep access through the end of your billing period.</p></div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What counts as a "report"?<span class="ic">+</span></div><div class="fq-a"><p>Each ASIN you analyze counts as one report. Re-running the same ASIN counts as a new report (because we pull fresh data each time). Your quota resets on the 1st of every month.</p></div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What's the difference between the free report and paid?<span class="ic">+</span></div><div class="fq-a"><p>The free report tells you WHAT is wrong — all 12 categories scored with specific findings. Paid plans add the Implementation Plan — step-by-step instructions on HOW to fix every issue, plus keyword priorities, action calendars, and score tracking over time.</p></div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I upgrade or downgrade later?<span class="ic">+</span></div><div class="fq-a"><p>Absolutely. Upgrade any time and the price difference is prorated. Downgrade takes effect at your next billing cycle. Your reports and history are always preserved.</p></div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What about the $7 Implementation Plan?<span class="ic">+</span></div><div class="fq-a"><p>The $7 Implementation Plan is a one-time purchase for a single ASIN — it gives you the full fix-it playbook for that listing. If you have multiple ASINs or want ongoing monitoring, the Seller or Agency plan is a better fit since it includes implementation plans with every report plus score tracking.</p></div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What counts as a "report"?<span class="ic">+</span></div><div class="fq-a"><p>Each ASIN you analyze counts as one report. Re-running the same ASIN counts as a new report (because we pull fresh data and generate new optimized copy each time). Your quota resets on the 1st of every month.</p></div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What's the difference between the free report and paid?<span class="ic">+</span></div><div class="fq-a"><p>The free report shows your 12-point diagnosis — WHAT is wrong. Paid plans add AI-optimized copy (title + bullets rewritten), A/B test instructions, keyword priorities, implementation plans, and score tracking over time. The paid plan tells you HOW to fix it and gives you the actual copy to use.</p></div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What about the $7 Implementation Plan?<span class="ic">+</span></div><div class="fq-a"><p>The $7 plan is a one-time purchase for a single ASIN — one set of optimized copy, one A/B test cycle. Monthly plans give you the optimization loop: new copy, new tests, new scores, every 2 weeks — across as many ASINs as your plan allows.</p></div></div>
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Is my data secure?<span class="ic">+</span></div><div class="fq-a"><p>All data is encrypted in transit and at rest. We only access publicly available Amazon data. We never access your Seller Central account or store any Amazon credentials.</p></div></div>
   </div>
 
@@ -283,7 +320,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
   <div class="bottom-cta" id="bottomCta">
     <h2>Start with a free analysis</h2>
     <p>See your listing's score in 30 seconds. No credit card required.</p>
-    <a href="/">Analyze My Listing Free →</a>
+    <a href="/">Analyze My Listing Free</a>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <p><strong>Earnings &amp; Results Disclaimer:</strong> Results from listing optimization and A/B testing vary significantly based on product, category, competition, pricing, and market conditions. We make no guarantees about specific sales increases, conversion improvements, or ranking changes. The optimization loop is a strategy for continuous improvement — not a guaranteed outcome. Individual results will vary.</p>
+    <p><strong>Amazon Disclaimer:</strong> ASIN Analyzer is not affiliated with, endorsed by, or sponsored by Amazon.com, Inc. Amazon, Seller Central, Brand Registry, and Manage Your Experiments are trademarks of Amazon.com, Inc. A/B testing via Manage Your Experiments requires Brand Registry enrollment. Features and availability of Amazon tools may change without notice.</p>
+    <p><strong>AI-Generated Content:</strong> All optimized copy (titles, bullet points, keywords) is generated by artificial intelligence. AI-generated content should be reviewed before use. You are responsible for ensuring all content complies with Amazon's Terms of Service and listing guidelines.</p>
+    <p><strong>Subscriptions:</strong> All plans are recurring subscriptions billed monthly or annually as selected. Cancel anytime from your account settings. 14-day money-back guarantee applies to first payment only.</p>
   </div>
 
 </div>
@@ -295,9 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const report = sessionStorage.getItem('asinReport');
 
   if (offer || report) {
-    // WARM PATH — user has report data
     document.getElementById('warmHero').classList.add('active');
-
     let data = null;
     if (offer) data = JSON.parse(offer);
     else if (report) data = JSON.parse(report);
@@ -315,19 +358,16 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('warmGradeText').textContent = grade;
       document.getElementById('warmBadge').style.borderColor = gc;
 
-      // Update bottom CTA for warm users
       document.getElementById('bottomCta').innerHTML = `
-        <h2>Your listing won't fix itself.</h2>
-        <p>You scored ${grade}. Every day you wait is another day of lost sales.</p>
-        <a href="/" style="display:inline-flex;padding:14px 36px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;">Get Started Now →</a>
+        <h2>Your listing won't optimize itself.</h2>
+        <p>You scored ${grade}. Start the optimization loop and watch your score climb.</p>
+        <a href="/" style="display:inline-flex;padding:14px 36px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;text-decoration:none;">Get Started Now</a>
       `;
     }
   } else {
-    // COLD PATH — no data, push them to try the tool first
     document.getElementById('coldHero').classList.add('active');
   }
 
-  // Enter key on cold ASIN input
   const coldInput = document.getElementById('coldAsinInput');
   if (coldInput) {
     coldInput.addEventListener('keypress', (e) => {
@@ -342,7 +382,6 @@ function gradeColor(grade) {
   return {A:'#10B981',B:'#3B82F6',C:'#F59E0B',D:'#F97316',F:'#EF4444'}[g] || '#94A3B8';
 }
 
-// Cold path: redirect to homepage with ASIN prefilled
 function coldStartAnalysis() {
   const input = document.getElementById('coldAsinInput');
   const asin = input.value.trim().toUpperCase();
@@ -360,7 +399,6 @@ function coldStartAnalysis() {
     return;
   }
 
-  // Redirect to homepage with ASIN in URL param — homepage will auto-start analysis
   window.location.href = '/?asin=' + cleanASIN;
 }
 

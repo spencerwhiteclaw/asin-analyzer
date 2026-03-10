@@ -9,10 +9,10 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Implementation Plan — ASIN Analyzer</title>
+<title>Your Optimized Title &amp; Bullets — ASIN Analyzer</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--red:#EF4444;--yellow:#F59E0B;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--r:12px;--r2:16px;--r3:20px;}
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--green-bg:#ECFDF5;--green-border:#A7F3D0;--red:#EF4444;--yellow:#F59E0B;--orange:#F97316;--purple:#8B5CF6;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
 nav{display:flex;align-items:center;justify-content:space-between;max-width:800px;margin:0 auto;padding:16px 40px;}
@@ -21,59 +21,117 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 .logo-text span{color:var(--blue);}
 .wrap{max-width:720px;margin:0 auto;padding:0 24px 80px;}
 
+/* Urgency strip */
+.urgency-strip{background:linear-gradient(90deg,#DC2626,#EF4444);text-align:center;padding:10px 20px;font-size:13px;font-weight:700;color:#fff;letter-spacing:0.3px;}
+
 /* Hero */
-.offer-hero{text-align:center;padding:40px 0 32px;}
-.offer-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:100px;padding:6px 16px;font-size:13px;font-weight:600;color:var(--red);margin-bottom:20px;}
-.offer-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:36px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:12px;}
+.offer-hero{text-align:center;padding:36px 0 28px;}
+.offer-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:100px;padding:6px 16px;font-size:13px;font-weight:600;color:var(--blue);margin-bottom:16px;}
+.offer-hero h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:34px;font-weight:800;line-height:1.15;letter-spacing:-0.02em;margin-bottom:14px;}
 .offer-hero h1 em{font-style:normal;color:var(--blue);text-decoration:underline;text-decoration-color:rgba(59,130,246,0.3);text-underline-offset:4px;}
-.offer-hero p{font-size:17px;color:var(--text2);max-width:560px;margin:0 auto;}
+.offer-hero .sub{font-size:17px;color:var(--text2);max-width:580px;margin:0 auto;}
 
 /* Grade recap */
-.grade-recap{display:flex;align-items:center;gap:20px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:20px 24px;margin-bottom:28px;}
+.grade-recap{display:flex;align-items:center;gap:20px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:20px 24px;margin-bottom:24px;}
 .gr-grade{font-family:'Plus Jakarta Sans',sans-serif;font-size:40px;font-weight:800;line-height:1;}
 .gr-info h3{font-size:15px;font-weight:700;color:var(--text);}
 .gr-info p{font-size:14px;color:var(--text2);}
 
-/* Value stack */
-.value-stack{background:var(--bg);border:2px solid var(--blue);border-radius:var(--r3);overflow:hidden;margin-bottom:28px;}
-.vs-header{background:var(--blue);color:#fff;padding:14px 24px;font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;text-align:center;}
-.vs-item{display:flex;align-items:flex-start;gap:12px;padding:16px 24px;border-bottom:1px solid var(--bg2);}
-.vs-item:last-child{border:none;}
-.vs-check{width:22px;height:22px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:50%;display:grid;place-items:center;flex-shrink:0;margin-top:2px;}
-.vs-check svg{width:12px;height:12px;color:var(--green);}
-.vs-text h4{font-size:14px;font-weight:700;color:var(--text);}
-.vs-text p{font-size:13px;color:var(--text2);margin-top:2px;}
-.vs-text .vs-val{font-size:12px;color:var(--muted);font-weight:600;margin-top:4px;}
-.vs-total{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:var(--bg2);}
-.vs-total-label{font-size:14px;color:var(--text2);font-weight:600;}
-.vs-total-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;color:var(--text);text-decoration:line-through;text-decoration-color:var(--red);}
-
-/* Price + CTA */
-.price-block{text-align:center;margin-bottom:32px;}
-.price-label{font-size:15px;color:var(--text2);margin-bottom:4px;}
-.price-big{font-family:'Plus Jakarta Sans',sans-serif;font-size:64px;font-weight:800;color:var(--text);line-height:1;}
-.price-big sup{font-size:24px;vertical-align:super;}
-.price-note{font-size:13px;color:var(--muted);margin-top:4px;}
-.buy-btn{display:block;width:100%;padding:18px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(59,130,246,0.3);text-align:center;text-decoration:none;margin-bottom:12px;}
-.buy-btn:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 30px rgba(59,130,246,0.4);}
+/* CTA card */
+.cta-card{background:linear-gradient(135deg,#1E293B,#0F172A);border-radius:var(--r3);padding:32px;text-align:center;margin-bottom:28px;position:relative;overflow:hidden;}
+.cta-card::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at top center,rgba(59,130,246,0.15),transparent 70%);pointer-events:none;}
+.cta-card h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:24px;font-weight:800;color:#fff;margin-bottom:6px;position:relative;}
+.cta-card p{font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:20px;position:relative;}
+.cta-price{position:relative;margin-bottom:16px;}
+.cta-price .was{font-size:14px;color:rgba(255,255,255,0.35);text-decoration:line-through;margin-bottom:2px;}
+.cta-price .now{font-family:'Plus Jakarta Sans',sans-serif;font-size:56px;font-weight:800;color:#fff;line-height:1;}
+.cta-price .now sup{font-size:20px;vertical-align:super;}
+.cta-price .note{font-size:13px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.buy-btn{display:block;width:100%;max-width:440px;margin:0 auto 12px;padding:18px 24px;background:linear-gradient(135deg,#3B82F6,#2563EB);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(59,130,246,0.4);position:relative;letter-spacing:-0.01em;}
+.buy-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(59,130,246,0.5);}
 .buy-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
-.skip-link{display:block;text-align:center;font-size:14px;color:var(--muted);text-decoration:none;padding:8px;}
+.trust-badges{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;position:relative;}
+.trust-badges span{font-size:12px;color:rgba(255,255,255,0.35);font-weight:500;}
+
+/* What You Get */
+.section-label{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;}
+.section-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;}
+.section-sub{font-size:15px;color:var(--text2);margin-bottom:20px;}
+
+/* Deliverables */
+.deliverable{background:var(--bg);border:1px solid var(--border);border-radius:var(--r2);padding:24px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s;}
+.deliverable:hover{border-color:var(--blue);}
+.del-icon{width:44px;height:44px;border-radius:var(--r);display:grid;place-items:center;flex-shrink:0;font-size:20px;}
+.del-icon.blue{background:rgba(59,130,246,0.08);}
+.del-icon.green{background:rgba(16,185,129,0.08);}
+.del-icon.purple{background:rgba(139,92,246,0.08);}
+.del-icon.orange{background:rgba(249,115,22,0.08);}
+.del-icon.red{background:rgba(239,68,68,0.08);}
+.del-text h4{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.del-text p{font-size:13.5px;color:var(--text2);line-height:1.5;}
+.del-val{font-size:12px;font-weight:700;color:var(--muted);margin-top:6px;}
+
+/* Before/After Preview */
+.preview-card{background:var(--bg);border:2px solid var(--blue);border-radius:var(--r3);overflow:hidden;margin-bottom:28px;}
+.preview-header{background:var(--blue);color:#fff;padding:12px 24px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:0.5px;}
+.preview-body{padding:24px;}
+.preview-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;padding:4px 10px;border-radius:6px;display:inline-block;}
+.preview-label.before{background:rgba(239,68,68,0.08);color:var(--red);}
+.preview-label.after{background:rgba(16,185,129,0.08);color:var(--green);}
+.preview-text{font-size:14px;color:var(--text2);line-height:1.6;padding:10px 0;border-bottom:1px dashed var(--border);margin-bottom:12px;}
+.preview-text:last-child{border:none;margin:0;}
+.preview-text.blurred{filter:blur(5px);user-select:none;pointer-events:none;}
+.preview-lock{text-align:center;padding:12px;font-size:13px;color:var(--muted);font-weight:600;}
+
+/* A/B Test section */
+.ab-section{background:linear-gradient(135deg,rgba(139,92,246,0.04),rgba(59,130,246,0.04));border:1px solid rgba(139,92,246,0.15);border-radius:var(--r3);padding:28px;margin-bottom:28px;}
+.ab-section h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px;color:var(--text);}
+.ab-section .ab-sub{font-size:14px;color:var(--text2);margin-bottom:20px;}
+.ab-steps{counter-reset:ab;}
+.ab-step{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid rgba(139,92,246,0.08);}
+.ab-step:last-child{border:none;}
+.ab-num{counter-increment:ab;width:28px;height:28px;background:var(--purple);color:#fff;border-radius:50%;display:grid;place-items:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:800;flex-shrink:0;}
+.ab-num::before{content:counter(ab);}
+.ab-content h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.ab-content p{font-size:13px;color:var(--text2);}
+
+/* Value stack total */
+.value-total{background:var(--bg);border:2px dashed var(--border);border-radius:var(--r2);padding:20px;text-align:center;margin-bottom:28px;}
+.value-total .total-label{font-size:14px;color:var(--text2);font-weight:500;margin-bottom:2px;}
+.value-total .total-val{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;color:var(--text);text-decoration:line-through;text-decoration-color:var(--red);margin-bottom:2px;}
+.value-total .total-pay{font-size:16px;color:var(--blue);font-weight:700;}
+
+/* Second CTA */
+.buy-btn-wrap{text-align:center;margin-bottom:28px;}
+.buy-btn-main{display:block;width:100%;padding:20px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(59,130,246,0.3);margin-bottom:10px;}
+.buy-btn-main:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 8px 30px rgba(59,130,246,0.4);}
+.buy-btn-main:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.skip-link{display:block;text-align:center;font-size:14px;color:var(--muted);text-decoration:none;padding:8px;cursor:pointer;}
 .skip-link:hover{color:var(--text2);}
 
-/* Trust */
-.trust-row{display:flex;justify-content:center;gap:20px;margin-bottom:32px;flex-wrap:wrap;}
-.trust-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);font-weight:500;}
-.trust-item svg{width:16px;height:16px;color:var(--green);}
-
 /* FAQ */
-.offer-faq{margin-top:40px;}
-.offer-faq h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:16px;}
+.faq-section{margin-top:32px;margin-bottom:32px;}
+.faq-section h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:800;text-align:center;margin-bottom:16px;}
 .faq-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:16px 20px;margin-bottom:8px;}
 .faq-item h4{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
 .faq-item p{font-size:14px;color:var(--text2);}
+
+/* Disclaimer */
+.disclaimer{border-top:1px solid var(--border);padding:28px 0 0;margin-top:20px;}
+.disclaimer p{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:8px;}
+
+@media(max-width:600px){
+  .offer-hero h1{font-size:26px;}
+  .cta-price .now{font-size:44px;}
+  .deliverable{flex-direction:column;gap:10px;}
+  .preview-body{padding:16px;}
+}
 </style>
 </head>
 <body>
+
+<!-- Urgency strip -->
+<div class="urgency-strip">YOUR REPORT FOUND ISSUES — GET THE FIX PLAN BEFORE YOU LOSE ANOTHER DAY OF SALES</div>
 
 <nav>
   <a href="/" class="logo"><div class="logo-text">ASIN <span>Analyzer</span></div></a>
@@ -83,107 +141,217 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 
   <!-- Hero -->
   <div class="offer-hero">
-    <div class="offer-badge">⚠️ Your report found issues</div>
-    <h1>You know what's broken.<br>Now get the <em>exact fix</em> for every issue.</h1>
-    <p>Your personalized Implementation Plan — step-by-step instructions written specifically for your listing, your scores, and your category.</p>
+    <div class="offer-badge">AI-POWERED OPTIMIZATION</div>
+    <h1>We already wrote you a<br><em>new title and 5 new bullets.</em></h1>
+    <p class="sub">Our AI analyzed your listing, your competitors, and your category — then wrote you conversion-optimized copy. A/B test it against what you have now. See what wins. <strong>In 2 weeks, you'll have real data.</strong></p>
   </div>
 
   <!-- Grade recap (filled by JS) -->
   <div class="grade-recap" id="gradeRecap" style="display:none;"></div>
 
-  <!-- Value Stack -->
-  <div class="value-stack">
-    <div class="vs-header">Here's Everything You Get</div>
+  <!-- CTA Card — Right up top, Dan Kennedy style -->
+  <div class="cta-card">
+    <h2>Your optimized title + 5 bullets are ready.</h2>
+    <p>One-time payment. Instant delivery. Written specifically for your ASIN.</p>
+    <div class="cta-price">
+      <div class="was">Agencies charge $500+ for this</div>
+      <div class="now"><sup>$</sup>7</div>
+      <div class="note">One-time payment · Instant access · Specific to your listing</div>
+    </div>
+    <button class="buy-btn" id="buyBtnTop" onclick="handlePurchase()">
+      Get My Optimized Title &amp; Bullets → $7
+    </button>
+    <div class="trust-badges">
+      <span>Secure checkout</span>
+      <span>·</span>
+      <span>Instant delivery</span>
+      <span>·</span>
+      <span>No subscription</span>
+    </div>
+  </div>
 
-    <div class="vs-item">
-      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-      <div class="vs-text">
-        <h4>Complete Implementation Plan</h4>
-        <p>Step-by-step fix instructions for every issue found in your 12-point diagnosis. Not generic advice — specific to your ASIN, your scores, your category.</p>
-        <div class="vs-val">Value: $47</div>
+  <!-- Before/After Preview -->
+  <div class="preview-card">
+    <div class="preview-header">SNEAK PEEK — YOUR TITLE REWRITE</div>
+    <div class="preview-body">
+      <div class="preview-label before">YOUR CURRENT TITLE</div>
+      <div class="preview-text" id="currentTitle">Loading your title...</div>
+      <div class="preview-label after">YOUR NEW OPTIMIZED TITLE</div>
+      <div class="preview-text blurred" id="newTitle">Your AI-optimized title with strategic keyword placement, benefit-first structure, and conversion-tested format is ready and waiting inside your plan...</div>
+      <div class="preview-lock">Unlock your full optimized title + 5 bullets for $7</div>
+    </div>
+  </div>
+
+  <!-- What You Get -->
+  <div style="margin-bottom:28px;">
+    <div class="section-label">EVERYTHING INCLUDED</div>
+    <div class="section-title">Here's what's inside your $7 plan</div>
+    <div class="section-sub">Not generic tips. Not blog post advice. Specific, actionable copy written for YOUR listing.</div>
+
+    <div class="deliverable">
+      <div class="del-icon blue">✏️</div>
+      <div class="del-text">
+        <h4>AI-Optimized Title Rewrite</h4>
+        <p>Your current title analyzed and rewritten with strategic keyword placement, benefit-first structure, and competitor gap analysis. Before-and-after with explanation of every change.</p>
+        <div class="del-val">Value: $97</div>
       </div>
     </div>
 
-    <div class="vs-item">
-      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-      <div class="vs-text">
+    <div class="deliverable">
+      <div class="del-icon green">📝</div>
+      <div class="del-text">
+        <h4>5 Conversion-Optimized Bullet Points</h4>
+        <p>All 5 bullets rewritten using the ALL-CAPS BENEFIT + supporting detail formula that top sellers use. Each bullet targets a different search intent and buyer objection.</p>
+        <div class="del-val">Value: $147</div>
+      </div>
+    </div>
+
+    <div class="deliverable">
+      <div class="del-icon purple">🔑</div>
+      <div class="del-text">
+        <h4>Keyword Priority List (Primary, Long-Tail &amp; Competitor)</h4>
+        <p>Keywords grouped by priority: high-volume primary terms, long-tail opportunities your competitors are missing, and competitor keywords you should be targeting.</p>
+        <div class="del-val">Value: $47</div>
+      </div>
+    </div>
+
+    <div class="deliverable">
+      <div class="del-icon orange">🧪</div>
+      <div class="del-text">
+        <h4>A/B Test Setup Instructions</h4>
+        <p>Step-by-step guide to set up Amazon's "Manage Your Experiments" to split-test your new title and bullets against what you have now. In 2 weeks you'll have real data showing which one converts better.</p>
+        <div class="del-val">Value: $29</div>
+      </div>
+    </div>
+
+    <div class="deliverable">
+      <div class="del-icon blue">📋</div>
+      <div class="del-text">
+        <h4>Complete Fix-It Plan for Every Category</h4>
+        <p>Step-by-step instructions for every issue in your 12-point diagnosis. Current score, target score, time estimate, and exactly what to change — for all 12 scoring categories.</p>
+        <div class="del-val">Value: $47</div>
+      </div>
+    </div>
+
+    <div class="deliverable">
+      <div class="del-icon red">⚡</div>
+      <div class="del-text">
+        <h4>5 Quick Wins (Do Today in 30 Minutes)</h4>
+        <p>The highest-impact changes you can make right now. Each one includes step-by-step instructions you can follow in Seller Central in under 10 minutes.</p>
+        <div class="del-val">Value: $19</div>
+      </div>
+    </div>
+
+    <div class="deliverable">
+      <div class="del-icon green">📅</div>
+      <div class="del-text">
         <h4>30-Day Action Calendar</h4>
-        <p>Week-by-week breakdown of exactly what to do and when. No guessing, no overwhelm — just follow the calendar.</p>
-        <div class="vs-val">Value: $19</div>
+        <p>Week-by-week breakdown: what to change, what to test, when to measure. No guessing, no overwhelm — just follow the calendar.</p>
+        <div class="del-val">Value: $19</div>
       </div>
-    </div>
-
-    <div class="vs-item">
-      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-      <div class="vs-text">
-        <h4>Keyword Priority List</h4>
-        <p>Which keywords to target first and why, based on your title, category, and competitor landscape.</p>
-        <div class="vs-val">Value: $15</div>
-      </div>
-    </div>
-
-    <div class="vs-item">
-      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-      <div class="vs-text">
-        <h4>"Quick Wins" Checklist</h4>
-        <p>3 things you can do TODAY in under 30 minutes that will start improving your listing immediately.</p>
-        <div class="vs-val">Value: $9</div>
-      </div>
-    </div>
-
-    <div class="vs-item">
-      <div class="vs-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
-      <div class="vs-text">
-        <h4>30-Day Re-Scan Credit</h4>
-        <p>Come back in 30 days and re-run your analysis for free. See exactly how your changes moved the score.</p>
-        <div class="vs-val">Value: $7</div>
-      </div>
-    </div>
-
-    <div class="vs-total">
-      <div class="vs-total-label">Total Value</div>
-      <div class="vs-total-val">$97+</div>
     </div>
   </div>
 
-  <!-- Price + Buy -->
-  <div class="price-block">
-    <div class="price-label">Your price today:</div>
-    <div class="price-big"><sup>$</sup>7</div>
-    <div class="price-note">One-time payment · Instant delivery · Specific to your listing</div>
+  <!-- Value total -->
+  <div class="value-total">
+    <div class="total-label">Total value of everything inside:</div>
+    <div class="total-val">$405+</div>
+    <div class="total-pay">Your price today: $7</div>
   </div>
 
-  <button class="buy-btn" id="buyBtn" onclick="handlePurchase()">
-    Get My Implementation Plan → $7
-  </button>
-  <a href="#" class="skip-link" id="skipLink" onclick="handleSkip(event)">No thanks, I'll figure it out on my own</a>
+  <!-- A/B Testing section — the hook -->
+  <div class="ab-section">
+    <h3>The A/B Test Strategy (This Is the Real Gold)</h3>
+    <p class="ab-sub">You don't have to guess if the new copy will work. Amazon lets you <strong>split-test it against your current listing</strong> and see the winner with real data. Here's how it works:</p>
+
+    <div class="ab-steps">
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Get your optimized title + bullets</h4>
+          <p>Our AI writes you conversion-tested copy based on your listing, competitors, and category data.</p>
+        </div>
+      </div>
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Set up A/B test in Seller Central</h4>
+          <p>Use Amazon's free "Manage Your Experiments" tool (we give you step-by-step screenshots). Put our title against yours. Let Amazon split traffic 50/50.</p>
+        </div>
+      </div>
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Wait 2 weeks — Amazon picks the winner</h4>
+          <p>Real shoppers. Real clicks. Real conversions. No guessing. Amazon tells you which title drives more sales.</p>
+        </div>
+      </div>
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Come back and re-score your listing</h4>
+          <p>Run your ASIN through ASIN Analyzer again. See how your score changed. Identify the next thing to optimize.</p>
+        </div>
+      </div>
+      <div class="ab-step">
+        <div class="ab-num"></div>
+        <div class="ab-content">
+          <h4>Keep fine-tuning until you dominate</h4>
+          <p>New test, 2 more weeks, re-score. Every cycle your listing gets stronger. This is how top sellers operate — constant improvement backed by real data.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Second CTA -->
+  <div class="buy-btn-wrap">
+    <button class="buy-btn-main" id="buyBtnBottom" onclick="handlePurchase()">
+      Get My Optimized Title &amp; Bullets → $7
+    </button>
+    <a href="#" class="skip-link" id="skipLink" onclick="handleSkip(event)">No thanks, I'll write my own copy</a>
+  </div>
 
   <!-- Trust signals -->
-  <div class="trust-row">
-    <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Secure Checkout</div>
-    <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Instant Access</div>
-    <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generated in seconds</div>
+  <div style="display:flex;justify-content:center;gap:20px;margin-bottom:32px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);font-weight:500;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Secure Checkout</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);font-weight:500;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Instant Access</div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2);font-weight:500;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> Generated in Seconds</div>
   </div>
 
   <!-- FAQ -->
-  <div class="offer-faq">
+  <div class="faq-section">
     <h3>Common Questions</h3>
     <div class="faq-item">
-      <h4>What exactly is the Implementation Plan?</h4>
-      <p>It's a detailed, step-by-step action plan written by AI specifically for YOUR listing. It covers every issue found in your diagnosis with specific instructions on how to fix each one — not generic advice you could find in a blog post.</p>
+      <h4>What exactly do I get for $7?</h4>
+      <p>A complete AI-rewritten title, all 5 bullet points rewritten, a prioritized keyword list, step-by-step A/B testing instructions, a fix plan for every category in your diagnosis, 5 quick wins, and a 30-day action calendar. All specific to your ASIN — not generic templates.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Why is it only $7?</h4>
+      <p>Because we want you to try the A/B test and see real results. When you come back in 2 weeks with a higher-converting listing and a better score, you'll want to keep optimizing. That's our business model — deliver so much value at $7 that you'll want to use us again.</p>
+    </div>
+    <div class="faq-item">
+      <h4>What is A/B testing on Amazon?</h4>
+      <p>Amazon's "Manage Your Experiments" tool lets Brand Registered sellers test two versions of their title, bullets, or images. Amazon splits your traffic 50/50 and tells you which version drives more sales. It's free to use and built into Seller Central. We give you step-by-step instructions to set it up.</p>
+    </div>
+    <div class="faq-item">
+      <h4>Do I need Brand Registry for A/B testing?</h4>
+      <p>Yes, Amazon's Manage Your Experiments requires Brand Registry. If you don't have it, you can still use the optimized title, bullets, and keywords — just swap them in directly instead of A/B testing. You'll still see improvements.</p>
     </div>
     <div class="faq-item">
       <h4>Is this a done-for-you service?</h4>
-      <p>No — you do the work. The plan tells you exactly what to do, in what order, with specific guidance. You implement it in Seller Central. You own the outcome. That's why it's $7 and not $2,000.</p>
-    </div>
-    <div class="faq-item">
-      <h4>How is this different from the free report?</h4>
-      <p>The free report tells you WHAT is wrong. The Implementation Plan tells you exactly HOW to fix it — step-by-step instructions, a 30-day calendar, keyword priorities, and quick wins you can do today.</p>
+      <p>No — we write the optimized copy for you, but you set up the A/B test (or swap the copy in) yourself in Seller Central. That's why it's $7 and not $2,000. You do the 5-minute setup. Amazon handles the rest.</p>
     </div>
     <div class="faq-item">
       <h4>What if I have multiple ASINs?</h4>
-      <p>This plan covers the ASIN you just analyzed. For multiple ASINs, check out our Seller Plan ($19/mo) — every report includes the full implementation plan automatically.</p>
+      <p>This plan covers the ASIN you just analyzed. For multiple ASINs with ongoing optimization, check out our Seller Plan ($19/mo) — it includes optimized copy + A/B test instructions with every report, plus score tracking so you can see your progress over time.</p>
     </div>
+  </div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer">
+    <p><strong>Earnings &amp; Results Disclaimer:</strong> The results described on this page are not typical. Individual results will vary based on your product, category, competition, pricing, and numerous other factors. We make no guarantees about specific sales increases, conversion improvements, or ranking changes. A/B test results depend on Amazon's algorithm, your product category, traffic volume, and market conditions. Past performance of other sellers does not guarantee future results for your listing.</p>
+    <p><strong>Amazon Disclaimer:</strong> ASIN Analyzer is not affiliated with, endorsed by, or sponsored by Amazon.com, Inc. or any of its affiliates. Amazon, Seller Central, Brand Registry, and Manage Your Experiments are trademarks of Amazon.com, Inc. A/B testing via Manage Your Experiments requires Brand Registry enrollment. Features and availability of Amazon tools may change without notice.</p>
+    <p><strong>AI-Generated Content:</strong> Title rewrites, bullet point suggestions, and keyword recommendations are generated by artificial intelligence. While our AI analyzes your listing data and competitor landscape, all AI-generated copy should be reviewed by you before use. You are responsible for ensuring all content complies with Amazon's Terms of Service and listing guidelines.</p>
   </div>
 
 </div>
@@ -192,7 +360,7 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 const params = new URLSearchParams(window.location.search);
 const analysisId = params.get('analysis');
 
-// Try to get report context for the grade recap
+// Try to get report context for the grade recap + title preview
 const stored = sessionStorage.getItem('asinOffer');
 if (stored) {
   try {
@@ -203,29 +371,34 @@ if (stored) {
     recap.innerHTML = `
       <div class="gr-grade" style="color:${gc}">${data.grade}</div>
       <div class="gr-info">
-        <h3>${data.asin} — ${data.overall}/100</h3>
-        <p>${data.actionCount || 0} issues found that are costing you sales</p>
+        <h3>${data.asin} scored ${data.overall}/100</h3>
+        <p>${data.actionCount || 0} issues found — your optimized copy addresses the biggest ones</p>
       </div>
     `;
+
+    // Show current title if available
+    if (data.title) {
+      document.getElementById('currentTitle').textContent = data.title;
+    } else {
+      document.getElementById('currentTitle').textContent = 'Your current listing title will appear here after analysis';
+    }
   } catch(e) {}
 }
 
 async function handlePurchase() {
-  const btn = document.getElementById('buyBtn');
-  btn.disabled = true;
-  btn.textContent = 'Redirecting to checkout...';
-  if(typeof gtag==='function')gtag('event','begin_checkout',{value:7,currency:'USD',items:[{item_name:'Implementation Plan'}]});
+  const btns = document.querySelectorAll('#buyBtnTop, #buyBtnBottom');
+  btns.forEach(b => { b.disabled = true; b.textContent = 'Redirecting to checkout...'; });
+
+  if(typeof gtag==='function')gtag('event','begin_checkout',{value:7,currency:'USD',items:[{item_name:'Implementation Plan + Optimized Copy'}]});
   if(typeof fbq==='function')fbq('track','InitiateCheckout',{value:7,currency:'USD'});
 
   try {
-    // Get email from sessionStorage or URL
     const email = sessionStorage.getItem('asinEmail') || '';
-
     const resp = await fetch('/api/stripe/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        priceId: 'price_1T8YvgLhOMEKeqYhtWctJRfE', // Will be replaced with real Stripe price ID
+        priceId: 'price_1T8YvgLhOMEKeqYhtWctJRfE',
         email: email,
         analysisId: analysisId,
         mode: 'payment',
@@ -235,7 +408,6 @@ async function handlePurchase() {
     if (resp.ok) {
       const data = await resp.json();
       if (data.url) {
-        // Store state for post-purchase flow
         sessionStorage.setItem('purchasePath', 'tripwire');
         window.location.href = data.url;
       }
@@ -246,20 +418,17 @@ async function handlePurchase() {
       } else {
         alert(err.error || 'Something went wrong. Please try again.');
       }
-      btn.disabled = false;
-      btn.textContent = 'Get My Implementation Plan → $7';
+      btns.forEach(b => { b.disabled = false; b.textContent = 'Get My Optimized Title & Bullets → $7'; });
     }
   } catch (err) {
     console.error('Purchase error:', err);
     alert('Connection error. Please try again.');
-    btn.disabled = false;
-    btn.textContent = 'Get My Implementation Plan → $7';
+    btns.forEach(b => { b.disabled = false; b.textContent = 'Get My Optimized Title & Bullets → $7'; });
   }
 }
 
 function handleSkip(e) {
   e.preventDefault();
-  // Declined $7 → go to $4.97 downsell
   sessionStorage.setItem('purchasePath', 'declined_tripwire');
   window.location.href = `/downsell?analysis=${analysisId || ''}`;
 }
