@@ -1964,12 +1964,12 @@ app.post('/api/stripe/create-checkout', async (req, res) => {
     const { priceId, email, analysisId, mode } = req.body;
 
     const sessionParams = {
-      customer_email: email,
+      ...(email && email.includes('@') ? { customer_email: email } : {}),
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: mode || 'payment', // 'payment' for one-time, 'subscription' for recurring
       success_url: `https://www.asinanalyzer.app/thank-you?session_id={CHECKOUT_SESSION_ID}&analysis_id=${analysisId || ''}`,
-      cancel_url: `https://www.asinanalyzer.app/report/${analysisId || ''}`,
+      cancel_url: analysisId ? `https://www.asinanalyzer.app/report/${analysisId}` : `https://www.asinanalyzer.app/pricing`,
       metadata: {
         analysisId: String(analysisId || ''),
         product: priceId,
