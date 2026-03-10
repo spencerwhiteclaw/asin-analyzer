@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XRNTK9YM1L');</script>
+<!-- Facebook Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','938316492034344');fbq('track','PageView');</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keyword Rank Tracker — ASIN Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#3B82F6;--blue-dark:#2563EB;--blue-soft:rgba(59,130,246,0.06);--green:#10B981;--green-bg:#ECFDF5;--yellow:#F59E0B;--red:#EF4444;--red-bg:#FEF2F2;--purple:#8B5CF6;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;--shadow:0 4px 16px rgba(0,0,0,0.06);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
+
+/* Dashboard Nav */
+.dash-nav{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:16px 40px;background:var(--bg);border-bottom:1px solid var(--border);}
+.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);text-decoration:none;}
+.logo-text span{color:var(--blue);}
+.dash-nav-r{display:flex;align-items:center;gap:24px;}
+.dash-nav-r a{color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;transition:color .2s;}
+.dash-nav-r a:hover{color:var(--text);}
+.dash-nav-r a.active{color:var(--blue);font-weight:600;}
+.avatar-btn{width:36px;height:36px;background:var(--blue);color:#fff;border-radius:50%;display:grid;place-items:center;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;border:none;}
+.wrap{max-width:1200px;margin:0 auto;padding:32px 40px 80px;}
+
+/* Page Header */
+.page-header{margin-bottom:24px;}
+.page-header h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;}
+.page-header p{font-size:15px;color:var(--text2);margin-top:4px;}
+
+/* ASIN Selector */
+.selector-row{display:flex;gap:12px;align-items:center;margin-bottom:20px;flex-wrap:wrap;}
+.asin-select{padding:10px 16px;border:1px solid var(--border);border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;min-width:200px;background:var(--bg);transition:border .2s;}
+.asin-select:focus{border-color:var(--blue);}
+.selector-row .or-text{font-size:13px;color:var(--muted);font-weight:500;}
+
+/* Add Keyword Form */
+.add-kw-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:20px 24px;margin-bottom:20px;}
+.add-kw-card h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;margin-bottom:12px;}
+.add-kw-form{display:flex;gap:10px;}
+.add-kw-form input{flex:1;padding:11px 16px;border:1px solid var(--border);border-radius:var(--r);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;}
+.add-kw-form input:focus{border-color:var(--blue);}
+.add-kw-form button{padding:11px 20px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.add-kw-form button:hover{background:var(--blue-dark);}
+.add-kw-form button:disabled{opacity:0.6;cursor:not-allowed;}
+.add-kw-error{color:var(--red);font-size:13px;margin-top:8px;display:none;}
+
+/* Keywords Table */
+.kw-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);overflow:hidden;}
+.kw-header{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.kw-header h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;}
+.kw-header-actions{display:flex;gap:8px;}
+.refresh-all-btn{padding:8px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.refresh-all-btn:hover{border-color:var(--blue);color:var(--blue);}
+.refresh-all-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.kw-table{width:100%;border-collapse:collapse;}
+.kw-table th,.kw-table td{padding:12px 16px;text-align:left;font-size:13px;border-bottom:1px solid var(--bg3);}
+.kw-table th{font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);background:var(--bg2);}
+.kw-table tr:last-child td{border-bottom:none;}
+.kw-table tr:hover td{background:var(--bg2);}
+
+.kw-keyword{font-weight:600;color:var(--text);}
+.kw-rank{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:800;}
+.kw-rank.ranked{color:var(--blue);}
+.kw-rank.not-ranked{color:var(--muted);font-size:13px;font-weight:600;}
+.kw-delta{font-size:12px;font-weight:700;padding:2px 8px;border-radius:100px;display:inline-block;}
+.kw-delta.up{background:var(--green-bg);color:var(--green);}
+.kw-delta.down{background:var(--red-bg);color:var(--red);}
+.kw-delta.flat{background:var(--bg3);color:var(--muted);}
+.kw-sparkline{width:80px;height:24px;}
+.kw-page{font-size:12px;color:var(--muted);}
+.kw-date{font-size:12px;color:var(--muted);white-space:nowrap;}
+.kw-actions{display:flex;gap:6px;}
+.kw-action-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;color:var(--text2);}
+.kw-action-btn:hover{border-color:var(--blue);color:var(--blue);}
+.kw-action-btn.delete:hover{border-color:var(--red);color:var(--red);}
+.kw-action-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* Empty State */
+.kw-empty{padding:60px 24px;text-align:center;}
+.kw-empty h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.kw-empty p{font-size:14px;color:var(--muted);}
+
+/* Upgrade gate */
+.upgrade-gate{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:48px;text-align:center;}
+.upgrade-gate h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px;}
+.upgrade-gate p{color:var(--text2);font-size:15px;margin-bottom:20px;}
+.upgrade-gate a{display:inline-flex;padding:12px 28px;background:var(--blue);color:#fff;border-radius:var(--r);font-weight:700;font-size:14px;text-decoration:none;transition:all .2s;}
+.upgrade-gate a:hover{background:var(--blue-dark);}
+
+/* Loading */
+.spinner-sm{display:inline-block;width:14px;height:14px;border:2px solid var(--bg3);border-top-color:var(--blue);border-radius:50%;animation:spin 0.6s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+  .kw-table th:nth-child(4),.kw-table td:nth-child(4),
+  .kw-table th:nth-child(5),.kw-table td:nth-child(5){display:none;}
+  .add-kw-form{flex-direction:column;}
+  .selector-row{flex-direction:column;align-items:stretch;}
+}
+</style>
+</head>
+<body>
+
+<div class="dash-nav">
+  <a href="/" class="logo-text">ASIN <span>Analyzer</span></a>
+  <div class="dash-nav-r">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/compare">Compare</a>
+    <a href="/keywords" class="active">Keywords</a>
+    <a href="/dashboard/history">History</a>
+    <a href="/dashboard/account">Account</a>
+    <button class="avatar-btn" id="avatarBtn" onclick="window.location.href='/dashboard/account'">U</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="page-header">
+    <h1>Keyword Rank Tracker</h1>
+    <p>Track where your ASIN ranks for any Amazon search term</p>
+  </div>
+
+  <!-- Upgrade gate (shown for free users) -->
+  <div class="upgrade-gate" id="upgradeGate" style="display:none;">
+    <h2>Keyword Rank Tracking</h2>
+    <p>Track where your ASINs rank in Amazon search results for any keyword. Available on paid plans.</p>
+    <a href="/pricing">Upgrade to unlock →</a>
+  </div>
+
+  <!-- Main content (hidden until auth + tier verified) -->
+  <div id="mainContent" style="display:none;">
+
+    <!-- ASIN Selector -->
+    <div class="selector-row">
+      <select class="asin-select" id="asinSelect" onchange="onAsinChange()">
+        <option value="">Select an ASIN...</option>
+      </select>
+      <span class="or-text">or</span>
+      <input type="text" class="asin-select" id="asinInput" placeholder="Enter ASIN (e.g., B0BSHF7WHW)" style="flex:1;" />
+      <button class="refresh-all-btn" onclick="loadAsinFromInput()">Load →</button>
+    </div>
+
+    <!-- Add Keyword -->
+    <div class="add-kw-card" id="addKwCard" style="display:none;">
+      <h2>Track a keyword for <span id="addKwAsin">—</span></h2>
+      <div class="add-kw-form">
+        <input type="text" id="kwInput" placeholder='e.g., "silicone nipple covers"' />
+        <button onclick="trackKeyword()" id="kwTrackBtn">Track Keyword →</button>
+      </div>
+      <div class="add-kw-error" id="kwError"></div>
+    </div>
+
+    <!-- Keywords Table -->
+    <div class="kw-card" id="kwCard" style="display:none;">
+      <div class="kw-header">
+        <h2>Tracked Keywords <span id="kwCount" style="font-size:13px;color:var(--muted);font-weight:500;"></span></h2>
+        <div class="kw-header-actions">
+          <button class="refresh-all-btn" onclick="refreshAll()" id="refreshAllBtn">Refresh All</button>
+        </div>
+      </div>
+      <div id="kwTableWrap">
+        <div class="kw-empty" id="kwEmpty">
+          <h3>No keywords tracked yet</h3>
+          <p>Enter a keyword above to start tracking where your ASIN ranks in Amazon search.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const token = localStorage.getItem('sb_access_token');
+if (!token) window.location.href = '/login';
+
+let currentAsin = '';
+let keywordsData = [];
+let userTier = 'free';
+
+// Init — check auth + tier, load saved ASINs
+async function init() {
+  try {
+    // Get user profile to check tier
+    const dashResp = await fetch('/api/dashboard', {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+
+    if (dashResp.status === 401) {
+      localStorage.removeItem('sb_access_token');
+      window.location.href = '/login';
+      return;
+    }
+
+    if (dashResp.ok) {
+      const data = await dashResp.json();
+      userTier = data.user?.subscription_tier || 'free';
+      const isActive = data.user?.subscription_status === 'active';
+      const userName = data.user?.name || data.user?.email || 'U';
+      document.getElementById('avatarBtn').textContent = userName[0].toUpperCase();
+
+      if (userTier === 'free' || !isActive) {
+        document.getElementById('upgradeGate').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('mainContent').style.display = 'block';
+    }
+
+    // Load saved ASINs for dropdown
+    const asinsResp = await fetch('/api/saved-asins', {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (asinsResp.ok) {
+      const asinsData = await asinsResp.json();
+      const select = document.getElementById('asinSelect');
+      (asinsData.asins || []).forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a.asin;
+        opt.textContent = a.nickname ? `${a.nickname} (${a.asin})` : a.asin;
+        select.appendChild(opt);
+      });
+    }
+
+    // Check URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlAsin = urlParams.get('asin');
+    if (urlAsin) {
+      const clean = urlAsin.trim().toUpperCase();
+      if (/^B0[A-Z0-9]{8}$/i.test(clean)) {
+        document.getElementById('asinSelect').value = clean;
+        selectAsin(clean);
+      }
+    }
+
+  } catch (err) {
+    console.error('Init failed:', err);
+  }
+}
+
+function onAsinChange() {
+  const val = document.getElementById('asinSelect').value;
+  if (val) selectAsin(val);
+}
+
+function loadAsinFromInput() {
+  let val = document.getElementById('asinInput').value.trim().toUpperCase();
+  const urlMatch = val.match(/\/(?:dp|gp\/product)\/([A-Z0-9]{10})/i);
+  if (urlMatch) val = urlMatch[1].toUpperCase();
+
+  if (!val || !/^B0[A-Z0-9]{8}$/i.test(val)) {
+    alert('Enter a valid ASIN (10 characters starting with B0).');
+    return;
+  }
+  selectAsin(val);
+}
+
+async function selectAsin(asin) {
+  currentAsin = asin;
+  document.getElementById('addKwAsin').textContent = asin;
+  document.getElementById('addKwCard').style.display = 'block';
+  document.getElementById('kwCard').style.display = 'block';
+
+  // Update URL
+  history.replaceState(null, '', `/keywords?asin=${asin}`);
+
+  await loadKeywords();
+}
+
+async function loadKeywords() {
+  if (!currentAsin) return;
+
+  try {
+    const resp = await fetch(`/api/keywords/${currentAsin}`, {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (!resp.ok) return;
+    const data = await resp.json();
+    keywordsData = data.keywords || [];
+    renderKeywords();
+  } catch (err) {
+    console.error('Load keywords failed:', err);
+  }
+}
+
+function renderKeywords() {
+  const wrap = document.getElementById('kwTableWrap');
+  const empty = document.getElementById('kwEmpty');
+  const countEl = document.getElementById('kwCount');
+
+  countEl.textContent = keywordsData.length ? `(${keywordsData.length})` : '';
+
+  if (!keywordsData.length) {
+    wrap.innerHTML = '';
+    wrap.appendChild(createEmptyState());
+    return;
+  }
+
+  // Sort: ranked first (by rank ASC), then unranked
+  const sorted = [...keywordsData].sort((a, b) => {
+    if (a.currentRank == null && b.currentRank == null) return 0;
+    if (a.currentRank == null) return 1;
+    if (b.currentRank == null) return -1;
+    return a.currentRank - b.currentRank;
+  });
+
+  let html = `<table class="kw-table">
+    <thead><tr>
+      <th>Keyword</th>
+      <th>Rank</th>
+      <th>Change</th>
+      <th>Trend</th>
+      <th>Page</th>
+      <th>Last Checked</th>
+      <th>Actions</th>
+    </tr></thead>
+    <tbody>`;
+
+  sorted.forEach(kw => {
+    // Rank display
+    let rankHtml;
+    if (kw.currentRank != null) {
+      rankHtml = `<span class="kw-rank ranked">#${kw.currentRank}</span>`;
+    } else {
+      rankHtml = `<span class="kw-rank not-ranked">Not ranked</span>`;
+    }
+
+    // Delta badge
+    let deltaHtml = '';
+    if (kw.delta != null && kw.delta !== 0) {
+      if (kw.delta > 0) {
+        deltaHtml = `<span class="kw-delta up">▲ ${kw.delta}</span>`;
+      } else {
+        deltaHtml = `<span class="kw-delta down">▼ ${Math.abs(kw.delta)}</span>`;
+      }
+    } else if (kw.previousRank != null) {
+      deltaHtml = `<span class="kw-delta flat">—</span>`;
+    }
+
+    // Sparkline canvas
+    const sparkId = `kw-spark-${encodeURIComponent(kw.keyword).replace(/%/g, '_')}`;
+
+    // Page
+    const pageHtml = kw.currentRank != null ? `<span class="kw-page">Page ${kw.history[0] != null ? Math.ceil(kw.currentRank / 48) : '—'}</span>` : '<span class="kw-page">—</span>';
+
+    // Last checked
+    const dateHtml = kw.lastChecked
+      ? `<span class="kw-date">${new Date(kw.lastChecked).toLocaleDateString()} ${new Date(kw.lastChecked).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</span>`
+      : '<span class="kw-date">—</span>';
+
+    const escapedKw = kw.keyword.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+    html += `<tr>
+      <td class="kw-keyword">${kw.keyword}</td>
+      <td>${rankHtml}</td>
+      <td>${deltaHtml}</td>
+      <td><canvas class="kw-sparkline" id="${sparkId}" width="80" height="24"></canvas></td>
+      <td>${pageHtml}</td>
+      <td>${dateHtml}</td>
+      <td class="kw-actions">
+        <button class="kw-action-btn" onclick="refreshKeyword('${escapedKw}')" title="Refresh">↻</button>
+        <button class="kw-action-btn delete" onclick="deleteKeyword('${escapedKw}')" title="Delete">×</button>
+      </td>
+    </tr>`;
+  });
+
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+
+  // Draw sparklines
+  sorted.forEach(kw => {
+    const sparkId = `kw-spark-${encodeURIComponent(kw.keyword).replace(/%/g, '_')}`;
+    const hist = (kw.history || []).filter(r => r != null).reverse(); // oldest to newest
+    if (hist.length >= 2) drawKwSparkline(sparkId, hist);
+  });
+}
+
+function createEmptyState() {
+  const div = document.createElement('div');
+  div.className = 'kw-empty';
+  div.innerHTML = '<h3>No keywords tracked yet</h3><p>Enter a keyword above to start tracking where your ASIN ranks in Amazon search.</p>';
+  return div;
+}
+
+function drawKwSparkline(canvasId, data) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = 80, h = 24;
+  canvas.width = w * 2;
+  canvas.height = h * 2;
+  ctx.scale(2, 2);
+
+  // For rank, LOWER is better, so invert for display
+  const inverted = data.map(r => -r); // Negative so higher on chart = better rank
+  const min = Math.min(...inverted) - 2;
+  const max = Math.max(...inverted) + 2;
+  const range = max - min || 1;
+  const step = w / (inverted.length - 1);
+
+  const lastVal = data[data.length - 1];
+  const color = lastVal <= 10 ? '#10B981' : lastVal <= 30 ? '#3B82F6' : lastVal <= 60 ? '#F59E0B' : '#EF4444';
+
+  ctx.beginPath();
+  inverted.forEach((v, i) => {
+    const x = i * step;
+    const y = h - ((v - min) / range) * (h - 4) - 2;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.5;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  // End dot
+  const lastX = (inverted.length - 1) * step;
+  const lastInv = inverted[inverted.length - 1];
+  const lastY = h - ((lastInv - min) / range) * (h - 4) - 2;
+  ctx.beginPath();
+  ctx.arc(lastX, lastY, 2, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+// Track a keyword
+async function trackKeyword() {
+  const errEl = document.getElementById('kwError');
+  const btn = document.getElementById('kwTrackBtn');
+  const input = document.getElementById('kwInput');
+  const keyword = input.value.trim();
+  errEl.style.display = 'none';
+
+  if (!keyword) {
+    errEl.textContent = 'Enter a keyword to track.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  if (!currentAsin) {
+    errEl.textContent = 'Select an ASIN first.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-sm"></span> Checking rank...';
+
+  try {
+    const resp = await fetch('/api/keywords/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ asin: currentAsin, keyword }),
+    });
+
+    if (resp.ok) {
+      input.value = '';
+      await loadKeywords();
+      if(typeof gtag==='function')gtag('event','keyword_tracked',{asin:currentAsin});
+    } else {
+      const data = await resp.json();
+      errEl.textContent = data.error || 'Failed to track keyword.';
+      errEl.style.display = 'block';
+    }
+  } catch (err) {
+    errEl.textContent = 'Connection error. Try again.';
+    errEl.style.display = 'block';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Track Keyword →';
+}
+
+// Refresh single keyword
+async function refreshKeyword(keyword) {
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = '...';
+
+  try {
+    await fetch('/api/keywords/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ asin: currentAsin, keyword }),
+    });
+    await loadKeywords();
+  } catch (err) {
+    console.error('Refresh failed:', err);
+  }
+
+  btn.disabled = false;
+  btn.textContent = '↻';
+}
+
+// Delete keyword
+async function deleteKeyword(keyword) {
+  if (!confirm(`Stop tracking "${keyword}"?`)) return;
+
+  try {
+    await fetch(`/api/keywords/${currentAsin}/${encodeURIComponent(keyword)}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    await loadKeywords();
+  } catch (err) {
+    console.error('Delete failed:', err);
+  }
+}
+
+// Refresh all keywords
+async function refreshAll() {
+  if (!currentAsin || !keywordsData.length) return;
+  const btn = document.getElementById('refreshAllBtn');
+  btn.disabled = true;
+  btn.textContent = 'Refreshing...';
+
+  try {
+    const resp = await fetch(`/api/keywords/refresh/${currentAsin}`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    if (resp.ok) {
+      await loadKeywords();
+    }
+  } catch (err) {
+    console.error('Refresh all failed:', err);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Refresh All';
+}
+
+// Handle enter key in keyword input
+document.addEventListener('DOMContentLoaded', () => {
+  const kwInput = document.getElementById('kwInput');
+  if (kwInput) {
+    kwInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') trackKeyword();
+    });
+  }
+  const asinInput = document.getElementById('asinInput');
+  if (asinInput) {
+    asinInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') loadAsinFromInput();
+    });
+  }
+});
+
+init();
+</script>
+</body>
+</html>

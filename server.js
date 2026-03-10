@@ -157,6 +157,21 @@ async function initDB() {
       CREATE INDEX IF NOT EXISTS idx_saved_asins_user ON saved_asins(user_id);
     `).catch(() => {});
 
+    // Keyword rank tracking table (Sprint 5.1)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS keyword_rankings (
+        id SERIAL PRIMARY KEY,
+        user_id UUID NOT NULL,
+        asin VARCHAR(10) NOT NULL,
+        keyword VARCHAR(500) NOT NULL,
+        rank INTEGER,
+        page INTEGER,
+        checked_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+      CREATE INDEX IF NOT EXISTS idx_kw_user_asin ON keyword_rankings(user_id, asin);
+      CREATE INDEX IF NOT EXISTS idx_kw_checked ON keyword_rankings(checked_at DESC);
+    `).catch(() => {});
+
     // Add implementation_plan column if missing (migration for existing DBs)
     await pool.query(`
       ALTER TABLE analyses ADD COLUMN IF NOT EXISTS implementation_plan JSONB;
@@ -332,6 +347,43 @@ function parseAmazonHTML(html, asin) {
 
 // ═══════════════════════════════════════════════════════════════
 // 12-POINT SCORING ALGORITHM — WITH CONTENT SPLIT
+// ═══════════════════════════════════════════════════════════════
+// KEYWORD RANK DETECTION — Check where an ASIN ranks for a keyword
+// ═══════════════════════════════════════════════════════════════
+
+async function checkKeywordRank(asin, keyword) {
+  const apiKey = process.env.SCRAPINGDOG_API_KEY;
+  if (!apiKey) throw new Error('Scraping API not configured');
+
+  let position = 0;
+
+  for (let page = 1; page <= 3; page++) {
+    const searchUrl = `https://www.amazon.com/s?k=${encodeURIComponent(keyword)}&page=${page}`;
+    const scraperUrl = `https://api.scrapingdog.com/scrape?api_key=${apiKey}&url=${encodeURIComponent(searchUrl)}&dynamic=false`;
+
+    const resp = await fetch(scraperUrl, { timeout: 30000 });
+    if (!resp.ok) throw new Error(`Scraper returned ${resp.status}`);
+    const html = await resp.text();
+
+    // Find all ASINs in search results (data-asin attribute)
+    const matches = [...html.matchAll(/data-asin="([A-Z0-9]{10})"/g)];
+    const pageAsins = matches.map(m => m[1]).filter(a => a && a !== 'undefined');
+
+    for (let i = 0; i < pageAsins.length; i++) {
+      position++;
+      if (pageAsins[i].toUpperCase() === asin.toUpperCase()) {
+        return { rank: position, page };
+      }
+    }
+
+    if (pageAsins.length === 0) break; // No more results
+  }
+
+  return { rank: null, page: null }; // Not found in top ~150
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCORING ENGINE — 12-point listing diagnosis with content split
 // Each action item has:
 //   problem: what's wrong (FREE users see this)
 //   solution: how to fix it (PAID users see this)
@@ -830,6 +882,32 @@ async function triggerGHL(email, asin, score, grade, reportId, product, event = 
     else if (event === 'subscription_cancelled')    tagsToAdd.push('subscription_cancelled');
     await ghlAddTags(contactId, tagsToAdd);
 
+    // Determine grade tag
+    const gradeTag = (grade || '').startsWith('A') ? 'grade_a' :
+                     (grade || '').startsWith('B') ? 'grade_b' :
+                     (grade || '').startsWith('C') ? 'grade_c' :
+                     (grade || '').startsWith('D') ? 'grade_d' : 'grade_f';
+
+    // Apply grade tag via GHL Contacts API
+    try {
+      const gradeTagRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer pit-0ec4239a-cc6e-4275-baad-95d27ed39808',
+          'Content-Type': 'application/json',
+          'Version': '2021-07-28'
+        },
+        body: JSON.stringify({
+          email: email,
+          tags: [gradeTag],
+          locationId: 'FkRY7SKAXibyjuH3c7Ew'
+        })
+      });
+      console.log(`🏷️ GHL grade tag applied: ${gradeTag} for ${email}`);
+    } catch (err) {
+      console.error('GHL grade tag failed:', err.message);
+    }
+
     console.log(`✅ GHL: ${email} → upserted, tags: [${tagsToAdd.join(', ')}]`);
   } catch (err) {
     console.error('GHL triggerGHL failed:', err.message);
@@ -1084,7 +1162,8 @@ app.get('/api/report/:id/pdf', async (req, res) => {
 
     browser = await puppeteer.launch({
       headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium-browser',
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
     });
 
     const page = await browser.newPage();
@@ -1882,6 +1961,218 @@ app.patch('/api/saved-asins/:asin', requireAuth, async (req, res) => {
   }
 });
 
+// ═══════════════════════════════════════════════════════════════
+// KEYWORD RANK TRACKING (Sprint 5.1 — Enterprise feature)
+// ═══════════════════════════════════════════════════════════════
+
+// ── POST /api/keywords/track — Track a keyword for an ASIN ──
+app.post('/api/keywords/track', requireAuth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { asin, keyword } = req.body;
+
+    // Validate ASIN
+    const cleanAsin = (asin || '').trim().toUpperCase();
+    if (!cleanAsin || !/^B0[A-Z0-9]{8}$/i.test(cleanAsin)) {
+      return res.status(400).json({ error: 'Invalid ASIN.' });
+    }
+
+    // Validate keyword
+    const cleanKeyword = (keyword || '').trim().toLowerCase();
+    if (!cleanKeyword || cleanKeyword.length > 500) {
+      return res.status(400).json({ error: 'Keyword is required (max 500 chars).' });
+    }
+
+    // Check tier — Seller gets 20 keywords/ASIN, Enterprise gets 100
+    const profile = await pool.query('SELECT subscription_tier, subscription_status FROM user_profiles WHERE id = $1', [userId]);
+    const tier = profile.rows[0]?.subscription_tier || 'free';
+    const isActive = profile.rows[0]?.subscription_status === 'active';
+
+    if (tier === 'free' || !isActive) {
+      return res.status(403).json({ error: 'Keyword tracking requires a paid plan.' });
+    }
+
+    const maxKeywords = (tier === 'enterprise') ? 100 : 20;
+
+    // Count existing unique keywords for this ASIN
+    const countResult = await pool.query(
+      `SELECT COUNT(DISTINCT keyword) as cnt FROM keyword_rankings WHERE user_id = $1 AND UPPER(asin) = $2`,
+      [userId, cleanAsin]
+    );
+    const currentCount = parseInt(countResult.rows[0].cnt, 10);
+
+    // Check if this keyword already exists for this ASIN
+    const existsResult = await pool.query(
+      `SELECT id FROM keyword_rankings WHERE user_id = $1 AND UPPER(asin) = $2 AND LOWER(keyword) = $3 LIMIT 1`,
+      [userId, cleanAsin, cleanKeyword]
+    );
+    const isNewKeyword = existsResult.rows.length === 0;
+
+    if (isNewKeyword && currentCount >= maxKeywords) {
+      return res.status(400).json({ error: `Maximum ${maxKeywords} keywords per ASIN on your plan.` });
+    }
+
+    // Check keyword rank via Scrapingdog
+    const rankData = await checkKeywordRank(cleanAsin, cleanKeyword);
+
+    // Save to database
+    await pool.query(
+      `INSERT INTO keyword_rankings (user_id, asin, keyword, rank, page) VALUES ($1, $2, $3, $4, $5)`,
+      [userId, cleanAsin, cleanKeyword, rankData.rank, rankData.page]
+    );
+
+    console.log(`🔍 Keyword tracked: "${cleanKeyword}" for ${cleanAsin} → Rank ${rankData.rank || 'not found'}`);
+
+    res.json({
+      asin: cleanAsin,
+      keyword: cleanKeyword,
+      rank: rankData.rank,
+      page: rankData.page,
+      checkedAt: new Date().toISOString(),
+    });
+
+  } catch (err) {
+    console.error('Keyword track error:', err.message);
+    res.status(500).json({ error: 'Failed to check keyword rank.' });
+  }
+});
+
+// ── GET /api/keywords/:asin — Get all tracked keywords for an ASIN ──
+app.get('/api/keywords/:asin', requireAuth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const asin = (req.params.asin || '').trim().toUpperCase();
+    if (!asin || !/^B0[A-Z0-9]{8}$/i.test(asin)) {
+      return res.status(400).json({ error: 'Invalid ASIN.' });
+    }
+
+    // Get all keyword entries for this user + ASIN, ordered by keyword then date
+    const result = await pool.query(
+      `SELECT keyword, rank, page, checked_at
+       FROM keyword_rankings
+       WHERE user_id = $1 AND UPPER(asin) = $2
+       ORDER BY keyword ASC, checked_at DESC`,
+      [userId, asin]
+    );
+
+    // Group by keyword and build history
+    const keywordMap = {};
+    result.rows.forEach(row => {
+      const kw = row.keyword.toLowerCase();
+      if (!keywordMap[kw]) {
+        keywordMap[kw] = { keyword: row.keyword, history: [] };
+      }
+      keywordMap[kw].history.push({
+        rank: row.rank,
+        page: row.page,
+        checkedAt: row.checked_at,
+      });
+    });
+
+    // Build response with current rank, previous rank, delta, sparkline
+    const keywords = Object.values(keywordMap).map(kw => {
+      const hist = kw.history.slice(0, 10); // Last 10 checks
+      const current = hist[0]?.rank || null;
+      const previous = hist[1]?.rank || null;
+      let delta = null;
+      if (current != null && previous != null) {
+        delta = previous - current; // Positive = improved (lower rank number = better)
+      }
+
+      return {
+        keyword: kw.keyword,
+        currentRank: current,
+        previousRank: previous,
+        delta,
+        history: hist.map(h => h.rank),
+        lastChecked: hist[0]?.checkedAt || null,
+      };
+    });
+
+    res.json({ asin, keywords });
+
+  } catch (err) {
+    console.error('Keywords fetch error:', err.message);
+    res.status(500).json({ error: 'Failed to load keywords.' });
+  }
+});
+
+// ── DELETE /api/keywords/:asin/:keyword — Remove a tracked keyword ──
+app.delete('/api/keywords/:asin/:keyword', requireAuth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const asin = (req.params.asin || '').trim().toUpperCase();
+    const keyword = decodeURIComponent(req.params.keyword || '').trim().toLowerCase();
+
+    if (!asin || !keyword) return res.status(400).json({ error: 'ASIN and keyword required.' });
+
+    await pool.query(
+      `DELETE FROM keyword_rankings WHERE user_id = $1 AND UPPER(asin) = $2 AND LOWER(keyword) = $3`,
+      [userId, asin, keyword]
+    );
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Keyword delete error:', err.message);
+    res.status(500).json({ error: 'Failed to delete keyword.' });
+  }
+});
+
+// ── POST /api/keywords/refresh/:asin — Re-check all keywords for an ASIN ──
+app.post('/api/keywords/refresh/:asin', requireAuth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const asin = (req.params.asin || '').trim().toUpperCase();
+    if (!asin || !/^B0[A-Z0-9]{8}$/i.test(asin)) {
+      return res.status(400).json({ error: 'Invalid ASIN.' });
+    }
+
+    // Check tier
+    const profile = await pool.query('SELECT subscription_tier, subscription_status FROM user_profiles WHERE id = $1', [userId]);
+    const tier = profile.rows[0]?.subscription_tier || 'free';
+    if (tier === 'free' || profile.rows[0]?.subscription_status !== 'active') {
+      return res.status(403).json({ error: 'Keyword tracking requires a paid plan.' });
+    }
+
+    // Get unique keywords for this ASIN
+    const kwResult = await pool.query(
+      `SELECT DISTINCT keyword FROM keyword_rankings WHERE user_id = $1 AND UPPER(asin) = $2`,
+      [userId, asin]
+    );
+
+    if (kwResult.rows.length === 0) {
+      return res.json({ asin, refreshed: 0, keywords: [] });
+    }
+
+    const results = [];
+    for (const row of kwResult.rows) {
+      try {
+        const rankData = await checkKeywordRank(asin, row.keyword);
+        await pool.query(
+          `INSERT INTO keyword_rankings (user_id, asin, keyword, rank, page) VALUES ($1, $2, $3, $4, $5)`,
+          [userId, asin, row.keyword, rankData.rank, rankData.page]
+        );
+        results.push({
+          keyword: row.keyword,
+          rank: rankData.rank,
+          page: rankData.page,
+          checkedAt: new Date().toISOString(),
+        });
+      } catch (kwErr) {
+        console.error(`Keyword refresh failed for "${row.keyword}":`, kwErr.message);
+        results.push({ keyword: row.keyword, error: kwErr.message });
+      }
+    }
+
+    console.log(`🔄 Refreshed ${results.length} keywords for ${asin}`);
+    res.json({ asin, refreshed: results.length, keywords: results });
+
+  } catch (err) {
+    console.error('Keyword refresh error:', err.message);
+    res.status(500).json({ error: 'Failed to refresh keywords.' });
+  }
+});
+
 // ── POST /api/account/update — Update user profile ──
 app.post('/api/account/update', requireAuth, async (req, res) => {
   try {
@@ -1964,12 +2255,12 @@ app.post('/api/stripe/create-checkout', async (req, res) => {
     const { priceId, email, analysisId, mode } = req.body;
 
     const sessionParams = {
-      ...(email && email.includes('@') ? { customer_email: email } : {}),
+      customer_email: email,
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: mode || 'payment', // 'payment' for one-time, 'subscription' for recurring
       success_url: `https://www.asinanalyzer.app/thank-you?session_id={CHECKOUT_SESSION_ID}&analysis_id=${analysisId || ''}`,
-      cancel_url: analysisId ? `https://www.asinanalyzer.app/report/${analysisId}` : `https://www.asinanalyzer.app/pricing`,
+      cancel_url: `https://www.asinanalyzer.app/report/${analysisId || ''}`,
       metadata: {
         analysisId: String(analysisId || ''),
         product: priceId,
@@ -2184,6 +2475,7 @@ app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'public', 
 app.get('/dashboard/history', (req, res) => res.sendFile(path.join(__dirname, 'public', 'history.html')));
 app.get('/dashboard/account', (req, res) => res.sendFile(path.join(__dirname, 'public', 'account.html')));
 app.get('/compare', (req, res) => res.sendFile(path.join(__dirname, 'public', 'compare.html')));
+app.get('/keywords', (req, res) => res.sendFile(path.join(__dirname, 'public', 'keywords.html')));
 
 // Catch-all → landing page
 app.get('*', (req, res) => {
