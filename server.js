@@ -1391,12 +1391,17 @@ app.get('/api/report/:id/pdf', async (req, res) => {
 // ── POST /api/subscribe ──
 app.post('/api/subscribe', async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, asin, source, reportId, grade, overall } = req.body;
     if (!email || !email.includes('@')) return res.status(400).json({ error: 'Valid email required' });
+    const cleanEmail = email.trim().toLowerCase();
     await pool.query(
-      `INSERT INTO subscribers (email, source) VALUES ($1, 'newsletter') ON CONFLICT (email) DO UPDATE SET active = true`,
-      [email.trim().toLowerCase()]
+      `INSERT INTO subscribers (email, source) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET active = true`,
+      [cleanEmail, source || 'newsletter']
     );
+    // Fire GHL for preview-gate captures so email workflows trigger
+    if (source === 'preview-gate' && asin) {
+      triggerGHL(cleanEmail, asin, overall || 0, grade || '', reportId || '', null, 'analysis');
+    }
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: 'Subscription failed' });
