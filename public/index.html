@@ -135,80 +135,148 @@ nav {
 .search-bar button:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(59,130,246,0.35); }
 .search-bar-note { margin-top: 10px; font-size: 13px; color: var(--text-muted); font-weight: 500; max-width: 520px; }
 
-/* ═══ PREVIEW RESULTS (VALUE-FIRST GATE) ═══ */
+/* ═══ PREVIEW RESULTS (VALUE-FIRST GATE — Dan Kennedy open loop + Perry Belcher value-first) ═══ */
 .preview-overlay {
   display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.97);
   backdrop-filter: blur(12px); z-index: 999; overflow-y: auto; padding: 40px 20px;
 }
 .preview-overlay.active { display: flex; justify-content: center; align-items: flex-start; }
 .preview-container {
-  max-width: 640px; width: 100%; background: var(--bg); border-radius: var(--r3);
-  border: 1px solid var(--border); box-shadow: var(--shadow-xl); padding: 48px 40px; margin-top: 40px;
+  max-width: 680px; width: 100%; background: var(--bg); border-radius: var(--r3);
+  border: 1px solid var(--border); box-shadow: var(--shadow-xl); padding: 40px 36px 36px; margin-top: 30px;
   position: relative;
 }
 .preview-close {
-  position: absolute; top: 16px; right: 16px; background: none; border: none;
-  font-size: 20px; color: var(--text-muted); cursor: pointer; transition: color .2s;
+  position: absolute; top: 14px; right: 14px; background: none; border: none;
+  font-size: 20px; color: var(--text-muted); cursor: pointer; transition: color .2s; z-index: 2;
 }
 .preview-close:hover { color: var(--text-primary); }
+
+/* ── Grade Ring ── */
 .preview-grade-ring {
-  width: 120px; height: 120px; margin: 0 auto 16px; position: relative;
+  width: 110px; height: 110px; margin: 0 auto 12px; position: relative;
 }
 .preview-grade-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
 .preview-grade-ring .ring-bg { fill: none; stroke: var(--border-light); stroke-width: 8; }
 .preview-grade-ring .ring-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1.5s ease; }
 .preview-grade-letter {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 40px; font-weight: 800;
 }
 .preview-score-label {
-  text-align: center; font-size: 15px; color: var(--text-secondary); margin-bottom: 32px;
+  text-align: center; font-size: 15px; color: var(--text-secondary); margin-bottom: 6px;
 }
 .preview-score-label strong { color: var(--text-primary); font-size: 22px; font-weight: 700; }
-.preview-categories { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+
+/* ── Urgency headline under score ── */
+.preview-urgency {
+  text-align: center; margin-bottom: 20px;
+}
+.preview-urgency-text {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px; font-weight: 700;
+  color: var(--red); line-height: 1.4;
+}
+.preview-urgency-sub {
+  font-size: 14px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5;
+}
+
+/* ── Email Gate (RIGHT UNDER GRADE — Perry Belcher "make the ask when desire peaks") ── */
+.preview-email-gate {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  border-radius: var(--r2); padding: 28px 24px; text-align: center; margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.preview-email-gate::before {
+  content: ''; position: absolute; top: -60px; right: -60px; width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(59,130,246,0.15), transparent 70%);
+  pointer-events: none;
+}
+.preview-gate-headline {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 22px; font-weight: 800;
+  color: #fff; margin-bottom: 8px; line-height: 1.3; position: relative;
+}
+.preview-gate-sub {
+  font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 20px; line-height: 1.5;
+  max-width: 440px; margin-left: auto; margin-right: auto; position: relative;
+}
+.preview-email-row { display: flex; gap: 8px; max-width: 420px; margin: 0 auto; position: relative; }
+.preview-email-row input {
+  flex: 1; padding: 15px 18px; border: 2px solid rgba(255,255,255,0.15); border-radius: var(--r);
+  font-size: 15px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .2s;
+  background: rgba(255,255,255,0.08); color: #fff;
+}
+.preview-email-row input::placeholder { color: rgba(255,255,255,0.4); }
+.preview-email-row input:focus { border-color: var(--blue-light); background: rgba(255,255,255,0.12); }
+.preview-email-row button {
+  background: var(--green); color: #fff; border: none; padding: 15px 26px;
+  border-radius: var(--r); font-size: 15px; font-weight: 700; cursor: pointer;
+  white-space: nowrap; transition: all .2s; box-shadow: 0 2px 12px rgba(16,185,129,0.35);
+}
+.preview-email-row button:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 4px 20px rgba(16,185,129,0.4); }
+.preview-gate-trust {
+  display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px;
+  font-size: 12px; color: rgba(255,255,255,0.5); position: relative;
+}
+.preview-gate-trust span { display: flex; align-items: center; gap: 4px; }
+
+/* ── "Your scores" divider ── */
+.preview-scores-divider {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+}
+.preview-scores-divider::before, .preview-scores-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.preview-scores-divider span {
+  font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); white-space: nowrap;
+}
+
+/* ── Category Rows ── */
+.preview-categories { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
 .preview-cat {
-  display: flex; align-items: center; gap: 12px; padding: 14px 18px;
+  display: flex; align-items: center; gap: 12px; padding: 12px 16px;
   border-radius: var(--r); border: 1px solid var(--border); background: var(--bg);
   transition: all .3s;
-}
-.preview-cat.blurred {
-  filter: blur(5px); user-select: none; pointer-events: none; opacity: 0.6;
 }
 .preview-cat-name { flex: 1; font-size: 14px; font-weight: 600; color: var(--text-primary); }
 .preview-cat-grade {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; border-radius: 8px; font-weight: 800; font-size: 15px;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-width: 36px; height: 36px; border-radius: 8px; font-weight: 800; font-size: 15px;
+  font-family: 'Plus Jakarta Sans', sans-serif; padding: 0 4px;
 }
-.preview-cat-bar { flex: 1; max-width: 120px; height: 6px; background: var(--border-light); border-radius: 100px; overflow: hidden; }
+.preview-cat-bar { flex: 1; max-width: 100px; height: 6px; background: var(--border-light); border-radius: 100px; overflow: hidden; }
 .preview-cat-bar-fill { height: 100%; border-radius: 100px; transition: width 1s ease; }
-.preview-unlock-gate {
-  position: relative; text-align: center; padding: 32px 24px; margin-top: 8px;
-  background: linear-gradient(180deg, transparent 0%, rgba(59,130,246,0.04) 100%);
-  border-radius: var(--r2); border: 2px dashed var(--blue-ring);
+
+/* Locked categories — show name, hide grade */
+.preview-cat.locked {
+  border-color: var(--border-light); background: var(--bg-subtle);
 }
-.preview-unlock-gate h3 {
-  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 800;
-  color: var(--text-primary); margin-bottom: 8px;
+.preview-cat.locked .preview-cat-grade {
+  background: #F1F5F9; color: var(--text-muted); font-size: 16px; font-weight: 400;
+  cursor: default;
 }
-.preview-unlock-gate p { font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6; }
-.preview-email-row { display: flex; gap: 8px; max-width: 400px; margin: 0 auto; }
-.preview-email-row input {
-  flex: 1; padding: 14px 18px; border: 2px solid var(--border); border-radius: var(--r);
-  font-size: 15px; font-family: 'DM Sans', sans-serif; outline: none; transition: border-color .2s;
+.preview-cat.locked .preview-cat-bar { opacity: 0.3; }
+.preview-cat.locked .preview-cat-bar-fill { background: var(--border) !important; }
+
+/* ── Bottom FOMO nudge ── */
+.preview-bottom-nudge {
+  text-align: center; padding: 16px; background: var(--red-soft); border-radius: var(--r);
+  border: 1px solid rgba(239,68,68,0.1);
 }
-.preview-email-row input:focus { border-color: var(--blue); }
-.preview-email-row button {
-  background: var(--blue); color: #fff; border: none; padding: 14px 24px;
-  border-radius: var(--r); font-size: 15px; font-weight: 700; cursor: pointer;
-  white-space: nowrap; transition: all .2s; box-shadow: 0 2px 8px rgba(59,130,246,0.25);
+.preview-bottom-nudge p {
+  font-size: 14px; font-weight: 600; color: var(--red); margin-bottom: 6px;
 }
-.preview-email-row button:hover { background: var(--blue-dark); }
-.preview-lock-note { margin-top: 12px; font-size: 12px; color: var(--text-muted); }
+.preview-bottom-nudge a {
+  font-size: 13px; font-weight: 700; color: var(--blue); cursor: pointer; text-decoration: none;
+}
+.preview-bottom-nudge a:hover { text-decoration: underline; }
+
 @media(max-width:640px) {
-  .preview-container { padding: 32px 20px; margin-top: 20px; }
+  .preview-container { padding: 28px 18px 24px; margin-top: 16px; }
   .preview-email-row { flex-direction: column; }
   .preview-email-row button { width: 100%; }
+  .preview-email-gate { padding: 24px 16px; }
+  .preview-gate-headline { font-size: 19px; }
 }
 
 .search-examples { margin-top: 14px; font-size: 13px; color: var(--text-muted); animation: fadeInUp 0.6s 0.35s ease both; }
@@ -872,11 +940,12 @@ footer a { color: var(--blue); text-decoration: none; }
   <p>© 2026 ASIN Analyzer · A Listing Doctor Product · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
 </footer>
 
-<!-- PREVIEW RESULTS OVERLAY (value-first gate: Dan Kennedy / Perry Belcher strategy) -->
+<!-- PREVIEW RESULTS OVERLAY (Dan Kennedy open loop + Perry Belcher value-first + Brunson tripwire funnel) -->
 <div id="previewOverlay" class="preview-overlay">
   <div class="preview-container">
     <button class="preview-close" onclick="closePreview()">✕</button>
 
+    <!-- 1. GRADE RING — The hook, instant proof of value -->
     <div id="previewGradeSection" style="text-align:center;margin-bottom:8px;">
       <div class="preview-grade-ring">
         <svg viewBox="0 0 100 100">
@@ -890,19 +959,41 @@ footer a { color: var(--blue); text-decoration: none; }
       </div>
     </div>
 
-    <div class="preview-categories" id="previewCategories">
-      <!-- Populated by JS: 5 visible + 7 blurred -->
+    <!-- 2. URGENCY — Dan Kennedy: "agitate the problem before offering the solution" -->
+    <div class="preview-urgency" id="previewUrgency">
+      <div class="preview-urgency-text" id="previewUrgencyText">We found issues holding your listing back.</div>
+      <div class="preview-urgency-sub">Your competitors are seeing this data too. Every day without fixes costs you sales.</div>
     </div>
 
-    <div class="preview-unlock-gate">
-      <h3>Unlock your full 12-point report</h3>
-      <p>You're seeing 5 of 12 categories. Enter your email to get the complete diagnosis with prioritized action items, competitor benchmarks, and fix-it guides.</p>
+    <!-- 3. EMAIL GATE — RIGHT HERE, peak desire moment (Perry Belcher: "ask when value is proven") -->
+    <div class="preview-email-gate">
+      <div class="preview-gate-headline">Get Your Full 12-Category Report Free</div>
+      <div class="preview-gate-sub">Unlock all scores, prioritized action items, and step-by-step fixes. Takes 5 seconds.</div>
       <div class="preview-email-row">
-        <input type="email" id="previewEmailInput" placeholder="you@example.com" />
-        <button onclick="unlockFullReport()">Unlock Report →</button>
+        <input type="email" id="previewEmailInput" placeholder="Enter your email" />
+        <button onclick="unlockFullReport()">Unlock My Report</button>
       </div>
-      <div class="preview-lock-note">🔒 100% free · No spam · Unsubscribe anytime</div>
+      <div class="preview-gate-trust">
+        <span>&#128274; No spam ever</span>
+        <span>&#10003; 100% free</span>
+        <span>&#10003; Instant access</span>
+      </div>
     </div>
+
+    <!-- 4. DIVIDER -->
+    <div class="preview-scores-divider"><span>Your 12-Point Diagnosis</span></div>
+
+    <!-- 5. ALL 12 CATEGORIES — top 5 show grades, bottom 7 show lock icons (FOMO machine) -->
+    <div class="preview-categories" id="previewCategories">
+      <!-- Populated by JS: 5 with real grades + 7 with lock icons -->
+    </div>
+
+    <!-- 6. BOTTOM FOMO NUDGE — for scrollers who didn't enter email above -->
+    <div class="preview-bottom-nudge" id="previewBottomNudge">
+      <p id="previewNudgeText">7 of your scores are hidden. Some might be failing.</p>
+      <a onclick="document.getElementById('previewEmailInput').focus();document.getElementById('previewEmailInput').scrollIntoView({behavior:'smooth',block:'center'});">Enter your email above to unlock all 12 &uarr;</a>
+    </div>
+
   </div>
 </div>
 
@@ -1127,7 +1218,7 @@ function showPreviewResults(report) {
   document.getElementById('previewScoreNum').textContent = overall;
 
   // Animate ring
-  const circumference = 264; // 2 * PI * 42
+  const circumference = 264;
   const offset = circumference - (circumference * overall / 100);
   const ring = document.getElementById('previewRingFill');
   ring.style.stroke = color;
@@ -1135,35 +1226,75 @@ function showPreviewResults(report) {
 
   // Build category rows from report scores
   const categories = buildCategoryList(report);
+
+  // Count issues (categories scoring below 70)
+  const issueCount = categories.filter(c => c.score < 70).length;
+  const lockedIssues = categories.slice(VISIBLE_COUNT).filter(c => c.score < 70).length;
+
+  // Set urgency text based on grade (Dan Kennedy: agitate the specific problem)
+  const urgencyEl = document.getElementById('previewUrgencyText');
+  if (overall < 50) {
+    urgencyEl.textContent = `We found ${issueCount} critical issues dragging your listing down.`;
+  } else if (overall < 70) {
+    urgencyEl.textContent = `We found ${issueCount} issues holding back your sales.`;
+  } else {
+    urgencyEl.textContent = `Good start — but we found ${issueCount} areas costing you rankings.`;
+  }
+
+  // Set bottom FOMO nudge
+  const nudgeEl = document.getElementById('previewNudgeText');
+  if (lockedIssues > 0) {
+    nudgeEl.textContent = `${lockedIssues} of your hidden scores are below passing. Don't ignore them.`;
+  } else {
+    nudgeEl.textContent = `7 category scores are hidden. You need the full picture to take action.`;
+  }
+
+  // Build ALL 12 category rows — top 5 show grades, bottom 7 show lock
   const container = document.getElementById('previewCategories');
   container.innerHTML = '';
 
   categories.forEach((cat, i) => {
-    const isBlurred = i >= VISIBLE_COUNT;
+    const isLocked = i >= VISIBLE_COUNT;
     const catColor = gradeColor(cat.grade);
     const catBg = gradeColorBg(cat.grade);
     const pct = cat.score || 0;
 
     const row = document.createElement('div');
-    row.className = 'preview-cat' + (isBlurred ? ' blurred' : '');
-    row.innerHTML = `
-      <div class="preview-cat-grade" style="background:${catBg};color:${catColor};">${cat.grade}</div>
-      <div class="preview-cat-name">${cat.name}</div>
-      <div class="preview-cat-bar"><div class="preview-cat-bar-fill" style="width:0%;background:${catColor};"></div></div>
-    `;
-    container.appendChild(row);
+    row.className = 'preview-cat' + (isLocked ? ' locked' : '');
 
-    // Animate bars in
-    setTimeout(() => {
-      row.querySelector('.preview-cat-bar-fill').style.width = pct + '%';
-    }, 200 + i * 80);
+    if (isLocked) {
+      // LOCKED: Show category name but grade is hidden — creates open loop (Dan Kennedy)
+      row.innerHTML = `
+        <div class="preview-cat-grade" title="Enter email to reveal">&#128274;</div>
+        <div class="preview-cat-name">${cat.name}</div>
+        <div class="preview-cat-bar"><div class="preview-cat-bar-fill" style="width:0%;background:var(--border);"></div></div>
+      `;
+      // Animate a mystery bar to random low width
+      setTimeout(() => {
+        row.querySelector('.preview-cat-bar-fill').style.width = Math.round(Math.random() * 30 + 15) + '%';
+      }, 400 + i * 80);
+    } else {
+      // VISIBLE: Full grade, color, bar — prove value (Gary Vee: jab jab jab)
+      row.innerHTML = `
+        <div class="preview-cat-grade" style="background:${catBg};color:${catColor};">${cat.grade}</div>
+        <div class="preview-cat-name">${cat.name}</div>
+        <div class="preview-cat-bar"><div class="preview-cat-bar-fill" style="width:0%;background:${catColor};"></div></div>
+      `;
+      setTimeout(() => {
+        row.querySelector('.preview-cat-bar-fill').style.width = pct + '%';
+      }, 200 + i * 80);
+    }
+
+    container.appendChild(row);
   });
 
   // Show the overlay
   const overlay = document.getElementById('previewOverlay');
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
-  setTimeout(() => document.getElementById('previewEmailInput').focus(), 600);
+
+  // Auto-focus email after the animation settles
+  setTimeout(() => document.getElementById('previewEmailInput').focus(), 800);
 }
 
 function buildCategoryList(report) {
