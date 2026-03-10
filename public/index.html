@@ -1090,20 +1090,22 @@ if (cn) costObs.observe(cn);
 let pendingASIN = '';
 let previewReportData = null;
 
-// ═══ The 12 scoring categories (order matters — first 5 are shown, rest blurred) ═══
+// ═══ The 12 scoring categories — first 5 shown with grades, rest locked ═══
+// ORDER: Most actionable categories first (visible to hook them),
+// lock the ones that create the most curiosity
 const CATEGORY_ORDER = [
   'Title Optimization',
-  'Image Quality',
-  'Review Sentiment',
-  'Pricing Competitiveness',
+  'Image Gallery',
   'Bullet Points',
-  'A+ Content',
-  'Backend Keywords',
-  'Q&A Coverage',
-  'Inventory Health',
-  'Brand Registry',
-  'Listing Completeness',
-  'Competitive Position'
+  'Star Rating',
+  'Review Volume',
+  'Video Content',
+  'A+ / Enhanced Content',
+  'Q&A Engagement',
+  'Sales Rank (BSR)',
+  'Brand Presence',
+  'Content Depth',
+  'Listing Completeness'
 ];
 const VISIBLE_COUNT = 5;
 
@@ -1298,41 +1300,43 @@ function showPreviewResults(report) {
 }
 
 function buildCategoryList(report) {
-  // Map report scores to our display categories
+  // Map display category names → backend score keys (all 0-100 scale)
   const scores = report.scores || {};
   const mapping = {
-    'Title Optimization': { key: 'title', score: scores.title },
-    'Image Quality': { key: 'images', score: scores.images },
-    'Review Sentiment': { key: 'reviews', score: scores.reviews },
-    'Pricing Competitiveness': { key: 'price', score: scores.price },
-    'Bullet Points': { key: 'bullets', score: scores.bullets },
-    'A+ Content': { key: 'aPlus', score: scores.aPlus },
-    'Backend Keywords': { key: 'keywords', score: scores.keywords },
-    'Q&A Coverage': { key: 'qa', score: scores.qa },
-    'Inventory Health': { key: 'inventory', score: scores.inventory },
-    'Brand Registry': { key: 'brand', score: scores.brand },
-    'Listing Completeness': { key: 'completeness', score: scores.completeness },
-    'Competitive Position': { key: 'competitive', score: scores.competitive }
+    'Title Optimization':      scores.title,
+    'Image Gallery':           scores.images,
+    'Bullet Points':           scores.bullets,
+    'Star Rating':             scores.rating,
+    'Review Volume':           scores.reviews,
+    'Video Content':           scores.video,
+    'A+ / Enhanced Content':   scores.aPlus,
+    'Q&A Engagement':          scores.qa,
+    'Sales Rank (BSR)':        scores.bsr,
+    'Brand Presence':          scores.brand,
+    'Content Depth':           scores.contentDepth,
+    'Listing Completeness':    scores.completeness,
   };
 
   return CATEGORY_ORDER.map(name => {
-    const m = mapping[name] || {};
-    const score = m.score ?? Math.round(Math.random() * 40 + 30); // fallback if missing
+    const score = mapping[name] ?? null; // null = truly missing, don't fake it
     return {
       name,
-      score,
-      grade: scoreToGrade(score),
+      score: score !== null ? score : 0,
+      grade: score !== null ? scoreToGrade(score) : '?',
+      missing: score === null, // flag if data wasn't returned by server
     };
   });
 }
 
 function scoreToGrade(score) {
-  if (score >= 90) return 'A';
+  // Matches backend grade thresholds (0-100 scale)
+  if (score >= 93) return 'A+';
+  if (score >= 86) return 'A';
   if (score >= 80) return 'B+';
-  if (score >= 70) return 'B';
-  if (score >= 60) return 'C+';
-  if (score >= 50) return 'C';
-  if (score >= 40) return 'D';
+  if (score >= 73) return 'B';
+  if (score >= 66) return 'C+';
+  if (score >= 58) return 'C';
+  if (score >= 45) return 'D';
   return 'F';
 }
 

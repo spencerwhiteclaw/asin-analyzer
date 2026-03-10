@@ -351,8 +351,10 @@ function parseAmazonHTML(html, asin) {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// 12-POINT SCORING ALGORITHM — WITH CONTENT SPLIT
+// 12-POINT SCORING ALGORITHM v2 — Honest 0-100 scale per category
+// All scores based on what we can ACTUALLY measure from a page scrape
 // ═══════════════════════════════════════════════════════════════
+
 // KEYWORD RANK DETECTION — Check where an ASIN ranks for a keyword
 // ═══════════════════════════════════════════════════════════════
 
@@ -398,268 +400,322 @@ function scoreProduct(product) {
   const scores = {};
   const actions = [];
 
-  // ── 1. Title Quality (sweet spot 120-180 chars) ──
-  const titleLen = (product.title || '').length;
-  if (titleLen >= 120 && titleLen <= 180) scores.title = 10;
-  else if (titleLen >= 100 && titleLen <= 200) scores.title = 8;
-  else if (titleLen >= 80 && titleLen <= 220) scores.title = 6;
-  else if (titleLen >= 50) scores.title = 4;
-  else if (titleLen > 0) scores.title = 2;
-  else scores.title = 1;
+  // ═══════════════════════════════════════════════════════════
+  // ALL SCORES ARE 0-100 SCALE — directly maps to grade display
+  // ═══════════════════════════════════════════════════════════
 
-  if (scores.title < 7) {
+  // ── 1. TITLE OPTIMIZATION ──
+  // Sweet spot: 120-200 chars. Has brand. Not keyword-stuffed.
+  const titleLen = (product.title || '').length;
+  const titleHasBrand = product.brand && (product.title || '').toLowerCase().includes(product.brand.toLowerCase());
+
+  if (titleLen >= 120 && titleLen <= 200) {
+    scores.title = titleHasBrand ? 95 : 85;
+  } else if (titleLen >= 100 && titleLen <= 220) {
+    scores.title = titleHasBrand ? 80 : 72;
+  } else if (titleLen >= 80 && titleLen <= 250) {
+    scores.title = 60;
+  } else if (titleLen >= 50) {
+    scores.title = 40;
+  } else if (titleLen > 0) {
+    scores.title = 20;
+  } else {
+    scores.title = 0;
+  }
+
+  if (scores.title < 75) {
     actions.push({
       category: 'Title Optimization',
       problem: titleLen < 120
-        ? `Your title is only ${titleLen} characters — well below the 120-180 character sweet spot where top listings perform. This is costing you visibility and clicks.`
-        : `Your title is ${titleLen} characters — bloated past the optimal range. On mobile, buyers only see the first 80 characters. Your key selling points are getting cut off.`,
+        ? `Your title is only ${titleLen} characters — below the 120-200 character sweet spot where top listings perform. Shorter titles mean fewer keywords indexed and less information for buyers to click.`
+        : titleLen > 200
+        ? `Your title is ${titleLen} characters — past the optimal range. On mobile, buyers only see the first 80 characters. Key selling points are getting cut off.`
+        : `Your title length is ${titleLen} characters which is in range, but ${!titleHasBrand ? 'your brand name is missing from the title — this hurts trust and Brand Analytics tracking.' : 'could be structured better for maximum keyword visibility.'}`,
       solution: titleLen < 120
-        ? `Expand your title to 120-180 characters. Structure: [Brand] + [Primary Keyword] + [Key Feature 1] + [Key Feature 2] + [Size/Variant]. Front-load your highest-volume keyword in the first 80 characters for mobile. Add benefit language ("For Easy Cleanup") not just features ("Stainless Steel"). Your current title "${(product.title || '').substring(0, 60)}..." should be rewritten to include your top 3 search terms.`
-        : `Cut your title to 120-180 characters. Remove filler words like "premium quality," "best," and "amazing." Keep the first 80 characters focused on your #1 keyword + primary benefit. Current title starts with "${(product.title || '').substring(0, 60)}..." — identify which words are earning clicks and cut the rest.`,
-      priority: scores.title < 4 ? 'high' : 'medium',
+        ? `Expand to 120-200 characters. Structure: [Brand] + [Primary Keyword] + [Key Feature 1] + [Key Feature 2] + [Size/Variant]. Front-load your highest-volume keyword in the first 80 characters for mobile. Your current title "${(product.title || '').substring(0, 60)}..." needs more keyword-rich benefit language.`
+        : `Trim to 120-200 characters. Remove filler words like "premium quality," "best," "amazing." Keep the first 80 characters focused on your #1 keyword + primary benefit. Current title starts with "${(product.title || '').substring(0, 60)}..."`,
+      priority: scores.title < 50 ? 'high' : 'medium',
     });
   }
 
-  // ── 2. Image Score (7+ = 10, video = +1 bonus) ──
+  // ── 2. IMAGE GALLERY ──
+  // Target: 7+ high-res images. Measured by count of hi-res images detected.
   const imgCount = product.imageCount || 0;
-  if (imgCount >= 7) scores.images = 9;
-  else if (imgCount >= 5) scores.images = 7;
-  else if (imgCount >= 3) scores.images = 5;
-  else if (imgCount >= 1) scores.images = 3;
-  else scores.images = 1;
-  if (product.hasVideo) scores.images = Math.min(10, scores.images + 1);
 
-  if (scores.images < 7) {
+  if (imgCount >= 9) scores.images = 98;
+  else if (imgCount >= 7) scores.images = 90;
+  else if (imgCount >= 6) scores.images = 78;
+  else if (imgCount >= 5) scores.images = 68;
+  else if (imgCount >= 4) scores.images = 55;
+  else if (imgCount >= 3) scores.images = 42;
+  else if (imgCount >= 2) scores.images = 28;
+  else if (imgCount >= 1) scores.images = 18;
+  else scores.images = 0;
+
+  if (scores.images < 75) {
     actions.push({
-      category: 'Image Optimization',
-      problem: `You have ${imgCount} image${imgCount !== 1 ? 's' : ''}${product.hasVideo ? ' with video' : ' and no product video'}. Top-converting listings in your category use 7+ images. Every missing image slot is a missed chance to address buyer objections and show your product's value.`,
-      solution: `Upload to 7+ images in this exact order: (1) Main image — pure white background, product fills 85% of frame. (2) Infographic — call out 3-4 key features with text overlays. (3) Lifestyle shot — product in use by your target customer. (4) Size/scale comparison — show next to common object. (5) What's in the box — everything they receive. (6) Close-up detail — texture, quality, craftsmanship. (7) Benefit-driven graphic — "Before vs After" or "Problem → Solution."${!product.hasVideo ? ' Then add a 30-60 second product video showing unboxing + key features. Video listings see up to 9.7% higher conversion.' : ''} Use 2000x2000px minimum for zoom functionality.`,
-      priority: scores.images < 4 ? 'high' : 'medium',
+      category: 'Image Gallery',
+      problem: `You have ${imgCount} image${imgCount !== 1 ? 's' : ''}. Top-converting listings use 7-9 images. Every missing image slot is a missed chance to address buyer objections and showcase value. Images are the #1 conversion driver on Amazon.`,
+      solution: `Upload 7+ images in this order: (1) Main image — white background, product fills 85% of frame. (2) Infographic — 3-4 key features with text overlays. (3) Lifestyle shot — product in use. (4) Size/scale comparison. (5) What's in the box. (6) Close-up detail — texture, craftsmanship. (7) Benefit-driven graphic — "Before vs After" or "Problem → Solution." Use 2000x2000px minimum for zoom.`,
+      priority: scores.images < 50 ? 'high' : 'medium',
     });
   }
 
-  // ── 3. Bullet Points (5 bullets at 200+ chars each) ──
+  // ── 3. VIDEO CONTENT ──
+  // Binary but critical — video increases conversion significantly
+  const hasVideo = product.hasVideo || false;
+
+  if (hasVideo) {
+    scores.video = 95;
+  } else {
+    scores.video = 25;
+  }
+
+  if (!hasVideo) {
+    actions.push({
+      category: 'Video Content',
+      problem: `No product video detected. Listings with video see significantly higher conversion rates. Video lets buyers see the product in action, understand scale, and build confidence — things static images can't fully deliver.`,
+      solution: `Add a 30-60 second product video covering: (1) Quick unboxing — show packaging quality. (2) Product in hand — establishes real size/scale. (3) Key feature demo — show it working. (4) Close-up quality shots. Keep it professional but authentic. Upload via Seller Central > Manage Videos. You can also use Amazon's video ad placements to drive traffic.`,
+      priority: 'medium',
+    });
+  }
+
+  // ── 4. BULLET POINTS ──
+  // Target: 5 bullets, 150-300 chars each (detailed but readable)
   const bulletCount = product.bulletCount || 0;
   const avgBulletLen = product.bulletLengths?.length > 0
     ? product.bulletLengths.reduce((a, b) => a + b, 0) / product.bulletLengths.length
     : 0;
 
-  if (bulletCount >= 5 && avgBulletLen >= 200) scores.bullets = 10;
-  else if (bulletCount >= 5 && avgBulletLen >= 100) scores.bullets = 8;
-  else if (bulletCount >= 4) scores.bullets = 6;
-  else if (bulletCount >= 3) scores.bullets = 4;
-  else if (bulletCount >= 1) scores.bullets = 2;
-  else scores.bullets = 1;
+  if (bulletCount >= 5 && avgBulletLen >= 200) scores.bullets = 95;
+  else if (bulletCount >= 5 && avgBulletLen >= 150) scores.bullets = 88;
+  else if (bulletCount >= 5 && avgBulletLen >= 100) scores.bullets = 78;
+  else if (bulletCount >= 5) scores.bullets = 68;
+  else if (bulletCount >= 4) scores.bullets = 55;
+  else if (bulletCount >= 3) scores.bullets = 40;
+  else if (bulletCount >= 1) scores.bullets = 22;
+  else scores.bullets = 0;
 
-  if (scores.bullets < 7) {
+  if (scores.bullets < 75) {
     actions.push({
-      category: 'Bullet Point Enhancement',
-      problem: `You have ${bulletCount}/5 bullet points${avgBulletLen > 0 ? ` averaging only ${Math.round(avgBulletLen)} characters each` : ''}. Amazon gives you 5 bullet slots with up to 500 characters each — you're leaving conversion power on the table. Weak bullets mean buyers scroll past without understanding why your product is worth the price.`,
-      solution: `Rewrite all 5 bullets to 200+ characters each using this formula: ALL-CAPS BENEFIT PHRASE — then explain the feature with specific details, materials, dimensions, or use cases. Example: "NEVER WORRY ABOUT SPILLS AGAIN — Our triple-sealed lid uses medical-grade silicone gaskets..." Each bullet should answer one buyer objection: Bullet 1 = primary benefit. Bullet 2 = quality/materials. Bullet 3 = ease of use. Bullet 4 = what's included/sizing. Bullet 5 = guarantee or social proof. Embed your top 3-5 keywords naturally.`,
-      priority: scores.bullets < 4 ? 'high' : 'medium',
+      category: 'Bullet Points',
+      problem: `You have ${bulletCount}/5 bullet points${avgBulletLen > 0 ? ` averaging ${Math.round(avgBulletLen)} characters each` : ''}. Amazon gives you 5 slots with up to 500 characters each — ${bulletCount < 5 ? "you're not using all your slots" : "your bullets are too short to be persuasive"}.`,
+      solution: `Write 5 bullets at 150-300 characters each. Formula: ALL-CAPS BENEFIT → then explain with specifics. Example: "NEVER WORRY ABOUT SPILLS — Triple-sealed medical-grade silicone gaskets keep every drop inside..." Each bullet answers one objection: Bullet 1 = primary benefit, 2 = quality/materials, 3 = ease of use, 4 = what's included, 5 = guarantee/social proof.`,
+      priority: scores.bullets < 50 ? 'high' : 'medium',
     });
   }
 
-  // ── 4. A+ / Description ──
+  // ── 5. A+ / ENHANCED CONTENT ──
+  // A+ Content presence. If no A+, fall back to description length.
   if (product.hasAPlus) {
-    scores.description = 9;
+    scores.aPlus = 88;
   } else if (product.descriptionLength >= 2000) {
-    scores.description = 7;
+    scores.aPlus = 65;
   } else if (product.descriptionLength >= 1000) {
-    scores.description = 5;
+    scores.aPlus = 50;
   } else if (product.descriptionLength >= 300) {
-    scores.description = 3;
+    scores.aPlus = 32;
   } else {
-    scores.description = 1;
+    scores.aPlus = 10;
   }
 
-  if (scores.description < 7) {
+  if (scores.aPlus < 75) {
     actions.push({
-      category: 'A+ Content / Description',
+      category: 'A+ / Enhanced Content',
       problem: product.hasAPlus
-        ? 'Your A+ Content is active but may not be optimized for conversion. A+ Content that simply repeats bullet points wastes the most powerful visual real estate on your listing.'
-        : `No A+ Content detected. Without it, you're missing the single biggest conversion lever Amazon gives brand-registered sellers. Listings with A+ Content see 3-10% higher conversion rates — at your price point, that's significant revenue left on the table.`,
-      solution: product.hasAPlus
-        ? 'Rebuild your A+ Content with these modules: (1) Brand Story banner — your origin story builds trust. (2) Comparison chart — you vs. 3 competitors on 5 features (you win every row). (3) "How It Works" 3-step visual. (4) Lifestyle image with benefit callouts. (5) FAQ section addressing top 3 customer questions from your reviews. Use alt-text on every image for SEO indexing.'
-        : 'Apply for Brand Registry if you haven\'t (amazon.com/brandregistry). Then build A+ Content with: (1) Hero banner — lifestyle image with your primary benefit headline. (2) Comparison chart — your product vs. 3 alternatives across 5 features. (3) "What\'s in the box" module. (4) Brand Story carousel — builds trust and cross-sells. (5) Use every text field for keyword-rich descriptions. A+ Content is indexed by Amazon\'s search algorithm.',
+        ? 'A+ Content is present but may benefit from optimization. Strong A+ Content with comparison charts and lifestyle imagery typically drives 3-10% higher conversion.'
+        : `No A+ Content detected. This is the most powerful visual real estate Amazon gives brand-registered sellers. Without it, you're leaving significant conversion potential on the table.`,
+      solution: !product.hasAPlus
+        ? 'Apply for Brand Registry at amazon.com/brandregistry. Then build A+ with: (1) Hero banner with primary benefit headline. (2) Comparison chart — your product vs 3 alternatives across 5 features. (3) "What\'s in the box" module. (4) Brand Story carousel. (5) Use every text field for keyword-rich descriptions — A+ text is indexed.'
+        : 'Optimize your A+ with: (1) Brand Story banner. (2) Comparison chart — you vs 3 competitors, you win every row. (3) "How It Works" 3-step visual. (4) Lifestyle imagery with benefit callouts. (5) Use alt-text on every image for SEO indexing.',
       priority: !product.hasAPlus ? 'high' : 'low',
     });
   }
 
-  // ── 5. Pricing Position ──
-  const price = product.price || 0;
-  if (price > 0 && price <= 25) scores.pricing = 8;
-  else if (price <= 50) scores.pricing = 9;
-  else if (price <= 100) scores.pricing = 8;
-  else if (price <= 200) scores.pricing = 7;
-  else if (price <= 500) scores.pricing = 6;
-  else if (price > 500) scores.pricing = 5;
-  else scores.pricing = 5;
-
-  if (scores.pricing < 7) {
-    actions.push({
-      category: 'Pricing Strategy',
-      problem: `At $${price.toFixed(2)}, your price point may be creating friction. Higher-priced products need stronger perceived value in the listing to overcome the "is it worth it?" hesitation. Without premium imagery, A+ Content, and social proof, your price is working against your conversion rate.`,
-      solution: `At $${price.toFixed(2)}, you need to justify the premium: (1) Add a comparison chart in A+ Content showing why you're worth more than cheaper alternatives. (2) Include "What's in the box" images showing everything they receive. (3) Use strikethrough pricing or coupons to create anchoring — "Was $${(price * 1.3).toFixed(2)}, now $${price.toFixed(2)}." (4) Consider a Subscribe & Save option for repeat-purchase products — even 5% off increases conversion. (5) Test price points in $2 increments using A/B experiments in Manage Your Experiments.`,
-      priority: 'medium',
-    });
-  }
-
-  // ── 6. Review Quality (star rating) ──
+  // ── 6. STAR RATING ──
   const rating = product.rating || 0;
-  if (rating >= 4.5) scores.reviewQuality = 10;
-  else if (rating >= 4.0) scores.reviewQuality = 8;
-  else if (rating >= 3.5) scores.reviewQuality = 6;
-  else if (rating >= 3.0) scores.reviewQuality = 4;
-  else if (rating > 0) scores.reviewQuality = 2;
-  else scores.reviewQuality = 1;
 
-  if (scores.reviewQuality < 7) {
+  if (rating >= 4.7) scores.rating = 98;
+  else if (rating >= 4.5) scores.rating = 92;
+  else if (rating >= 4.3) scores.rating = 84;
+  else if (rating >= 4.0) scores.rating = 74;
+  else if (rating >= 3.7) scores.rating = 60;
+  else if (rating >= 3.5) scores.rating = 50;
+  else if (rating >= 3.0) scores.rating = 35;
+  else if (rating > 0) scores.rating = 18;
+  else scores.rating = 0;
+
+  if (scores.rating < 75) {
     actions.push({
-      category: 'Review Quality',
-      problem: `Your ${rating}/5 star rating is a conversion killer. Buyers see this before they even click your listing. Every 0.1 star below 4.5 reduces your click-through rate measurably. At ${rating} stars, a percentage of buyers are filtering you out entirely.`,
-      solution: `Fixing your rating requires understanding WHY it's low. (1) Read every 1-2 star review and categorize complaints: product quality? Shipping damage? Misleading listing? Wrong expectations? (2) For product issues: fix the product, then update your listing to set correct expectations. (3) For "not what I expected": rewrite bullet 1 and main image to be crystal clear. (4) Use the "Request a Review" button in Seller Central on every order (7-30 days after delivery). (5) Enroll in Amazon Vine for 30 honest reviews from verified reviewers. (6) Add product insert cards with QR code to a support page — catch unhappy customers before they review.`,
-      priority: scores.reviewQuality < 4 ? 'high' : 'medium',
+      category: 'Star Rating',
+      problem: rating > 0
+        ? `Your ${rating}/5 star rating is hurting conversions. Shoppers filter and compare by stars — every 0.1 below 4.5 measurably reduces click-through rate. At ${rating} stars, some buyers filter you out entirely.`
+        : 'No rating data detected. This may indicate a new listing or a data issue.',
+      solution: `Improving your rating: (1) Read every 1-2 star review — categorize complaints: product quality? Shipping? Misleading listing? (2) Fix product issues, then update listing to set correct expectations. (3) Use "Request a Review" in Seller Central on every order (7-30 days post-delivery). (4) Enroll in Amazon Vine for honest verified reviews. (5) Add product inserts with QR code to a support page — catch unhappy customers before they leave negative reviews.`,
+      priority: scores.rating < 50 ? 'high' : 'medium',
     });
   }
 
-  // ── 7. Review Quantity ──
+  // ── 7. REVIEW VOLUME ──
   const reviewCount = product.reviewCount || 0;
-  if (reviewCount >= 1000) scores.reviewQuantity = 10;
-  else if (reviewCount >= 500) scores.reviewQuantity = 9;
-  else if (reviewCount >= 200) scores.reviewQuantity = 8;
-  else if (reviewCount >= 100) scores.reviewQuantity = 7;
-  else if (reviewCount >= 50) scores.reviewQuantity = 5;
-  else if (reviewCount >= 10) scores.reviewQuantity = 3;
-  else scores.reviewQuantity = 1;
 
-  if (scores.reviewQuantity < 7) {
+  if (reviewCount >= 1000) scores.reviews = 95;
+  else if (reviewCount >= 500) scores.reviews = 88;
+  else if (reviewCount >= 200) scores.reviews = 78;
+  else if (reviewCount >= 100) scores.reviews = 68;
+  else if (reviewCount >= 50) scores.reviews = 55;
+  else if (reviewCount >= 20) scores.reviews = 42;
+  else if (reviewCount >= 5) scores.reviews = 28;
+  else if (reviewCount > 0) scores.reviews = 15;
+  else scores.reviews = 0;
+
+  if (scores.reviews < 75) {
     actions.push({
       category: 'Review Volume',
-      problem: `Only ${reviewCount.toLocaleString()} reviews. Your competitors with 500+ reviews appear more trustworthy by default. Low review count is one of the hardest gaps to close because it compounds — fewer reviews → lower conversion → fewer sales → fewer reviews.`,
-      solution: `Build review velocity with a multi-channel approach: (1) Amazon Vine — enroll for up to 30 reviews ($200/parent ASIN, worth every penny). (2) "Request a Review" automation — use Seller Central's button or a tool like FeedbackWhiz on every order. (3) Product insert card — "Having issues? Contact us at [email]. Love it? We'd appreciate a review." Never incentivize reviews. (4) Run Lightning Deals or coupons to spike sales volume temporarily — more sales = more organic reviews. (5) Target 10 new reviews per month. At your current sales velocity, you should reach 100+ reviews within ${Math.max(2, Math.ceil((100 - reviewCount) / 10))} months.`,
-      priority: scores.reviewQuantity < 4 ? 'high' : 'medium',
+      problem: `${reviewCount.toLocaleString()} review${reviewCount !== 1 ? 's' : ''}. Competitors with 200+ reviews appear more trustworthy by default. Low review count compounds — fewer reviews → lower conversion → fewer sales → fewer reviews.`,
+      solution: `Build review velocity: (1) Amazon Vine — up to 30 reviews ($200/parent ASIN). (2) "Request a Review" on every order via Seller Central. (3) Product insert card with support contact + gentle review ask. (4) Run Lightning Deals to spike sales = more organic reviews. (5) Target 10 new reviews/month — you should reach ${Math.max(100, reviewCount + 60)}+ within 6 months.`,
+      priority: scores.reviews < 50 ? 'high' : 'medium',
     });
   }
 
-  // ── 8. Q&A Presence ──
+  // ── 8. Q&A ENGAGEMENT ──
   const qaCount = product.qaCount || 0;
-  if (qaCount >= 20) scores.qa = 10;
-  else if (qaCount >= 10) scores.qa = 8;
-  else if (qaCount >= 5) scores.qa = 6;
-  else if (qaCount >= 1) scores.qa = 4;
-  else scores.qa = 2;
 
-  if (scores.qa < 7) {
+  if (qaCount >= 30) scores.qa = 95;
+  else if (qaCount >= 20) scores.qa = 88;
+  else if (qaCount >= 10) scores.qa = 75;
+  else if (qaCount >= 5) scores.qa = 60;
+  else if (qaCount >= 2) scores.qa = 42;
+  else if (qaCount >= 1) scores.qa = 30;
+  else scores.qa = 15;
+
+  if (scores.qa < 75) {
     actions.push({
-      category: 'Q&A Section',
-      problem: `Only ${qaCount} answered question${qaCount !== 1 ? 's' : ''} on your listing. The Q&A section is prime real estate — it's indexed by Amazon search, builds buyer confidence, and addresses objections before they become abandoned carts. Your competitors with 10+ Q&As are converting buyers you're losing.`,
-      solution: `Seed 10-15 questions that address real buyer concerns: (1) Ask friends/family to post questions about sizing, compatibility, materials, use cases, and warranty. (2) Answer EVERY question within 24 hours — speed signals you're an active, responsive seller. (3) Use your 1-2 star reviews as a question source: if people complain about durability, have someone ask "How durable is this for daily use?" and answer thoroughly. (4) Include keywords naturally in your answers — Q&As are indexed. (5) Check your Q&A weekly and answer any new customer questions immediately.`,
+      category: 'Q&A Engagement',
+      problem: `Only ${qaCount} answered question${qaCount !== 1 ? 's' : ''}. Q&A is indexed by Amazon search, builds buyer confidence, and addresses objections before they become abandoned carts.`,
+      solution: `Seed 10-15 questions about real buyer concerns: sizing, compatibility, materials, use cases, warranty. Answer every question within 24 hours. Use your negative reviews as a source — if people complain about durability, have someone ask about it and answer thoroughly. Include keywords naturally in answers.`,
       priority: 'low',
     });
   }
 
-  // ── 9. BSR / Sales Rank ──
+  // ── 9. SALES RANK (BSR) ──
+  // Note: BSR varies by category, so this is a rough indicator
   const bsr = product.bsr || 0;
-  if (bsr > 0 && bsr <= 1000) scores.bsr = 10;
-  else if (bsr <= 5000) scores.bsr = 9;
-  else if (bsr <= 10000) scores.bsr = 8;
-  else if (bsr <= 25000) scores.bsr = 7;
-  else if (bsr <= 50000) scores.bsr = 6;
-  else if (bsr <= 100000) scores.bsr = 5;
-  else if (bsr <= 250000) scores.bsr = 3;
-  else if (bsr > 0) scores.bsr = 2;
-  else scores.bsr = 1;
 
-  if (scores.bsr < 7) {
+  if (bsr > 0 && bsr <= 500) scores.bsr = 98;
+  else if (bsr <= 2000) scores.bsr = 92;
+  else if (bsr <= 5000) scores.bsr = 85;
+  else if (bsr <= 10000) scores.bsr = 78;
+  else if (bsr <= 25000) scores.bsr = 68;
+  else if (bsr <= 50000) scores.bsr = 58;
+  else if (bsr <= 100000) scores.bsr = 45;
+  else if (bsr <= 250000) scores.bsr = 30;
+  else if (bsr > 0) scores.bsr = 18;
+  else scores.bsr = 0;
+
+  if (scores.bsr < 75) {
     actions.push({
-      category: 'BSR / Sales Rank',
-      problem: `BSR #${bsr.toLocaleString()}${product.category ? ` in ${product.category}` : ''} indicates below-average sales velocity. BSR is a trailing indicator — it reflects the sum of all your listing's strengths and weaknesses. Improving your BSR requires fixing the upstream issues identified in this report.`,
-      solution: `BSR improves when sales velocity increases. Priority actions: (1) Fix your highest-impact issues first — usually images, bullets, and reviews. (2) Run a 7-day Lightning Deal or coupon to spike sales and improve BSR. (3) Optimize your PPC campaigns — focus on exact-match keywords from Brand Analytics where your conversion rate > 10%. (4) Improve your main image click-through rate with A/B testing in Manage Your Experiments. (5) Target BSR under ${Math.max(1000, Math.floor(bsr / 2)).toLocaleString()} within 60 days by improving conversion rate 15-20% through the changes in this plan.`,
-      priority: scores.bsr < 4 ? 'medium' : 'low',
+      category: 'Sales Rank (BSR)',
+      problem: bsr > 0
+        ? `BSR #${bsr.toLocaleString()}${product.category ? ` in ${product.category}` : ''}. BSR reflects overall sales velocity — it's the output of every other factor on this report. Note: BSR varies by category size, so this score is a general indicator.`
+        : 'No BSR detected. This may indicate a very new listing or a data extraction issue.',
+      solution: `BSR improves when sales velocity increases. Priority: (1) Fix your highest-impact issues from this report first — usually images, bullets, and reviews. (2) Run a 7-day Lightning Deal or coupon to spike sales. (3) Optimize PPC — focus on exact-match keywords where your conversion rate > 10%. (4) A/B test your main image to improve click-through rate. (5) Target BSR under ${bsr > 0 ? Math.max(1000, Math.floor(bsr / 2)).toLocaleString() : '50,000'} within 60 days.`,
+      priority: scores.bsr < 50 ? 'medium' : 'low',
     });
   }
 
-  // ── 10. Category Rank (bonus for top 100) ──
-  if (bsr > 0 && bsr <= 100) scores.categoryRank = 10;
-  else if (bsr <= 500) scores.categoryRank = 8;
-  else if (bsr <= 2000) scores.categoryRank = 7;
-  else if (bsr <= 10000) scores.categoryRank = 6;
-  else if (bsr <= 50000) scores.categoryRank = 5;
-  else if (bsr <= 100000) scores.categoryRank = 4;
-  else scores.categoryRank = 3;
+  // ── 10. BRAND PRESENCE ──
+  // Checks for brand name detection + indicators of Brand Registry (A+, brand story)
+  const hasBrand = !!(product.brand && product.brand.length > 0);
+  const hasBrandRegistry = hasBrand && product.hasAPlus; // A+ implies Brand Registry
 
-  if (scores.categoryRank < 7) {
+  if (hasBrandRegistry) scores.brand = 95;
+  else if (hasBrand && product.descriptionLength > 500) scores.brand = 72;
+  else if (hasBrand) scores.brand = 60;
+  else scores.brand = 25;
+
+  if (scores.brand < 75) {
     actions.push({
-      category: 'Category Ranking',
-      problem: `You're ranked #${bsr.toLocaleString()} in your category — not in the top tier where the majority of sales happen. The top 1% of listings in any category capture a disproportionate share of revenue. You're outside that threshold.`,
-      solution: `Category rank is the output of everything else. The fastest path to top-category ranking: (1) Ensure you're in the most specific, relevant sub-category (check your Browse Node). Being #500 in a small sub-category is better than #5,000 in a broad one. (2) Request a category change via Seller Support if you're miscategorized. (3) Focus on conversion rate optimization — every improvement to your listing directly impacts rank. (4) Consider launching a variation (color, size, bundle) to capture additional sub-categories.`,
-      priority: 'medium',
+      category: 'Brand Presence',
+      problem: !hasBrand
+        ? 'No brand detected on your listing. Unbranded listings miss out on Brand Registry benefits: A+ Content, Brand Analytics, Sponsored Brands ads, and the brand trust badge.'
+        : !hasBrandRegistry
+        ? `Brand "${product.brand}" detected, but no A+ Content found — which suggests you may not have Brand Registry active. Brand Registry unlocks critical tools for conversion and protection.`
+        : `Brand "${product.brand}" is registered. Ensure your Brand Store and Brand Story are optimized.`,
+      solution: !hasBrand
+        ? 'Register your brand at amazon.com/brandregistry. You need a registered trademark (can be pending). Brand Registry unlocks: A+ Content, Sponsored Brands, Brand Analytics, brand protection tools, and the trusted "Visit the [Brand] Store" link.'
+        : 'Ensure Brand Registry is active and build out: (1) A+ Content with comparison charts and lifestyle modules. (2) Brand Store with at least 3 sub-pages. (3) Brand Story section on your listing. (4) Sponsored Brands campaigns for branded keyword defense.',
+      priority: !hasBrand ? 'medium' : 'low',
     });
   }
 
-  // ── 11. Keyword Visibility ──
-  const titleWords = (product.title || '').toLowerCase().split(/\s+/).filter(w => w.length > 3);
+  // ── 11. LISTING COMPLETENESS ──
+  // Composite: how many listing fields are properly filled
+  let completeness = 100;
+  if (imgCount < 7) completeness -= Math.min(20, (7 - imgCount) * 4);
+  if (bulletCount < 5) completeness -= Math.min(18, (5 - bulletCount) * 5);
+  if (!product.hasAPlus && product.descriptionLength < 500) completeness -= 15;
+  if (!hasVideo) completeness -= 10;
+  if (qaCount < 5) completeness -= 8;
+  if (reviewCount < 5) completeness -= 8;
+  if (!hasBrand) completeness -= 8;
+  if (titleLen < 80) completeness -= 8;
+  scores.completeness = Math.max(0, completeness);
 
-  if (product.bulletCount >= 5 && (product.hasAPlus || product.descriptionLength > 1000)) {
-    scores.keywords = 8;
-  } else if (product.bulletCount >= 3 && product.descriptionLength > 300) {
-    scores.keywords = 6;
-  } else if (product.bulletCount >= 1) {
-    scores.keywords = 4;
-  } else {
-    scores.keywords = 2;
-  }
-
-  if (scores.keywords < 7) {
-    actions.push({
-      category: 'Keyword Optimization',
-      problem: `Your keyword visibility is limited. Without keywords distributed across your title, bullets, A+ Content, and backend search terms, you're invisible for searches that should be driving traffic to your listing. Your competitors are capturing these searches while you're not.`,
-      solution: `Build a keyword strategy in 4 steps: (1) Pull your top 50 keywords from Brand Analytics (or Helium 10 Cerebro on your ASIN + top 3 competitors). Sort by search volume. (2) Place your #1 keyword phrase in the first 80 characters of your title. (3) Distribute keywords 2-10 across your 5 bullets — one primary keyword per bullet, woven naturally into benefit language. (4) Fill all 249 bytes of backend Search Terms with remaining keywords (no commas, no repeats from title/bullets). (5) If you have A+ Content, use alt-text fields on every image module — these are indexed. (6) Re-run this analysis in 14 days after changes to measure keyword score improvement.`,
-      priority: 'medium',
-    });
-  }
-
-  // ── 12. Completeness ──
-  let completenessScore = 10;
-  if (imgCount < 5) completenessScore -= 2;
-  if (bulletCount < 5) completenessScore -= 2;
-  if (!product.hasAPlus && product.descriptionLength < 500) completenessScore -= 2;
-  if (!product.hasVideo) completenessScore -= 1;
-  if (qaCount < 5) completenessScore -= 1;
-  if (reviewCount < 10) completenessScore -= 1;
-  if (!product.brand) completenessScore -= 1;
-  scores.completeness = Math.max(1, completenessScore);
-
-  if (scores.completeness < 7) {
+  if (scores.completeness < 75) {
     const missing = [];
-    if (imgCount < 5) missing.push(`images (${imgCount}/7)`);
+    if (imgCount < 7) missing.push(`images (${imgCount}/7)`);
     if (bulletCount < 5) missing.push(`bullets (${bulletCount}/5)`);
     if (!product.hasAPlus) missing.push('A+ Content');
-    if (!product.hasVideo) missing.push('product video');
+    if (!hasVideo) missing.push('product video');
     if (qaCount < 5) missing.push(`Q&A (${qaCount})`);
+    if (!hasBrand) missing.push('brand registration');
     actions.push({
       category: 'Listing Completeness',
-      problem: `Your listing is incomplete — missing: ${missing.join(', ')}. Amazon's algorithm rewards complete listings with higher organic placement. Every empty field is a signal that your listing isn't worth promoting. Incomplete listings convert at significantly lower rates.`,
-      solution: `Fill every field Amazon gives you, in this priority order: (1) ${imgCount < 7 ? `Add ${7 - imgCount} more images (see Image Optimization above).` : 'Images ✓.'} (2) ${bulletCount < 5 ? `Write ${5 - bulletCount} more bullets (see Bullet Point Enhancement above).` : 'Bullets ✓.'} (3) ${!product.hasAPlus ? 'Build A+ Content (see A+ Content section above).' : 'A+ ✓.'} (4) ${!product.hasVideo ? 'Add a 30-60 second product video.' : 'Video ✓.'} (5) ${qaCount < 5 ? `Seed ${5 - qaCount} more Q&As.` : 'Q&A ✓.'} (6) Check backend fields: Search Terms (249 bytes), Subject Matter, Target Audience, Intended Use. Every field contributes to discoverability.`,
-      priority: scores.completeness < 4 ? 'high' : 'medium',
+      problem: `Your listing is incomplete — gaps: ${missing.join(', ')}. Amazon's algorithm rewards complete listings with higher organic placement. Every missing element signals to Amazon that your listing isn't worth promoting.`,
+      solution: `Fill every field, priority order: (1) ${imgCount < 7 ? `Add ${7 - imgCount} more images.` : 'Images ✓.'} (2) ${bulletCount < 5 ? `Write ${5 - bulletCount} more bullets.` : 'Bullets ✓.'} (3) ${!product.hasAPlus ? 'Build A+ Content.' : 'A+ ✓.'} (4) ${!hasVideo ? 'Add a product video.' : 'Video ✓.'} (5) ${qaCount < 5 ? `Seed ${5 - qaCount} more Q&As.` : 'Q&A ✓.'} (6) Check backend: Search Terms (249 bytes), Subject Matter, Target Audience, Intended Use.`,
+      priority: scores.completeness < 50 ? 'high' : 'medium',
     });
   }
 
-  // ── OVERALL SCORE & GRADE ──
+  // ── 12. CONTENT DEPTH ──
+  // Total indexable text across title + bullets + description/A+
+  // Measures how much keyword-rich content Amazon can index
+  const totalBulletChars = product.bulletLengths?.length > 0
+    ? product.bulletLengths.reduce((a, b) => a + b, 0) : 0;
+  const totalContent = titleLen + totalBulletChars + (product.descriptionLength || 0);
+
+  if (totalContent >= 4000) scores.contentDepth = 95;
+  else if (totalContent >= 3000) scores.contentDepth = 88;
+  else if (totalContent >= 2000) scores.contentDepth = 78;
+  else if (totalContent >= 1500) scores.contentDepth = 68;
+  else if (totalContent >= 1000) scores.contentDepth = 55;
+  else if (totalContent >= 500) scores.contentDepth = 38;
+  else if (totalContent > 0) scores.contentDepth = 20;
+  else scores.contentDepth = 0;
+
+  if (scores.contentDepth < 75) {
+    actions.push({
+      category: 'Content Depth',
+      problem: `Your listing has approximately ${totalContent.toLocaleString()} characters of indexable text across title, bullets, and description. Top-performing listings typically have 3,000+ characters. More content means more keywords indexed and better search visibility.`,
+      solution: `Increase your indexable content: (1) Expand bullets to 200+ characters each (currently averaging ${avgBulletLen > 0 ? Math.round(avgBulletLen) : 0}). (2) ${product.descriptionLength < 1000 ? 'Write a detailed product description (1,000+ characters).' : 'Description length is good.'} (3) ${!product.hasAPlus ? 'Add A+ Content — its text fields are indexed by Amazon search.' : 'Optimize A+ Content alt-text on all images.'} (4) Use natural keyword-rich language throughout — don't keyword-stuff, but weave in relevant search terms.`,
+      priority: scores.contentDepth < 50 ? 'medium' : 'low',
+    });
+  }
+
+  // ═══ OVERALL SCORE & GRADE ═══
+  // All scores are 0-100, so overall is simply the average
   const scoreValues = Object.values(scores);
-  const rawTotal = scoreValues.reduce((a, b) => a + b, 0);
-  const maxPossible = scoreValues.length * 10;
-  const overall = Math.round((rawTotal / maxPossible) * 100);
+  const overall = Math.round(scoreValues.reduce((a, b) => a + b, 0) / scoreValues.length);
 
   let grade;
-  if (overall >= 90) grade = 'A+';
-  else if (overall >= 85) grade = 'A';
+  if (overall >= 93) grade = 'A+';
+  else if (overall >= 86) grade = 'A';
   else if (overall >= 80) grade = 'B+';
-  else if (overall >= 75) grade = 'B';
-  else if (overall >= 70) grade = 'C+';
-  else if (overall >= 65) grade = 'C';
-  else if (overall >= 55) grade = 'D';
+  else if (overall >= 73) grade = 'B';
+  else if (overall >= 66) grade = 'C+';
+  else if (overall >= 58) grade = 'C';
+  else if (overall >= 45) grade = 'D';
   else grade = 'F';
 
   // Sort actions by priority
@@ -680,46 +736,72 @@ async function generateImplementationPlan(product, scores, grade, overall, actio
     return { sections: actions.map(a => ({ category: a.category, priority: a.priority, problem: a.problem, solution: a.solution })) };
   }
 
-  const prompt = `You are the world's leading Amazon listing optimization consultant. A seller just ran a diagnostic on their listing and you need to create their personalized Implementation Plan — a step-by-step action plan to fix every issue found.
+  // Build human-readable score names for the prompt
+  const scoreDisplayNames = {
+    title: 'Title Optimization', images: 'Image Gallery', video: 'Video Content',
+    bullets: 'Bullet Points', aPlus: 'A+ / Enhanced Content', rating: 'Star Rating',
+    reviews: 'Review Volume', qa: 'Q&A Engagement', bsr: 'Sales Rank (BSR)',
+    brand: 'Brand Presence', completeness: 'Listing Completeness', contentDepth: 'Content Depth'
+  };
 
-THIS IS A PAID PRODUCT ($7). It must be worth significantly more than $7. Be specific, actionable, and reference their actual listing data.
+  const prompt = `You are the world's leading Amazon listing optimization consultant. A seller just ran a 12-point diagnostic on their listing and you need to create their personalized Implementation Plan — a step-by-step action plan to fix every issue found.
+
+THIS IS A PAID PRODUCT ($7). It must deliver AT LEAST $200 worth of value. Be brutally specific, actionable, and reference their actual listing data throughout. No generic advice — every recommendation must directly reference their ASIN, their title, their images, their actual numbers. The seller should feel like a $2,000 consultant reviewed their listing personally.
 
 LISTING DATA:
 - ASIN: ${product.asin}
 - Title: "${product.title}"
+- Title Length: ${(product.title || '').length} characters
 - Brand: ${product.brand || 'Not detected'}
 - Price: $${(product.price || 0).toFixed(2)}
 - Rating: ${product.rating || 'N/A'}/5 (${(product.reviewCount || 0).toLocaleString()} reviews)
 - BSR: #${(product.bsr || 0).toLocaleString()} in ${product.category || 'Unknown'}
-- Images: ${product.imageCount || 0} ${product.hasVideo ? '(has video)' : '(no video)'}
+- Images: ${product.imageCount || 0} hi-res images ${product.hasVideo ? '(has video)' : '(NO video)'}
 - Bullets: ${product.bulletCount || 0}/5 (avg length: ${product.bulletLengths?.length > 0 ? Math.round(product.bulletLengths.reduce((a,b) => a+b, 0) / product.bulletLengths.length) : 0} chars)
 - A+ Content: ${product.hasAPlus ? 'Active' : 'Missing'}
-- Q&A: ${product.qaCount || 0} answered
+- Description Length: ${product.descriptionLength || 0} characters
+- Q&A: ${product.qaCount || 0} answered questions
 - Overall Grade: ${grade} (${overall}/100)
 
-SCORES BY CATEGORY:
-${Object.entries(scores).map(([k,v]) => `- ${k}: ${v}/10`).join('\n')}
+SCORES BY CATEGORY (all scored 0-100):
+${Object.entries(scores).map(([k,v]) => `- ${scoreDisplayNames[k] || k}: ${v}/100`).join('\n')}
 
-ISSUES FOUND:
+ISSUES FOUND (${actions.length} total):
 ${actions.map(a => `[${a.priority.toUpperCase()}] ${a.category}: ${a.problem}`).join('\n')}
 
-Create a comprehensive Implementation Plan with:
-1. An executive summary (2-3 sentences about their listing's biggest opportunities)
-2. A prioritized 30-day action calendar (Week 1, Week 2, Week 3, Week 4)
-3. For EACH issue found, provide:
-   - The specific problem (1 sentence)
-   - Exactly what to do to fix it (step-by-step, referencing THEIR listing data)
-   - Expected impact on their score/conversion
-4. A "Quick Wins" section — 3 things they can do TODAY in under 30 minutes
-5. Specific keyword suggestions based on their title and category
+Create a comprehensive Implementation Plan with these sections:
+
+1. EXECUTIVE SUMMARY — 3-4 sentences. Name their grade, their biggest strengths (scores above 80), and their most urgent problems (scores below 50). Be direct and honest.
+
+2. QUICK WINS — 5 things they can do TODAY in under 30 minutes each. Reference their actual listing. Example: "Your title is ${(product.title || '').length} characters — ${(product.title || '').length < 120 ? 'add these keywords to extend it: [suggest 3-4 specific keywords based on their category]' : (product.title || '').length > 200 ? 'cut these filler words: [identify specific words to remove from their title]' : 'rearrange to front-load your primary keyword'}"
+
+3. 30-DAY ACTION CALENDAR — Week-by-week plan:
+   - Week 1: Quick wins + image fixes
+   - Week 2: Copy optimization (title, bullets, description/A+)
+   - Week 3: Review strategy + Q&A seeding
+   - Week 4: Advanced optimization + measurement
+
+4. CATEGORY-BY-CATEGORY FIX PLANS — For EACH issue found:
+   - The specific problem (1 sentence referencing their data)
+   - Step-by-step fix (3-7 numbered steps, each actionable and specific to THEIR listing)
+   - Expected score impact ("This should improve your ${category} score from ${current} to approximately ${target}")
+   - Time estimate for the fix
+
+5. KEYWORD SUGGESTIONS — Based on their title, category, and brand, suggest 15-20 specific keywords they should target. Group into: (a) Primary (top 5 by estimated volume), (b) Long-tail (10+), (c) Competitor keywords to target.
+
+6. TITLE REWRITE — Write a complete optimized title for their product. Show the current title, then your rewritten version, and explain each change.
+
+7. BULLET POINT REWRITES — Write all 5 optimized bullet points for their product. Each 200-300 characters using the ALL-CAPS BENEFIT → detail formula.
 
 Respond in JSON format:
 {
   "executiveSummary": "...",
-  "quickWins": [{"action": "...", "timeMinutes": 10, "impact": "..."}],
+  "quickWins": [{"action": "...", "timeMinutes": 10, "impact": "...", "howTo": "step-by-step instructions"}],
   "weeklyCalendar": {"week1": ["..."], "week2": ["..."], "week3": ["..."], "week4": ["..."]},
-  "categoryPlans": [{"category": "...", "priority": "high|medium|low", "problem": "...", "steps": ["..."], "expectedImpact": "..."}],
-  "keywordSuggestions": ["..."]
+  "categoryPlans": [{"category": "...", "currentScore": 65, "targetScore": 85, "priority": "high|medium|low", "problem": "...", "steps": ["..."], "expectedImpact": "...", "timeEstimate": "2 hours"}],
+  "keywordSuggestions": {"primary": ["..."], "longTail": ["..."], "competitor": ["..."]},
+  "titleRewrite": {"current": "...", "optimized": "...", "changes": "..."},
+  "bulletRewrites": [{"bullet": 1, "text": "...", "focus": "primary benefit"}]
 }`;
 
   try {
@@ -1177,18 +1259,18 @@ app.get('/api/report/:id/pdf', async (req, res) => {
     const getColor = (s) => s >= 80 ? '#10B981' : s >= 60 ? '#3B82F6' : s >= 40 ? '#F59E0B' : '#EF4444';
     const scores = r.scores || {};
     const scoreKeys = [
-      { key: 'title', label: 'Title Quality' },
-      { key: 'images', label: 'Image Quality' },
-      { key: 'bullet_points', label: 'Bullet Points' },
-      { key: 'a_plus', label: 'A+ Content' },
-      { key: 'reviews', label: 'Review Profile' },
-      { key: 'price_competitiveness', label: 'Price Position' },
-      { key: 'keyword_optimization', label: 'Keyword Optimization' },
-      { key: 'brand_story', label: 'Brand Story' },
-      { key: 'inventory_status', label: 'Inventory Status' },
-      { key: 'listing_completeness', label: 'Listing Completeness' },
-      { key: 'competitive_position', label: 'Competitive Position' },
-      { key: 'conversion_elements', label: 'Conversion Elements' },
+      { key: 'title', label: 'Title Optimization' },
+      { key: 'images', label: 'Image Gallery' },
+      { key: 'video', label: 'Video Content' },
+      { key: 'bullets', label: 'Bullet Points' },
+      { key: 'aPlus', label: 'A+ / Enhanced Content' },
+      { key: 'rating', label: 'Star Rating' },
+      { key: 'reviews', label: 'Review Volume' },
+      { key: 'qa', label: 'Q&A Engagement' },
+      { key: 'bsr', label: 'Sales Rank (BSR)' },
+      { key: 'brand', label: 'Brand Presence' },
+      { key: 'completeness', label: 'Listing Completeness' },
+      { key: 'contentDepth', label: 'Content Depth' },
     ];
 
     const actionItems = r.action_items || [];
@@ -1201,7 +1283,7 @@ app.get('/api/report/:id/pdf', async (req, res) => {
     const scoreRows = scoreKeys.map(sk => {
       const val = scores[sk.key];
       if (val == null) return '';
-      const pct = val * 10;
+      const pct = Math.min(100, val); // scores are already 0-100
       const color = getColor(pct);
       return `
         <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f1f5f9;">
@@ -1209,7 +1291,7 @@ app.get('/api/report/:id/pdf', async (req, res) => {
           <div style="flex:1;height:8px;background:#f1f5f9;border-radius:100px;overflow:hidden;">
             <div style="width:${pct}%;height:100%;background:${color};border-radius:100px;"></div>
           </div>
-          <div style="width:50px;text-align:right;font-size:14px;font-weight:700;color:${color};">${val}/10</div>
+          <div style="width:50px;text-align:right;font-size:14px;font-weight:700;color:${color};">${val}/100</div>
         </div>
       `;
     }).join('');
@@ -2713,4 +2795,3 @@ app.listen(PORT, async () => {
   console.log(`🚀 ASIN Analyzer v3.0 running on port ${PORT}`);
   await initDB();
 });
-

@@ -173,10 +173,10 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:1200
 <script>
 const COLORS = ['#3B82F6','#10B981','#F59E0B','#EF4444','#8B5CF6'];
 const SCORE_LABELS = {
-  title: 'Title Quality', images: 'Image Score', bullet_points: 'Bullet Points',
-  a_plus: 'A+ Content', reviews: 'Review Profile', price_competitiveness: 'Price Position',
-  keyword_optimization: 'Keywords', brand_story: 'Brand Story', inventory_status: 'Inventory',
-  listing_completeness: 'Completeness', competitive_position: 'Competitive', conversion_elements: 'Conversion',
+  title: 'Title Optimization', images: 'Image Gallery', video: 'Video Content',
+  bullets: 'Bullet Points', aPlus: 'A+ Content', rating: 'Star Rating',
+  reviews: 'Review Volume', qa: 'Q&A Engagement', bsr: 'Sales Rank',
+  brand: 'Brand Presence', completeness: 'Completeness', contentDepth: 'Content Depth',
 };
 const SCORE_KEYS = Object.keys(SCORE_LABELS);
 
@@ -332,9 +332,9 @@ function renderResults(data) {
       ${valid.map((r, i) => {
         const val = r.scores?.[key] || 0;
         const isW = val === maxVal && vals.filter(v => v === maxVal).length === 1;
-        const pct = val * 10;
+        const pct = Math.min(100, val);
         const color = getColor(pct);
-        return `<td class="${isW ? 'winner-cell' : ''}"><span style="color:${color};font-weight:700;">${val}</span>/10</td>`;
+        return `<td class="${isW ? 'winner-cell' : ''}"><span style="color:${color};font-weight:700;">${val}</span>/100</td>`;
       }).join('')}
     </tr>`;
   });
@@ -385,8 +385,8 @@ function renderRadarChart(listings) {
       scales: {
         r: {
           beginAtZero: true,
-          max: 10,
-          ticks: { stepSize: 2, font: { size: 10 } },
+          max: 100,
+          ticks: { stepSize: 20, font: { size: 10 } },
           pointLabels: { font: { size: 11, weight: '600' } },
           grid: { color: 'rgba(0,0,0,0.06)' },
         },

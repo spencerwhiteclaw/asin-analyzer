@@ -276,17 +276,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function getScoreColor(val) {
-  if (val >= 8) return 'green';
-  if (val >= 6) return 'blue';
-  if (val >= 4) return 'yellow';
+  if (val >= 80) return 'green';
+  if (val >= 65) return 'blue';
+  if (val >= 45) return 'yellow';
   return 'red';
 }
 
 function getScoreLabel(val) {
-  if (val >= 9) return 'Excellent';
-  if (val >= 7) return 'Good';
-  if (val >= 5) return 'Average';
-  if (val >= 3) return 'Needs Work';
+  if (val >= 90) return 'Excellent';
+  if (val >= 75) return 'Good';
+  if (val >= 58) return 'Average';
+  if (val >= 40) return 'Needs Work';
   return 'Critical';
 }
 
@@ -312,9 +312,9 @@ function renderReport(r, unlocked, email) {
   const v = getVerdictText(r.overall, issueCount);
 
   const scoreNames = {
-    title: 'Title Quality', images: 'Image Score', bullets: 'Bullet Points', description: 'A+ Content',
-    pricing: 'Pricing', reviewQuality: 'Review Quality', reviewQuantity: 'Review Volume', qa: 'Q&A Presence',
-    bsr: 'BSR Rank', categoryRank: 'Category Rank', keywords: 'Keyword Visibility', completeness: 'Completeness'
+    title: 'Title Optimization', images: 'Image Gallery', video: 'Video Content', bullets: 'Bullet Points',
+    aPlus: 'A+ / Enhanced Content', rating: 'Star Rating', reviews: 'Review Volume', qa: 'Q&A Engagement',
+    bsr: 'Sales Rank (BSR)', brand: 'Brand Presence', completeness: 'Listing Completeness', contentDepth: 'Content Depth'
   };
 
   // Sort scores to find 3 worst
@@ -447,8 +447,8 @@ function renderReport(r, unlocked, email) {
         <div class="score-card ${isVisible ? '' : 'locked'}">
           <div class="lock-overlay"><div class="lock-icon">${lockSVG}</div></div>
           <div class="sc-label">${scoreNames[key] || key}</div>
-          <div class="sc-value c-${c}">${val}<span style="font-size:14px;color:var(--muted);font-weight:500;">/10</span></div>
-          <div class="sc-bar"><div class="sc-bar-fill bg-${c}" style="width:${val * 10}%"></div></div>
+          <div class="sc-value c-${c}">${val}<span style="font-size:14px;color:var(--muted);font-weight:500;">/100</span></div>
+          <div class="sc-bar"><div class="sc-bar-fill bg-${c}" style="width:${val}%"></div></div>
           <div class="sc-status c-${c}">${getScoreLabel(val)}</div>
         </div>`;
       }).join('')}
@@ -540,8 +540,8 @@ function renderReport(r, unlocked, email) {
             <button class="hc-tab" data-metric="title" onclick="switchChartMetric('title',this)">Title</button>
             <button class="hc-tab" data-metric="images" onclick="switchChartMetric('images',this)">Images</button>
             <button class="hc-tab" data-metric="bullets" onclick="switchChartMetric('bullets',this)">Bullets</button>
-            <button class="hc-tab" data-metric="description" onclick="switchChartMetric('description',this)">A+</button>
-            <button class="hc-tab" data-metric="reviewQuality" onclick="switchChartMetric('reviewQuality',this)">Reviews</button>
+            <button class="hc-tab" data-metric="aPlus" onclick="switchChartMetric('aPlus',this)">A+</button>
+            <button class="hc-tab" data-metric="rating" onclick="switchChartMetric('rating',this)">Rating</button>
           </div>
           <span class="hc-delta" id="historyDelta"></span>
         </div>
@@ -680,13 +680,12 @@ function renderScoreChart(metric) {
   } else {
     dataPoints = history.map(h => (h.scores && h.scores[metric]) || 0);
     const metricNames = {
-      title: 'Title Quality', images: 'Image Score', bullets: 'Bullet Points',
-      description: 'A+ Content', reviewQuality: 'Review Quality', reviewQuantity: 'Review Volume',
-      qa: 'Q&A Presence', bsr: 'BSR Rank', categoryRank: 'Category Rank',
-      keywords: 'Keyword Visibility', completeness: 'Completeness', pricing: 'Pricing'
+      title: 'Title Optimization', images: 'Image Gallery', video: 'Video Content', bullets: 'Bullet Points',
+      aPlus: 'A+ / Enhanced Content', rating: 'Star Rating', reviews: 'Review Volume', qa: 'Q&A Engagement',
+      bsr: 'Sales Rank (BSR)', brand: 'Brand Presence', completeness: 'Listing Completeness', contentDepth: 'Content Depth'
     };
     label = metricNames[metric] || metric;
-    maxVal = 10;
+    maxVal = 100;
   }
 
   // Update delta badge
@@ -696,7 +695,7 @@ function renderScoreChart(metric) {
     const last = dataPoints[dataPoints.length - 1];
     const change = last - first;
     const sign = change > 0 ? '+' : '';
-    deltaEl.textContent = `${sign}${change}${metric === 'overall' ? ' pts' : '/10'}`;
+    deltaEl.textContent = `${sign}${change} pts`;
     deltaEl.className = 'hc-delta ' + (change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral');
   } else {
     deltaEl.textContent = '';
@@ -753,7 +752,7 @@ function renderScoreChart(metric) {
               if (metric === 'overall') {
                 return `Score: ${item.raw}/100 (${h.grade})`;
               }
-              return `${label}: ${item.raw}/10`;
+              return `${label}: ${item.raw}/100`;
             }
           }
         }
@@ -766,7 +765,7 @@ function renderScoreChart(metric) {
           ticks: {
             font: { family: 'DM Sans', size: 12 },
             color: '#94A3B8',
-            callback: (val) => metric === 'overall' ? val : val + '/10',
+            callback: (val) => val,
           }
         },
         x: {
