@@ -2255,7 +2255,7 @@ app.post('/api/stripe/create-checkout', async (req, res) => {
     const { priceId, email, analysisId, mode } = req.body;
 
     const sessionParams = {
-      customer_email: email,
+      ...(email && email.includes('@') ? { customer_email: email } : {}),
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: mode || 'payment', // 'payment' for one-time, 'subscription' for recurring
