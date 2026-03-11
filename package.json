@@ -4,7 +4,7 @@
   "description": "ASIN Analyzer â€” Diagnose Your Listing. Dominate Your Category. Sprint 1+2 Complete.",
   "main": "server.js",
   "scripts": {
-    "start": "node migrate.js && node server.js",
+    "start": "node server.js",
     "dev": "node server.js"
   },
   "engines": {
@@ -24,4 +24,5 @@
     "puppeteer": "^22.0.0"
   }
 }
+
 
