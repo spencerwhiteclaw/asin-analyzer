@@ -358,32 +358,80 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const analysisId = params.get('analysis');
 
-// Try to get report context for the grade recap + title preview
-const stored = sessionStorage.getItem('asinOffer');
-if (stored) {
-  try {
-    const data = JSON.parse(stored);
-    const gc = data.overall >= 80 ? 'var(--green)' : data.overall >= 60 ? 'var(--blue)' : data.overall >= 40 ? 'var(--yellow)' : 'var(--red)';
-    const recap = document.getElementById('gradeRecap');
-    recap.style.display = 'flex';
-    recap.innerHTML = `
-      <div class="gr-grade" style="color:${gc}">${data.grade}</div>
-      <div class="gr-info">
-        <h3>${data.asin} scored ${data.overall}/100</h3>
-        <p>${data.actionCount || 0} issues found — your optimized copy addresses the biggest ones</p>
-      </div>
-    `;
+// ═══ FUNNEL RESILIENCE (Sprint 0.5) ═══
+// Read analysis_id from URL params OR sessionStorage. If we got it from URL
+// but sessionStorage is empty, fetch from API and hydrate. This ensures the
+// funnel works even if the user closed a tab, opened from email, or is on mobile.
+async function getAnalysisContext() {
+  const urlId = params.get('analysis_id') || params.get('analysis');
+  const storedId = sessionStorage.getItem('analysis_id');
+  const analysisId = urlId || storedId;
 
-    // Show current title if available
-    if (data.title) {
-      document.getElementById('currentTitle').textContent = data.title;
-    } else {
-      document.getElementById('currentTitle').textContent = 'Your current listing title will appear here after analysis';
+  if (!analysisId) {
+    // No analysis context available — redirect to homepage
+    window.location.href = '/';
+    return null;
+  }
+
+  // Persist analysis_id to sessionStorage for downstream pages
+  sessionStorage.setItem('analysis_id', analysisId);
+
+  // If sessionStorage is missing the analysis data, fetch it from the API
+  if (!sessionStorage.getItem('asinOffer') || !sessionStorage.getItem('asinEmail')) {
+    try {
+      const resp = await fetch(`/api/report/${analysisId}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        // Hydrate sessionStorage with the data downstream pages expect
+        sessionStorage.setItem('asinOffer', JSON.stringify({
+          asin: data.asin,
+          overall: data.overall_score || data.overallScore,
+          grade: data.overall_grade || data.overallGrade,
+          title: data.product_title || data.title || '',
+          actionCount: data.action_count || data.actionCount || 0,
+        }));
+        if (data.email) sessionStorage.setItem('asinEmail', data.email);
+      }
+    } catch (e) {
+      console.error('Failed to hydrate analysis data:', e);
     }
-  } catch(e) {}
+  }
+
+  return analysisId;
 }
+
+// Initialize — get analysisId with fallback
+let analysisId = params.get('analysis_id') || params.get('analysis') || sessionStorage.getItem('analysis_id');
+
+(async () => {
+  analysisId = await getAnalysisContext();
+  if (!analysisId) return;
+
+  // Now populate the grade recap + title preview from sessionStorage
+  const stored = sessionStorage.getItem('asinOffer');
+  if (stored) {
+    try {
+      const data = JSON.parse(stored);
+      const gc = data.overall >= 80 ? 'var(--green)' : data.overall >= 60 ? 'var(--blue)' : data.overall >= 40 ? 'var(--yellow)' : 'var(--red)';
+      const recap = document.getElementById('gradeRecap');
+      recap.style.display = 'flex';
+      recap.innerHTML = `
+        <div class="gr-grade" style="color:${gc}">${data.grade}</div>
+        <div class="gr-info">
+          <h3>${data.asin} scored ${data.overall}/100</h3>
+          <p>${data.actionCount || 0} issues found — your optimized copy addresses the biggest ones</p>
+        </div>
+      `;
+
+      if (data.title) {
+        document.getElementById('currentTitle').textContent = data.title;
+      } else {
+        document.getElementById('currentTitle').textContent = 'Your current listing title will appear here after analysis';
+      }
+    } catch(e) {}
+  }
+})();
 
 async function handlePurchase() {
   const btns = document.querySelectorAll('#buyBtnTop, #buyBtnBottom');
@@ -430,7 +478,8 @@ async function handlePurchase() {
 function handleSkip(e) {
   e.preventDefault();
   sessionStorage.setItem('purchasePath', 'declined_tripwire');
-  window.location.href = `/downsell?analysis=${analysisId || ''}`;
+  // Pass analysis_id as query param for funnel resilience
+  window.location.href = `/downsell?analysis_id=${analysisId || ''}`;
 }
 </script>
 </body>

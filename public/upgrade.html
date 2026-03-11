@@ -240,8 +240,42 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const analysisId = params.get('analysis');
 let selectedPlan = 'monthly';
+
+// ═══ FUNNEL RESILIENCE (Sprint 0.5) ═══
+async function getAnalysisContext() {
+  const urlId = params.get('analysis_id') || params.get('analysis');
+  const storedId = sessionStorage.getItem('analysis_id');
+  const analysisId = urlId || storedId;
+
+  if (!analysisId) {
+    window.location.href = '/';
+    return null;
+  }
+
+  sessionStorage.setItem('analysis_id', analysisId);
+
+  // Hydrate email from API if missing
+  if (!sessionStorage.getItem('asinEmail')) {
+    try {
+      const resp = await fetch(`/api/report/${analysisId}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.email) sessionStorage.setItem('asinEmail', data.email);
+      }
+    } catch (e) {
+      console.error('Failed to hydrate analysis data:', e);
+    }
+  }
+
+  return analysisId;
+}
+
+let analysisId = params.get('analysis_id') || params.get('analysis') || sessionStorage.getItem('analysis_id');
+
+(async () => {
+  analysisId = await getAnalysisContext();
+})();
 
 function selectPlan(plan) {
   selectedPlan = plan;
@@ -289,10 +323,11 @@ async function handleUpgrade() {
 function handleSkipUpgrade(e) {
   e.preventDefault();
   const path = sessionStorage.getItem('purchasePath');
+  // Pass analysis_id as query param for funnel resilience
   if (path === 'tripwire') {
-    window.location.href = `/oto?analysis=${analysisId || ''}`;
+    window.location.href = `/oto?analysis_id=${analysisId || ''}`;
   } else {
-    window.location.href = `/thank-you?analysis=${analysisId || ''}`;
+    window.location.href = `/thank-you?analysis_id=${analysisId || ''}`;
   }
 }
 </script>

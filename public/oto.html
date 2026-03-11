@@ -211,17 +211,54 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const analysisId = params.get('analysis');
-const email = sessionStorage.getItem('asinEmail') || '';
 
-// Mark OTO as shown on page load (so it never shows again)
-if (email) {
-  fetch('/api/mark-oto-shown', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
-  }).catch(() => {});
+// ═══ FUNNEL RESILIENCE (Sprint 0.5) ═══
+async function getAnalysisContext() {
+  const urlId = params.get('analysis_id') || params.get('analysis');
+  const storedId = sessionStorage.getItem('analysis_id');
+  const analysisId = urlId || storedId;
+
+  if (!analysisId) {
+    window.location.href = '/';
+    return null;
+  }
+
+  sessionStorage.setItem('analysis_id', analysisId);
+
+  if (!sessionStorage.getItem('asinEmail')) {
+    try {
+      const resp = await fetch(`/api/report/${analysisId}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        if (data.email) sessionStorage.setItem('asinEmail', data.email);
+      }
+    } catch (e) {
+      console.error('Failed to hydrate analysis data:', e);
+    }
+  }
+
+  return analysisId;
 }
+
+let analysisId = params.get('analysis_id') || params.get('analysis') || sessionStorage.getItem('analysis_id');
+let email = sessionStorage.getItem('asinEmail') || '';
+
+(async () => {
+  analysisId = await getAnalysisContext();
+  if (!analysisId) return;
+
+  // Re-read email after potential hydration
+  email = sessionStorage.getItem('asinEmail') || '';
+
+  // Mark OTO as shown on page load (so it never shows again)
+  if (email) {
+    fetch('/api/mark-oto-shown', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    }).catch(() => {});
+  }
+})();
 
 // Warn on navigation away
 let purchased = false;
@@ -272,7 +309,8 @@ async function handleOTO() {
 function handleDeclineOTO(e) {
   e.preventDefault();
   purchased = true; // prevent beforeunload warning
-  window.location.href = `/thank-you?analysis=${analysisId || ''}`;
+  // Pass analysis_id as query param for funnel resilience
+  window.location.href = `/thank-you?analysis_id=${analysisId || ''}`;
 }
 </script>
 </body>
