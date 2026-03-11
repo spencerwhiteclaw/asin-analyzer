@@ -1,4 +1,4 @@
-/ ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // ASIN Analyzer v3.0 — Server (Sprint 1 + Sprint 2: Complete)
 // Express backend: scraping, 12-point scoring w/ content split,
 // implementation plan via Claude API, Stripe payments, GHL webhook,
