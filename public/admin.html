@@ -952,7 +952,11 @@
                     return;
                 }
 
-                if (!dashResp.ok) throw new Error('Failed to fetch dashboard');
+                if (!dashResp.ok) {
+                  let errBody = {};
+                  try { errBody = await dashResp.json(); } catch(e) {}
+                  throw new Error('HTTP ' + dashResp.status + ': ' + (errBody.error || 'Failed to fetch dashboard'));
+                }
 
                 dashboardData = await dashResp.json();
                 showMainDashboard();
