@@ -1,15 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- GA4 â€” Replace G-XXXXXXXXXX with your Measurement ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
-<!-- Facebook Pixel â€” Replace 938316492034344 with your Pixel ID -->
+<!-- GA4 — Replace G-XRNTK9YM1L with your Measurement ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XRNTK9YM1L');</script>
+<!-- Facebook Pixel — Replace 938316492034344 with your Pixel ID -->
 <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','938316492034344');fbq('track','PageView');</script>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASIN Analyzer â€” Diagnose Your Listing. Dominate Your Category.</title>
+<title>ASIN Analyzer — Diagnose Your Listing. Dominate Your Category.</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400;1,9..40,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -56,7 +56,7 @@ body {
   line-height: 1.6;
 }
 
-/* â•â•â• NAV â•â•â• */
+/* ═══ NAV ═══ */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
@@ -78,7 +78,7 @@ nav {
 }
 .nav-btn:hover { background: var(--blue-dark) !important; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(59,130,246,0.35) !important; }
 
-/* â•â•â• HERO â•â•â• */
+/* ═══ HERO ═══ */
 .hero {
   max-width: 1320px; margin: 0 auto; padding: 110px 40px 80px;
   display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
@@ -135,7 +135,7 @@ nav {
 .search-bar button:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(59,130,246,0.35); }
 .search-bar-note { margin-top: 10px; font-size: 13px; color: var(--text-muted); font-weight: 500; max-width: 520px; }
 
-/* â•â•â• PREVIEW RESULTS (VALUE-FIRST GATE â€” Dan Kennedy open loop + Perry Belcher value-first) â•â•â• */
+/* ═══ PREVIEW RESULTS (VALUE-FIRST GATE — Dan Kennedy open loop + Perry Belcher value-first) ═══ */
 .preview-overlay {
   display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.97);
   backdrop-filter: blur(12px); z-index: 999; overflow-y: auto; padding: 40px 20px;
@@ -152,7 +152,7 @@ nav {
 }
 .preview-close:hover { color: var(--text-primary); }
 
-/* â”€â”€ Grade Ring â”€â”€ */
+/* ── Grade Ring ── */
 .preview-grade-ring {
   width: 110px; height: 110px; margin: 0 auto 12px; position: relative;
 }
@@ -168,7 +168,7 @@ nav {
 }
 .preview-score-label strong { color: var(--text-primary); font-size: 22px; font-weight: 700; }
 
-/* â”€â”€ Urgency headline under score â”€â”€ */
+/* ── Urgency headline under score ── */
 .preview-urgency {
   text-align: center; margin-bottom: 20px;
 }
@@ -180,7 +180,7 @@ nav {
   font-size: 14px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5;
 }
 
-/* â”€â”€ Email Gate (RIGHT UNDER GRADE â€” Perry Belcher "make the ask when desire peaks") â”€â”€ */
+/* ── Email Gate (RIGHT UNDER GRADE — Perry Belcher "make the ask when desire peaks") ── */
 .preview-email-gate {
   background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
   border-radius: var(--r2); padding: 28px 24px; text-align: center; margin-bottom: 24px;
@@ -219,7 +219,7 @@ nav {
 }
 .preview-gate-trust span { display: flex; align-items: center; gap: 4px; }
 
-/* â”€â”€ "Your scores" divider â”€â”€ */
+/* ── "Your scores" divider ── */
 .preview-scores-divider {
   display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
 }
@@ -231,7 +231,7 @@ nav {
   color: var(--text-muted); white-space: nowrap;
 }
 
-/* â”€â”€ Category Rows â”€â”€ */
+/* ── Category Rows ── */
 .preview-categories { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
 .preview-cat {
   display: flex; align-items: center; gap: 12px; padding: 12px 16px;
@@ -247,7 +247,7 @@ nav {
 .preview-cat-bar { flex: 1; max-width: 100px; height: 6px; background: var(--border-light); border-radius: 100px; overflow: hidden; }
 .preview-cat-bar-fill { height: 100%; border-radius: 100px; transition: width 1s ease; }
 
-/* Locked categories â€” show name, hide grade */
+/* Locked categories — show name, hide grade */
 .preview-cat.locked {
   border-color: var(--border-light); background: var(--bg-subtle);
 }
@@ -258,7 +258,7 @@ nav {
 .preview-cat.locked .preview-cat-bar { opacity: 0.3; }
 .preview-cat.locked .preview-cat-bar-fill { background: var(--border) !important; }
 
-/* â”€â”€ Bottom FOMO nudge â”€â”€ */
+/* ── Bottom FOMO nudge ── */
 .preview-bottom-nudge {
   text-align: center; padding: 16px; background: var(--red-soft); border-radius: var(--r);
   border: 1px solid rgba(239,68,68,0.1);
@@ -287,7 +287,7 @@ nav {
 .trust-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); font-weight: 500; }
 .trust-item svg { width: 16px; height: 16px; color: var(--green); flex-shrink: 0; }
 
-/* â•â•â• DIAGNOSIS CARD â•â•â• */
+/* ═══ DIAGNOSIS CARD ═══ */
 .hero-right { display: flex; justify-content: center; position: relative; z-index: 2; animation: fadeInUp 0.8s 0.3s ease both; }
 .diagnosis-card {
   width: 440px; background: var(--bg); border-radius: var(--r3);
@@ -345,7 +345,7 @@ nav {
 .footer-link { font-size:12px; color:var(--blue); font-weight:600; text-decoration:none; display:flex; align-items:center; gap:4px; transition:gap .2s; }
 .footer-link:hover { gap:8px; }
 
-/* â•â•â• SECTIONS â•â•â• */
+/* ═══ SECTIONS ═══ */
 .section { max-width: 1320px; margin: 0 auto; padding: 100px 40px; }
 .section-alt { background: var(--bg-subtle); }
 .section-border { border-top: 1px solid var(--border); }
@@ -354,7 +354,7 @@ nav {
 .sp { font-size: 17px; max-width: 580px; line-height: 1.75; color: var(--text-secondary); margin-bottom: 48px; }
 .divider { height: 1px; background: var(--border); max-width: 1320px; margin: 0 auto; }
 
-/* â•â•â• METRICS BAR â•â•â• */
+/* ═══ METRICS BAR ═══ */
 .metrics-strip {
   max-width: 1320px; margin: 0 auto;
   display: grid; grid-template-columns: repeat(4,1fr);
@@ -365,7 +365,7 @@ nav {
 .metrics-strip .m .num { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 42px; font-weight: 800; color: var(--text-primary); line-height: 1; }
 .metrics-strip .m .lbl { font-size: 12px; color: var(--text-muted); margin-top: 6px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }
 
-/* â•â•â• PAIN CARDS â•â•â• */
+/* ═══ PAIN CARDS ═══ */
 .pain-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
 .pain-card {
   padding: 28px; border-radius: var(--r2); border: 1px solid var(--border); background: var(--bg);
@@ -385,7 +385,7 @@ nav {
 .cost-callout p { font-size: 16px; color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.7; }
 .cost-sub { font-size: 13px; color: var(--text-muted); margin-top: 12px; }
 
-/* â•â•â• CASE STUDIES â•â•â• */
+/* ═══ CASE STUDIES ═══ */
 .case-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; }
 .case-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r3); overflow: hidden; transition: transform .25s, box-shadow .25s; }
 .case-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
@@ -405,7 +405,7 @@ nav {
 .case-stat .val.gold { color: var(--gold); }
 .case-stat .desc { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
-/* â•â•â• 12 SCORING â•â•â• */
+/* ═══ 12 SCORING ═══ */
 .score-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border-radius: var(--r3); overflow: hidden; }
 .score-item { background: var(--bg); padding: 28px; position: relative; transition: background .2s; }
 .score-item:hover { background: var(--bg-subtle); }
@@ -414,7 +414,7 @@ nav {
 .score-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
 .score-tag { display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; background: var(--blue-soft); color: var(--blue); }
 
-/* â•â•â• HOW IT WORKS â•â•â• */
+/* ═══ HOW IT WORKS ═══ */
 .flow { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 48px; position: relative; }
 .flow::before { content:''; position:absolute; top:32px; left:16%; right:16%; height:1px; background:var(--border); z-index:0; }
 .flow-step { text-align: center; position: relative; z-index: 1; padding: 0 20px; }
@@ -422,7 +422,7 @@ nav {
 .flow-step h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
 .flow-step p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 280px; margin: 0 auto; }
 
-/* â•â•â• FEATURES â•â•â• */
+/* ═══ FEATURES ═══ */
 .feature-trio { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 48px; }
 .feature-card {
   border: 1px solid var(--border); border-radius: var(--r3); padding: 36px; text-align: center;
@@ -433,7 +433,7 @@ nav {
 .feature-card h3 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
 .feature-card p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
 
-/* â•â•â• COMPARISON â•â•â• */
+/* ═══ COMPARISON ═══ */
 .cmp { max-width: 780px; margin: 40px auto 0; border: 1px solid var(--border); border-radius: var(--r3); overflow: hidden; }
 .c-row { display: grid; grid-template-columns: 1.5fr 90px 90px 90px; border-bottom: 1px solid var(--border); }
 .c-row:last-child { border: none; }
@@ -443,7 +443,7 @@ nav {
 .c-y { color: var(--blue); font-weight: 800; font-size: 16px; }
 .c-n { color: var(--text-faint); font-size: 16px; }
 
-/* â•â•â• TESTIMONIALS â•â•â• */
+/* ═══ TESTIMONIALS ═══ */
 .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
 .testi-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r3); padding: 28px; transition: transform .25s; }
 .testi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
@@ -454,7 +454,7 @@ nav {
 .testi-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
 .testi-role { font-size: 13px; color: var(--text-muted); }
 
-/* â•â•â• QUOTE â•â•â• */
+/* ═══ QUOTE ═══ */
 .quote-section {
   max-width: 1320px; margin: 0 auto; padding: 80px 40px; text-align: center;
   border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
@@ -467,7 +467,7 @@ nav {
 .quote-text em { font-style: italic; color: var(--blue); }
 .quote-attr { margin-top: 14px; font-size: 14px; color: var(--text-muted); font-weight: 500; }
 
-/* â•â•â• VALUE STACK â•â•â• */
+/* ═══ VALUE STACK ═══ */
 .stack-section { background: var(--text-primary); color: #fff; padding: 100px 40px; text-align: center; }
 .stack-section .tag { color: var(--blue-light); }
 .stack-section .sh { color: #fff; }
@@ -494,7 +494,7 @@ nav {
 .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.35); }
 .stack-note { margin-top: 14px; font-size: 14px; color: rgba(255,255,255,0.35); }
 
-/* â•â•â• PRICING â•â•â• */
+/* ═══ PRICING ═══ */
 .pricing-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 48px; }
 .price-card {
   border: 1px solid var(--border); border-radius: var(--r3); padding: 32px 24px;
@@ -515,7 +515,7 @@ nav {
 .price-features { text-align: left; margin-bottom: 24px; }
 .price-features li { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; font-size: 14px; color: var(--text-secondary); border-bottom: 1px solid var(--border-light); list-style: none; }
 .price-features li:last-child { border: none; }
-.price-features li::before { content: 'âœ“'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
+.price-features li::before { content: '✓'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
 .price-btn {
   display: block; width: 100%; padding: 12px; border-radius: 10px;
   font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
@@ -528,7 +528,7 @@ nav {
 .price-guarantee { text-align: center; margin-top: 28px; font-size: 14px; color: var(--text-muted); }
 .price-guarantee strong { color: var(--text-secondary); }
 
-/* â•â•â• FAQ â•â•â• */
+/* ═══ FAQ ═══ */
 .faq { max-width: 660px; margin: 40px auto 0; }
 .fq { border-bottom: 1px solid var(--border); }
 .fq-q {
@@ -542,7 +542,7 @@ nav {
 .fq.open .fq-a { max-height: 400px; padding-bottom: 18px; }
 .fq.open .ic { transform: rotate(45deg); }
 
-/* â•â•â• NEWSLETTER â•â•â• */
+/* ═══ NEWSLETTER ═══ */
 .newsletter {
   max-width: 1320px; margin: 0 auto; padding: 40px;
   border-top: 1px solid var(--border);
@@ -556,7 +556,7 @@ nav {
 .newsletter-form button { padding: 10px 20px; border-radius: 10px; background: var(--blue); color: #fff; border: none; font-weight: 700; font-size: 14px; cursor: pointer; transition: all .15s; }
 .newsletter-form button:hover { background: var(--blue-dark); }
 
-/* â•â•â• FINAL CTA â•â•â• */
+/* ═══ FINAL CTA ═══ */
 .cta-end {
   max-width: 1320px; margin: 0 auto; padding: 100px 40px; text-align: center;
   border-top: 1px solid var(--border);
@@ -573,11 +573,11 @@ footer {
 footer a { color: var(--blue); text-decoration: none; }
 .footer-brand { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; }
 
-/* â•â•â• ANIMATIONS â•â•â• */
+/* ═══ ANIMATIONS ═══ */
 .ao { opacity:0; transform:translateY(24px); transition:opacity .7s cubic-bezier(0.22,1,0.36,1), transform .7s cubic-bezier(0.22,1,0.36,1); }
 .ao.vis { opacity:1; transform:none; }
 
-/* â•â•â• RESPONSIVE â•â•â• */
+/* ═══ RESPONSIVE ═══ */
 @media(max-width:1024px) {
   .hero { grid-template-columns:1fr; gap:50px; padding:100px 24px 60px; }
   .hero h1 { font-size:38px; }
@@ -624,7 +624,7 @@ footer a { color: var(--blue); text-decoration: none; }
     <a href="#proof">Results</a>
     <a href="#pricing">Pricing</a>
     <a href="#faq">FAQ</a>
-    <a href="#top" class="nav-btn">Free Diagnosis â†’</a>
+    <a href="#top" class="nav-btn">Free Diagnosis →</a>
   </div>
 </nav>
 
@@ -633,26 +633,26 @@ footer a { color: var(--blue); text-decoration: none; }
   <div class="hero-left">
     <div class="hero-badge">
       <div class="hero-badge-dot"></div>
-      Free Â· 12-point diagnostic Â· 30 seconds
+      Free · 12-point diagnostic · 30 seconds
     </div>
 
     <h1>Your Amazon listing is losing you money right now. <em>We'll prove it in 30 seconds.</em></h1>
 
     <p class="hero-sub">
-      Paste any ASIN and get an instant <strong>12-point diagnostic</strong> with Aâ€“F grades, competitor benchmarks, review sentiment analysis, and a prioritized action plan. <strong>The same audit agencies charge $2,000+ for.</strong>
+      Paste any ASIN and get an instant <strong>12-point diagnostic</strong> with A–F grades, competitor benchmarks, review sentiment analysis, and a prioritized action plan. <strong>The same audit agencies charge $2,000+ for.</strong>
     </p>
 
     <div class="search-bar" id="searchBar">
       <input type="text" id="asinInput" placeholder="Paste your ASIN (e.g. B08N5WRWNW)" maxlength="10" />
-      <button id="analyzeBtn" onclick="startAnalysis()">Get My Free Diagnosis â†’</button>
+      <button id="analyzeBtn" onclick="startAnalysis()">Get My Free Diagnosis →</button>
     </div>
-    <div class="search-bar-note">100% free Â· No credit card required Â· Results in 30 seconds</div>
+    <div class="search-bar-note">100% free · No credit card required · Results in 30 seconds</div>
     <div id="searchError" style="display:none;margin-top:8px;font-size:13px;color:var(--red);font-weight:600;"></div>
 
     <div class="search-examples">
       Try it now: &nbsp;
-      <a href="#" onclick="fillASIN('B0BSHF7WHW');return false;">B0BSHF7WHW</a> &nbsp;Â·&nbsp;
-      <a href="#" onclick="fillASIN('B09B8YWXDF');return false;">B09B8YWXDF</a> &nbsp;Â·&nbsp;
+      <a href="#" onclick="fillASIN('B0BSHF7WHW');return false;">B0BSHF7WHW</a> &nbsp;·&nbsp;
+      <a href="#" onclick="fillASIN('B09B8YWXDF');return false;">B09B8YWXDF</a> &nbsp;·&nbsp;
       <a href="#" onclick="fillASIN('B08N5WRWNW');return false;">B08N5WRWNW</a>
     </div>
 
@@ -694,10 +694,10 @@ footer a { color: var(--blue); text-decoration: none; }
         <div class="metric-row"><div class="metric-label">Listing Completeness</div><div class="metric-bar-wrap"><div class="metric-bar warning" style="width:58%"></div></div><div class="metric-score">58</div></div>
         <div style="text-align:center; padding:14px 0 6px;">
           <div style="font-size:15px; color:var(--text-secondary); font-weight:700;">Plus 6 More Categories Scored</div>
-          <a href="#top" style="display:inline-block; margin-top:8px; font-size:15px; font-weight:800; color:var(--blue); text-decoration:none; transition:color .2s;">Get Your Full Diagnosis â†’</a>
+          <a href="#top" style="display:inline-block; margin-top:8px; font-size:15px; font-weight:800; color:var(--blue); text-decoration:none; transition:color .2s;">Get Your Full Diagnosis →</a>
         </div>
       </div>
-      <div class="alert-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div>âš  We found a few critical errors in your listing that need <b>immediate attention</b></div></div>
+      <div class="alert-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><div>⚠ We found a few critical errors in your listing that need <b>immediate attention</b></div></div>
       <div class="card-footer"><div class="footer-status"><div class="footer-status-dot"></div>Analyzed just now</div><a href="#" class="footer-link">View full report <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
     </div>
   </div>
@@ -717,18 +717,18 @@ footer a { color: var(--blue); text-decoration: none; }
   <h2 class="sh">You're paying Amazon to lose money.</h2>
   <p class="sp">Every day your listing stays unoptimized, you're funding your competitors. Here's exactly how it's happening.</p>
   <div class="pain-grid">
-    <div class="pain-card"><div class="emoji">ðŸ’¸</div><h3>Burning Ad Spend</h3><p>Average FBA seller spends $37/day on PPC. If your listing converts at 8% instead of 15%, you're flushing $19/day straight into Amazon's pocket. That's <strong>$570/month</strong> gone.</p></div>
-    <div class="pain-card"><div class="emoji">ðŸ‘»</div><h3>Algorithmic Death Spiral</h3><p>Amazon's A10 algorithm rewards conversion rate. Bad listing â†’ low conversion â†’ lower rank â†’ less traffic â†’ even lower conversion. It's happening right now.</p></div>
-    <div class="pain-card"><div class="emoji">ðŸ†</div><h3>Worse Products Outselling You</h3><p>Their product isn't better. Their listing is. Better images, sharper copy, stronger reviews. They're eating your market share with a product you could beat.</p></div>
-    <div class="pain-card"><div class="emoji">ðŸŽ¯</div><h3>Guessing Instead of Knowing</h3><p>You "feel" something's off but can't pinpoint it. So you change the title. Then the images. Then the price. No data, no framework, no idea what moved the needle.</p></div>
-    <div class="pain-card"><div class="emoji">ðŸ“‹</div><h3>Agencies Want $2K/Month</h3><p>For a PDF checklist and a "strategy call." You don't need a retainer. You need a diagnosis â€” in 30 seconds, not 30 days.</p></div>
-    <div class="pain-card"><div class="emoji">ðŸ“‰</div><h3>Review Landmines</h3><p>Buried in your 1-star reviews are the exact complaints killing your conversion. We read every single one and surface the patterns automatically.</p></div>
+    <div class="pain-card"><div class="emoji">💸</div><h3>Burning Ad Spend</h3><p>Average FBA seller spends $37/day on PPC. If your listing converts at 8% instead of 15%, you're flushing $19/day straight into Amazon's pocket. That's <strong>$570/month</strong> gone.</p></div>
+    <div class="pain-card"><div class="emoji">👻</div><h3>Algorithmic Death Spiral</h3><p>Amazon's A10 algorithm rewards conversion rate. Bad listing → low conversion → lower rank → less traffic → even lower conversion. It's happening right now.</p></div>
+    <div class="pain-card"><div class="emoji">🏆</div><h3>Worse Products Outselling You</h3><p>Their product isn't better. Their listing is. Better images, sharper copy, stronger reviews. They're eating your market share with a product you could beat.</p></div>
+    <div class="pain-card"><div class="emoji">🎯</div><h3>Guessing Instead of Knowing</h3><p>You "feel" something's off but can't pinpoint it. So you change the title. Then the images. Then the price. No data, no framework, no idea what moved the needle.</p></div>
+    <div class="pain-card"><div class="emoji">📋</div><h3>Agencies Want $2K/Month</h3><p>For a PDF checklist and a "strategy call." You don't need a retainer. You need a diagnosis — in 30 seconds, not 30 days.</p></div>
+    <div class="pain-card"><div class="emoji">📉</div><h3>Review Landmines</h3><p>Buried in your 1-star reviews are the exact complaints killing your conversion. We read every single one and surface the patterns automatically.</p></div>
   </div>
   <div class="cost-callout">
     <h3>The average unoptimized listing costs you</h3>
     <div class="cost-num" id="costCounter">$2,847</div>
-    <p>per month in lost sales, wasted ad spend, and missed rank opportunities. That's $34,164 per year â€” for every listing.</p>
-    <div class="cost-sub">Based on average FBA seller metrics Â· 15% conversion gap Ã— avg daily sessions Ã— AOV</div>
+    <p>per month in lost sales, wasted ad spend, and missed rank opportunities. That's $34,164 per year — for every listing.</p>
+    <div class="cost-sub">Based on average FBA seller metrics · 15% conversion gap × avg daily sessions × AOV</div>
   </div>
 </section>
 
@@ -740,24 +740,24 @@ footer a { color: var(--blue); text-decoration: none; }
   <p class="sp">These aren't testimonials. These are case studies with real metrics from sellers who ran one free report and changed everything.</p>
   <div class="case-grid">
     <div class="case-card">
-      <div class="case-top"><div class="case-avatar">MR</div><div class="case-meta"><div class="case-tag">Home & Kitchen Â· 7-Figure</div><h4>Mike R.</h4><span>$1.2M annual revenue Â· 14 ASINs</span></div></div>
+      <div class="case-top"><div class="case-avatar">MR</div><div class="case-meta"><div class="case-tag">Home & Kitchen · 7-Figure</div><h4>Mike R.</h4><span>$1.2M annual revenue · 14 ASINs</span></div></div>
       <div class="case-body"><blockquote>"I was spending $3,100/month on PPC with a 4.2% conversion rate. The Analyzer flagged my bullets as feature-heavy with zero benefit language. Rewrote them in one afternoon. Two weeks later: 11.3% conversion. Same traffic. Same product. Same price."</blockquote></div>
       <div class="case-results"><div class="case-stat"><div class="val green">+169%</div><div class="desc">Conversion Rate</div></div><div class="case-stat"><div class="val blue">$1,847</div><div class="desc">Monthly PPC Saved</div></div><div class="case-stat"><div class="val gold">9 days</div><div class="desc">Time to Result</div></div></div>
     </div>
     <div class="case-card">
-      <div class="case-top"><div class="case-avatar">SJ</div><div class="case-meta"><div class="case-tag">Beauty Â· 6-Figure</div><h4>Sarah J.</h4><span>$340K annual revenue Â· 6 ASINs</span></div></div>
+      <div class="case-top"><div class="case-avatar">SJ</div><div class="case-meta"><div class="case-tag">Beauty · 6-Figure</div><h4>Sarah J.</h4><span>$340K annual revenue · 6 ASINs</span></div></div>
       <div class="case-body"><blockquote>"D+ on title quality. I had my brand name taking up half the character limit and zero search terms. The report showed me exactly what to fix and in what order. Page 3 to page 1 for my main keyword in 9 days."</blockquote></div>
-      <div class="case-results"><div class="case-stat"><div class="val green">Page 1</div><div class="desc">Keyword Rank</div></div><div class="case-stat"><div class="val blue">+214%</div><div class="desc">Organic Traffic</div></div><div class="case-stat"><div class="val gold">D+ â†’ A-</div><div class="desc">Title Score</div></div></div>
+      <div class="case-results"><div class="case-stat"><div class="val green">Page 1</div><div class="desc">Keyword Rank</div></div><div class="case-stat"><div class="val blue">+214%</div><div class="desc">Organic Traffic</div></div><div class="case-stat"><div class="val gold">D+ → A-</div><div class="desc">Title Score</div></div></div>
     </div>
     <div class="case-card">
-      <div class="case-top"><div class="case-avatar">DK</div><div class="case-meta"><div class="case-tag">Sports & Outdoors Â· Multi-Brand</div><h4>David K.</h4><span>$2.1M annual revenue Â· 38 ASINs</span></div></div>
+      <div class="case-top"><div class="case-avatar">DK</div><div class="case-meta"><div class="case-tag">Sports & Outdoors · Multi-Brand</div><h4>David K.</h4><span>$2.1M annual revenue · 38 ASINs</span></div></div>
       <div class="case-body"><blockquote>"Was paying an agency $2,200/month. They gave me a monthly PDF with the same recommendations. Ran all 38 ASINs through the Analyzer in one afternoon, got more actionable data than 6 months of agency reports. Cancelled them immediately."</blockquote></div>
       <div class="case-results"><div class="case-stat"><div class="val green">$26,400</div><div class="desc">Annual Savings</div></div><div class="case-stat"><div class="val blue">38 ASINs</div><div class="desc">Audited in 1 Day</div></div><div class="case-stat"><div class="val gold">+31%</div><div class="desc">Avg Score Increase</div></div></div>
     </div>
     <div class="case-card">
-      <div class="case-top"><div class="case-avatar">JL</div><div class="case-meta"><div class="case-tag">Electronics Â· New Seller</div><h4>Jessica L.</h4><span>$89K first year Â· 3 ASINs</span></div></div>
+      <div class="case-top"><div class="case-avatar">JL</div><div class="case-meta"><div class="case-tag">Electronics · New Seller</div><h4>Jessica L.</h4><span>$89K first year · 3 ASINs</span></div></div>
       <div class="case-body"><blockquote>"Brand new seller, no idea what I was doing wrong. The sentiment analysis found that 40% of my negative reviews mentioned 'confusing instructions.' Added an insert card and a product video. Returns dropped 60% in one month."</blockquote></div>
-      <div class="case-results"><div class="case-stat"><div class="val green">-60%</div><div class="desc">Return Rate</div></div><div class="case-stat"><div class="val blue">4.1 â†’ 4.6</div><div class="desc">Star Rating</div></div><div class="case-stat"><div class="val gold">$890</div><div class="desc">Monthly Savings</div></div></div>
+      <div class="case-results"><div class="case-stat"><div class="val green">-60%</div><div class="desc">Return Rate</div></div><div class="case-stat"><div class="val blue">4.1 → 4.6</div><div class="desc">Star Rating</div></div><div class="case-stat"><div class="val gold">$890</div><div class="desc">Monthly Savings</div></div></div>
     </div>
   </div>
 </section>
@@ -766,25 +766,25 @@ footer a { color: var(--blue); text-decoration: none; }
 <!-- QUOTE -->
 <div class="quote-section ao">
   <div class="quote-text">"Stop optimizing <em>ad spend</em> when your listing converts like a <em>broken checkout page.</em> Fix the listing first. Then spend."</div>
-  <div class="quote-attr">â€” The Listing Doctor philosophy</div>
+  <div class="quote-attr">— The Listing Doctor philosophy</div>
 </div>
 
 <!-- 12-POINT SCORING -->
 <section class="section ao" id="features">
   <div class="tag">12-Point Diagnostic</div>
-  <h2 class="sh">We score everything that kills â€” or creates â€” sales.</h2>
-  <p class="sp">Each category gets a letter grade, a numerical score, specific findings, and a prioritized fix. Not vague advice â€” exact steps.</p>
+  <h2 class="sh">We score everything that kills — or creates — sales.</h2>
+  <p class="sp">Each category gets a letter grade, a numerical score, specific findings, and a prioritized fix. Not vague advice — exact steps.</p>
   <div class="score-grid">
-    <div class="score-item"><div class="score-num">01</div><h3>Title Quality</h3><p>Character count, keyword density, benefit language, brand positioning, readability.</p><div class="score-tag">Keywords Â· Clarity</div></div>
-    <div class="score-item"><div class="score-num">02</div><h3>Bullet Points</h3><p>Count, average length, benefit-to-feature ratio, keyword integration, emotional triggers.</p><div class="score-tag">Benefits Â· Structure</div></div>
-    <div class="score-item"><div class="score-num">03</div><h3>Description & A+</h3><p>A+ content presence, module variety, brand story, word count, cross-sell integration.</p><div class="score-tag">A+ Â· EBC Â· Depth</div></div>
-    <div class="score-item"><div class="score-num">04</div><h3>Image Audit</h3><p>Total count, type analysis â€” lifestyle, infographic, comparison. White background compliance.</p><div class="score-tag">Count Â· Types Â· Quality</div></div>
-    <div class="score-item"><div class="score-num">05</div><h3>Reviews & Rating</h3><p>Star rating, total count, distribution curve, velocity trend, category benchmark comparison.</p><div class="score-tag">Stars Â· Velocity</div></div>
-    <div class="score-item"><div class="score-num">06</div><h3>BSR & Rank</h3><p>Primary category rank, sub-category positions, rank trajectory, badge presence signals.</p><div class="score-tag">BSR Â· Trajectory</div></div>
-    <div class="score-item"><div class="score-num">07</div><h3>Q&A Health</h3><p>Total questions, seller response rate, unanswered flagged, keyword opportunities.</p><div class="score-tag">Engagement Â· Trust</div></div>
+    <div class="score-item"><div class="score-num">01</div><h3>Title Quality</h3><p>Character count, keyword density, benefit language, brand positioning, readability.</p><div class="score-tag">Keywords · Clarity</div></div>
+    <div class="score-item"><div class="score-num">02</div><h3>Bullet Points</h3><p>Count, average length, benefit-to-feature ratio, keyword integration, emotional triggers.</p><div class="score-tag">Benefits · Structure</div></div>
+    <div class="score-item"><div class="score-num">03</div><h3>Description & A+</h3><p>A+ content presence, module variety, brand story, word count, cross-sell integration.</p><div class="score-tag">A+ · EBC · Depth</div></div>
+    <div class="score-item"><div class="score-num">04</div><h3>Image Audit</h3><p>Total count, type analysis — lifestyle, infographic, comparison. White background compliance.</p><div class="score-tag">Count · Types · Quality</div></div>
+    <div class="score-item"><div class="score-num">05</div><h3>Reviews & Rating</h3><p>Star rating, total count, distribution curve, velocity trend, category benchmark comparison.</p><div class="score-tag">Stars · Velocity</div></div>
+    <div class="score-item"><div class="score-num">06</div><h3>BSR & Rank</h3><p>Primary category rank, sub-category positions, rank trajectory, badge presence signals.</p><div class="score-tag">BSR · Trajectory</div></div>
+    <div class="score-item"><div class="score-num">07</div><h3>Q&A Health</h3><p>Total questions, seller response rate, unanswered flagged, keyword opportunities.</p><div class="score-tag">Engagement · Trust</div></div>
     <div class="score-item"><div class="score-num">08</div><h3>Competitive Position</h3><p>Head-to-head vs. top 3 BSR competitors across price, reviews, images, content, and rank.</p><div class="score-tag">vs. Top 3 Competitors</div></div>
-    <div class="score-item"><div class="score-num">09</div><h3>Content Sentiment</h3><p>Top 3 recurring complaints from 1â€“2 star reviews. The exact words killing your conversion.</p><div class="score-tag">Review Mining</div></div>
-    <div class="score-item"><div class="score-num">10</div><h3>Badge & Visibility</h3><p>Amazon's Choice, Best Seller, Prime, Small Business, Climate Pledge â€” every trust signal.</p><div class="score-tag">Badges Â· Trust</div></div>
+    <div class="score-item"><div class="score-num">09</div><h3>Content Sentiment</h3><p>Top 3 recurring complaints from 1–2 star reviews. The exact words killing your conversion.</p><div class="score-tag">Review Mining</div></div>
+    <div class="score-item"><div class="score-num">10</div><h3>Badge & Visibility</h3><p>Amazon's Choice, Best Seller, Prime, Small Business, Climate Pledge — every trust signal.</p><div class="score-tag">Badges · Trust</div></div>
     <div class="score-item"><div class="score-num">11</div><h3>Listing Completeness</h3><p>All fields populated, variants configured, missing attributes flagged, backend search terms.</p><div class="score-tag">Completeness</div></div>
     <div class="score-item"><div class="score-num">12</div><h3>Keyword Rank Check</h3><p>Where your listing appears when searching your own title keywords. Organic visibility mapped.</p><div class="score-tag">Search Position</div></div>
   </div>
@@ -797,7 +797,7 @@ footer a { color: var(--blue); text-decoration: none; }
   <h2 class="sh">Three steps. Thirty seconds. Zero excuses.</h2>
   <div class="flow">
     <div class="flow-step"><div class="flow-n">1</div><h3>Paste Your ASIN</h3><p>Grab the 10-character code from any Amazon URL. No login, no signup, no credit card.</p></div>
-    <div class="flow-step"><div class="flow-n">2</div><h3>Get Diagnosed</h3><p>12 scored categories, Aâ€“F grades, competitor benchmarks, sentiment analysis â€” in 30 seconds.</p></div>
+    <div class="flow-step"><div class="flow-n">2</div><h3>Get Diagnosed</h3><p>12 scored categories, A–F grades, competitor benchmarks, sentiment analysis — in 30 seconds.</p></div>
     <div class="flow-step"><div class="flow-n">3</div><h3>Fix, Re-Test, Dominate</h3><p>Follow the prioritized action plan. Re-run the report. Watch your score climb and sales follow.</p></div>
   </div>
 </section>
@@ -808,9 +808,9 @@ footer a { color: var(--blue); text-decoration: none; }
   <div class="tag">Exclusive Features</div>
   <h2 class="sh">Weapons your competitors don't have.</h2>
   <div class="feature-trio">
-    <div class="feature-card"><div class="feature-icon">ðŸ“ˆ</div><h3>Re-Run Tracking</h3><p>Scan the same ASIN over time. Watch your score improve after every fix. See exactly which changes moved the needle. The feedback loop agencies never give you.</p></div>
-    <div class="feature-card"><div class="feature-icon">ðŸŽ¯</div><h3>Competitor X-Ray</h3><p>Enter any competitor's ASIN. See their scores, weaknesses, blind spots. Find the gap. Exploit it. This is how category leaders are built.</p></div>
-    <div class="feature-card"><div class="feature-icon">ðŸ…</div><h3>Category Benchmarking</h3><p>"Your score is 72. Average in your category is 65. Top 10% score 88+." Now you know exactly where you stand and how far you need to go.</p></div>
+    <div class="feature-card"><div class="feature-icon">📈</div><h3>Re-Run Tracking</h3><p>Scan the same ASIN over time. Watch your score improve after every fix. See exactly which changes moved the needle. The feedback loop agencies never give you.</p></div>
+    <div class="feature-card"><div class="feature-icon">🎯</div><h3>Competitor X-Ray</h3><p>Enter any competitor's ASIN. See their scores, weaknesses, blind spots. Find the gap. Exploit it. This is how category leaders are built.</p></div>
+    <div class="feature-card"><div class="feature-icon">🏅</div><h3>Category Benchmarking</h3><p>"Your score is 72. Average in your category is 65. Top 10% score 88+." Now you know exactly where you stand and how far you need to go.</p></div>
   </div>
 </section>
 
@@ -821,14 +821,14 @@ footer a { color: var(--blue); text-decoration: none; }
   <h2 class="sh">ASIN Analyzer vs. everything else.</h2>
   <div class="cmp">
     <div class="c-row c-head"><div class="c-cell"></div><div class="c-cell" style="color:var(--blue)">Analyzer</div><div class="c-cell">Agencies</div><div class="c-cell">Helium 10</div></div>
-    <div class="c-row"><div class="c-cell">Instant results</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-n">âœ—</div><div class="c-cell c-n">âœ—</div></div>
-    <div class="c-row"><div class="c-cell">12-point listing audit</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-n">âœ—</div></div>
-    <div class="c-row"><div class="c-cell">Review sentiment analysis</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-n">âœ—</div><div class="c-cell c-n">âœ—</div></div>
-    <div class="c-row"><div class="c-cell">Competitor benchmarking</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-n">âœ—</div><div class="c-cell c-y">âœ“</div></div>
-    <div class="c-row"><div class="c-cell">Re-run tracking</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-n">âœ—</div><div class="c-cell c-n">âœ—</div></div>
-    <div class="c-row"><div class="c-cell">Prioritized action plan</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-n">âœ—</div></div>
-    <div class="c-row"><div class="c-cell">Category benchmarks</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-n">âœ—</div><div class="c-cell c-n">âœ—</div></div>
-    <div class="c-row"><div class="c-cell">No contract</div><div class="c-cell c-y">âœ“</div><div class="c-cell c-n">âœ—</div><div class="c-cell c-y">âœ“</div></div>
+    <div class="c-row"><div class="c-cell">Instant results</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">12-point listing audit</div><div class="c-cell c-y">✓</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">Review sentiment analysis</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">Competitor benchmarking</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-y">✓</div></div>
+    <div class="c-row"><div class="c-cell">Re-run tracking</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">Prioritized action plan</div><div class="c-cell c-y">✓</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">Category benchmarks</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-n">✗</div></div>
+    <div class="c-row"><div class="c-cell">No contract</div><div class="c-cell c-y">✓</div><div class="c-cell c-n">✗</div><div class="c-cell c-y">✓</div></div>
     <div class="c-row"><div class="c-cell">Starting price</div><div class="c-cell" style="color:var(--green);font-weight:800">FREE</div><div class="c-cell" style="color:var(--red)">$2K+/mo</div><div class="c-cell" style="color:var(--red)">$79/mo</div></div>
   </div>
 </section>
@@ -839,9 +839,9 @@ footer a { color: var(--blue); text-decoration: none; }
   <div class="tag">What Sellers Say</div>
   <h2 class="sh">Don't take our word for it.</h2>
   <div class="testi-grid">
-    <div class="testi-card"><div class="testi-stars">â˜…â˜…â˜…â˜…â˜…</div><blockquote>"Ran my competitor's ASIN and found 4 weaknesses I could exploit. Launched a new variation targeting those gaps. $12K in the first month."</blockquote><div class="testi-foot"><div class="testi-av">RB</div><div><div class="testi-name">Ryan B.</div><div class="testi-role">Supplements Â· 8-Figure Brand</div></div></div></div>
-    <div class="testi-card"><div class="testi-stars">â˜…â˜…â˜…â˜…â˜…</div><blockquote>"I manage 120+ ASINs for clients. The Enterprise plan's white-label reports let me deliver branded audits as my own. My clients think I'm a genius."</blockquote><div class="testi-foot"><div class="testi-av">AT</div><div><div class="testi-name">Amanda T.</div><div class="testi-role">Amazon Agency Owner</div></div></div></div>
-    <div class="testi-card"><div class="testi-stars">â˜…â˜…â˜…â˜…â˜…</div><blockquote>"The sentiment analysis found 'chemical smell' in 31% of my 1-stars. Changed the packaging. Returns dropped 45% in three weeks."</blockquote><div class="testi-foot"><div class="testi-av">PG</div><div><div class="testi-name">Paul G.</div><div class="testi-role">Home Goods Â· 7-Figure</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"Ran my competitor's ASIN and found 4 weaknesses I could exploit. Launched a new variation targeting those gaps. $12K in the first month."</blockquote><div class="testi-foot"><div class="testi-av">RB</div><div><div class="testi-name">Ryan B.</div><div class="testi-role">Supplements · 8-Figure Brand</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"I manage 120+ ASINs for clients. The Enterprise plan's white-label reports let me deliver branded audits as my own. My clients think I'm a genius."</blockquote><div class="testi-foot"><div class="testi-av">AT</div><div><div class="testi-name">Amanda T.</div><div class="testi-role">Amazon Agency Owner</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><blockquote>"The sentiment analysis found 'chemical smell' in 31% of my 1-stars. Changed the packaging. Returns dropped 45% in three weeks."</blockquote><div class="testi-foot"><div class="testi-av">PG</div><div><div class="testi-name">Paul G.</div><div class="testi-role">Home Goods · 7-Figure</div></div></div></div>
   </div>
 </section>
 
@@ -849,58 +849,58 @@ footer a { color: var(--blue); text-decoration: none; }
 <div class="stack-section ao">
   <div class="tag">What You're Getting</div>
   <h2 class="sh">Everything. For free. No catch.</h2>
-  <p class="sp">Here's what agencies charge for this exact scope of work â€” and what you'll pay today.</p>
+  <p class="sp">Here's what agencies charge for this exact scope of work — and what you'll pay today.</p>
   <div class="stk">
-    <div class="stk-row"><span class="n">âœ… 12-Point Listing Diagnostic</span><span class="v">$497</span></div>
-    <div class="stk-row"><span class="n">âœ… Aâ€“F Grades + Numerical Scores</span><span class="v">$197</span></div>
-    <div class="stk-row"><span class="n">âœ… Review Sentiment Analysis</span><span class="v">$297</span></div>
-    <div class="stk-row"><span class="n">âœ… Competitor Benchmarking</span><span class="v">$397</span></div>
-    <div class="stk-row"><span class="n">âœ… Prioritized Action Plan</span><span class="v">$297</span></div>
-    <div class="stk-row"><span class="n">âœ… Category Rank Positioning</span><span class="v">$197</span></div>
-    <div class="stk-row"><span class="n">âœ… Keyword Visibility Check</span><span class="v">$197</span></div>
-    <div class="stk-row"><span class="n">âœ… Weekly Seller Intelligence</span><span class="v">$47/mo</span></div>
+    <div class="stk-row"><span class="n">✅ 12-Point Listing Diagnostic</span><span class="v">$497</span></div>
+    <div class="stk-row"><span class="n">✅ A–F Grades + Numerical Scores</span><span class="v">$197</span></div>
+    <div class="stk-row"><span class="n">✅ Review Sentiment Analysis</span><span class="v">$297</span></div>
+    <div class="stk-row"><span class="n">✅ Competitor Benchmarking</span><span class="v">$397</span></div>
+    <div class="stk-row"><span class="n">✅ Prioritized Action Plan</span><span class="v">$297</span></div>
+    <div class="stk-row"><span class="n">✅ Category Rank Positioning</span><span class="v">$197</span></div>
+    <div class="stk-row"><span class="n">✅ Keyword Visibility Check</span><span class="v">$197</span></div>
+    <div class="stk-row"><span class="n">✅ Weekly Seller Intelligence</span><span class="v">$47/mo</span></div>
   </div>
   <div class="stk-box"><span class="l">Total value: <span style="text-decoration:line-through;opacity:0.4">$2,126</span></span><span class="p">FREE</span></div>
-  <a href="#top" class="btn-primary" style="margin-top:32px;">Get My Free Diagnosis â†’</a>
-  <div class="stack-note">No credit card Â· No login Â· Email only Â· Results in 30 seconds</div>
+  <a href="#top" class="btn-primary" style="margin-top:32px;">Get My Free Diagnosis →</a>
+  <div class="stack-note">No credit card · No login · Email only · Results in 30 seconds</div>
 </div>
 
 <!-- PRICING -->
 <section class="section ao" id="pricing" style="text-align:center;">
   <div class="tag">Plans</div>
   <h2 class="sh">Start free. Upgrade when you're addicted.</h2>
-  <p class="sp" style="margin:0 auto 16px;">Your free report shows what's broken. Paid plans show how to fix it â€” with implementation plans, score tracking, and more.</p>
+  <p class="sp" style="margin:0 auto 16px;">Your free report shows what's broken. Paid plans show how to fix it — with implementation plans, score tracking, and more.</p>
   <div class="pricing-grid">
     <div class="price-card">
       <div class="price-tier">Free</div>
       <div class="price-amt">0 <span class="period">forever</span></div>
       <div class="price-desc">One report per email. See what's broken.</div>
       <ul class="price-features"><li>1 ASIN report (per email, ever)</li><li>All 12 categories scored</li><li>Problems identified (no fix instructions)</li><li>Weekly seller newsletter</li></ul>
-      <a href="#top" class="price-btn btn-outline">Get Free Diagnosis â†’</a>
+      <a href="#top" class="price-btn btn-outline">Get Free Diagnosis →</a>
     </div>
     <div class="price-card popular">
       <div class="price-tier">Seller</div>
       <div class="price-amt"><span class="currency">$</span>19 <span class="period">/mo</span></div>
       <div class="price-desc">For active sellers optimizing listings.</div>
       <ul class="price-features"><li>10 reports/month</li><li>Implementation plans included</li><li>Re-run tracking & score history</li><li>Competitor ASIN analysis</li><li>PDF report export</li></ul>
-      <button class="price-btn btn-fill" onclick="window.location.href='/pricing'">Start Seller Plan â†’</button>
+      <button class="price-btn btn-fill" onclick="window.location.href='/pricing'">Start Seller Plan →</button>
     </div>
     <div class="price-card">
       <div class="price-tier">Agency</div>
       <div class="price-amt"><span class="currency">$</span>49 <span class="period">/mo</span></div>
       <div class="price-desc">For sellers and agencies running more ASINs.</div>
       <ul class="price-features"><li>50 reports/month</li><li>Everything in Seller</li><li>Priority support</li><li>Perfect for multi-ASIN catalogs</li><li>Team-friendly volume</li></ul>
-      <button class="price-btn btn-fill" onclick="window.location.href='/pricing'">Start Agency Plan â†’</button>
+      <button class="price-btn btn-fill" onclick="window.location.href='/pricing'">Start Agency Plan →</button>
     </div>
     <div class="price-card">
       <div class="price-tier">Enterprise</div>
       <div class="price-amt"><span class="currency">$</span>199 <span class="period">/mo</span></div>
       <div class="price-desc">For brands and agencies at scale.</div>
-      <ul class="price-features"><li>300 reports/month</li><li style="background:linear-gradient(90deg,#EFF6FF,#DBEAFE); margin:4px -8px; padding:8px 8px; border-radius:8px; border:1px solid #93C5FD; color:var(--text-primary); font-weight:700;">ðŸ” Keyword Rank Tracking <span style="font-size:10px; font-weight:800; background:var(--blue); color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px; vertical-align:middle; letter-spacing:0.5px;">EXCLUSIVE</span></li><li>Auto Monthly Re-scans</li><li>White-label branded reports</li><li>Category intelligence</li></ul>
-      <button class="price-btn btn-outline" onclick="window.location.href='/pricing'">Start Enterprise â†’</button>
+      <ul class="price-features"><li>300 reports/month</li><li style="background:linear-gradient(90deg,#EFF6FF,#DBEAFE); margin:4px -8px; padding:8px 8px; border-radius:8px; border:1px solid #93C5FD; color:var(--text-primary); font-weight:700;">🔍 Keyword Rank Tracking <span style="font-size:10px; font-weight:800; background:var(--blue); color:#fff; padding:2px 6px; border-radius:4px; margin-left:6px; vertical-align:middle; letter-spacing:0.5px;">EXCLUSIVE</span></li><li>Auto Monthly Re-scans</li><li>White-label branded reports</li><li>Category intelligence</li></ul>
+      <button class="price-btn btn-outline" onclick="window.location.href='/pricing'">Start Enterprise →</button>
     </div>
   </div>
-  <div class="price-guarantee">ðŸ”’ <strong>30-day money-back guarantee.</strong> Cancel anytime. No contracts.</div>
+  <div class="price-guarantee">🔒 <strong>30-day money-back guarantee.</strong> Cancel anytime. No contracts.</div>
 </section>
 
 <!-- FAQ -->
@@ -909,13 +909,13 @@ footer a { color: var(--blue); text-decoration: none; }
   <div class="tag" style="text-align:center;">FAQ</div>
   <h2 class="sh" style="text-align:center;">Questions you should be asking.</h2>
   <div class="faq">
-    <div class="fq open"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Is the free report actually free? No catch?<span class="ic">+</span></div><div class="fq-a">Yes. Enter your email and ASIN, get a full 12-point diagnosis with scores across all categories and a list of every problem we find. No credit card, no login required. The free report shows you WHAT's wrong â€” our paid plans show you HOW to fix it with step-by-step implementation plans.</div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">How is this different from Helium 10 or Jungle Scout?<span class="ic">+</span></div><div class="fq-a">Those tools are for product research â€” finding what to sell. ASIN Analyzer is for listing optimization â€” making what you've already launched convert better. They find products. We fix listings. Complementary, not competitors.</div></div>
+    <div class="fq open"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Is the free report actually free? No catch?<span class="ic">+</span></div><div class="fq-a">Yes. Enter your email and ASIN, get a full 12-point diagnosis with scores across all categories and a list of every problem we find. No credit card, no login required. The free report shows you WHAT's wrong — our paid plans show you HOW to fix it with step-by-step implementation plans.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">How is this different from Helium 10 or Jungle Scout?<span class="ic">+</span></div><div class="fq-a">Those tools are for product research — finding what to sell. ASIN Analyzer is for listing optimization — making what you've already launched convert better. They find products. We fix listings. Complementary, not competitors.</div></div>
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I analyze my competitor's listing?<span class="ic">+</span></div><div class="fq-a">Absolutely. Any public ASIN works. Smart sellers run their top 5 competitors through the tool to find gaps and vulnerabilities. The Seller plan includes competitor comparison features so you can see scores side by side.</div></div>
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What do I get with the Seller plan that's not in the free report?<span class="ic">+</span></div><div class="fq-a">The free report shows you what's broken. The Seller plan ($19/mo) gives you 10 reports per month, implementation plans with step-by-step fix instructions for every issue, score tracking over time so you can see your listing improve, competitor analysis, and PDF exports. It's the difference between knowing the problem and knowing the solution.</div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What's the difference between Agency and Enterprise?<span class="ic">+</span></div><div class="fq-a">Agency ($49/mo) gives you 50 reports per month â€” same features as Seller, just more volume for bigger catalogs. Enterprise ($199/mo) gives you 300 reports plus keyword rank tracking, automatic monthly re-scans, white-label branded reports, and category intelligence data.</div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">How accurate is the data?<span class="ic">+</span></div><div class="fq-a">We pull real-time data directly from Amazon product pages â€” pricing, reviews, BSR, images, A+ content, Q&A, everything. The scoring algorithm is calibrated against top 1% seller practices.</div></div>
-    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Where do I find my ASIN?<span class="ic">+</span></div><div class="fq-a">It's the 10-character code starting with "B0" in any Amazon product URL. You'll also find it in the "Product Information" section of any listing page. You can also paste the full Amazon URL â€” we'll extract the ASIN automatically.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">What's the difference between Agency and Enterprise?<span class="ic">+</span></div><div class="fq-a">Agency ($49/mo) gives you 50 reports per month — same features as Seller, just more volume for bigger catalogs. Enterprise ($199/mo) gives you 300 reports plus keyword rank tracking, automatic monthly re-scans, white-label branded reports, and category intelligence data.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">How accurate is the data?<span class="ic">+</span></div><div class="fq-a">We pull real-time data directly from Amazon product pages — pricing, reviews, BSR, images, A+ content, Q&A, everything. The scoring algorithm is calibrated against top 1% seller practices.</div></div>
+    <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Where do I find my ASIN?<span class="ic">+</span></div><div class="fq-a">It's the 10-character code starting with "B0" in any Amazon product URL. You'll also find it in the "Product Information" section of any listing page. You can also paste the full Amazon URL — we'll extract the ASIN automatically.</div></div>
     <div class="fq"><div class="fq-q" onclick="this.parentElement.classList.toggle('open')">Can I cancel anytime?<span class="ic">+</span></div><div class="fq-a">Yes. No contracts, no commitments. Cancel in one click from your account settings. 30-day money-back guarantee on all paid plans.</div></div>
   </div>
 </section>
@@ -924,48 +924,48 @@ footer a { color: var(--blue); text-decoration: none; }
 <!-- NEWSLETTER -->
 <div class="newsletter ao">
   <div class="newsletter-text"><h3>The Listing Doctor Weekly</h3><p>Strategies and data from top 1% Amazon sellers. Every Tuesday. Free.</p></div>
-  <div class="newsletter-form"><input type="email" id="nlEmail" placeholder="Enter your email" /><button onclick="subscribeNL()">Subscribe â†’</button></div>
+  <div class="newsletter-form"><input type="email" id="nlEmail" placeholder="Enter your email" /><button onclick="subscribeNL()">Subscribe →</button></div>
 </div>
 
 <!-- FINAL CTA -->
 <section class="cta-end ao">
   <h2>Your listing has a problem.<br>We'll find it in <em>30 seconds.</em></h2>
   <p>Free. No login. No credit card. The only cost is not knowing.</p>
-  <a href="#top" class="btn-primary">Get My Free Diagnosis â†’</a>
+  <a href="#top" class="btn-primary">Get My Free Diagnosis →</a>
   <div class="cta-note">Join 14,000+ sellers who stopped guessing and started knowing.</div>
 </section>
 
 <footer>
   <div class="footer-brand">Listing Doctor</div>
-  <p>Â© 2026 ASIN Analyzer Â· A Listing Doctor Product Â· <a href="#">Privacy</a> Â· <a href="#">Terms</a></p>
+  <p>© 2026 ASIN Analyzer · A Listing Doctor Product · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
 </footer>
 
 <!-- PREVIEW RESULTS OVERLAY (Dan Kennedy open loop + Perry Belcher value-first + Brunson tripwire funnel) -->
 <div id="previewOverlay" class="preview-overlay">
   <div class="preview-container">
-    <button class="preview-close" onclick="closePreview()">âœ•</button>
+    <button class="preview-close" onclick="closePreview()">✕</button>
 
-    <!-- 1. GRADE RING â€” The hook, instant proof of value -->
+    <!-- 1. GRADE RING — The hook, instant proof of value -->
     <div id="previewGradeSection" style="text-align:center;margin-bottom:8px;">
       <div class="preview-grade-ring">
         <svg viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="42" class="ring-bg"/>
           <circle id="previewRingFill" cx="50" cy="50" r="42" class="ring-fill" stroke-dasharray="264" stroke-dashoffset="264"/>
         </svg>
-        <div class="preview-grade-letter" id="previewGradeLetter">â€”</div>
+        <div class="preview-grade-letter" id="previewGradeLetter">—</div>
       </div>
       <div class="preview-score-label">
-        Your listing scored <strong id="previewScoreNum">â€”</strong> / 100
+        Your listing scored <strong id="previewScoreNum">—</strong> / 100
       </div>
     </div>
 
-    <!-- 2. URGENCY â€” Dan Kennedy: "agitate the problem before offering the solution" -->
+    <!-- 2. URGENCY — Dan Kennedy: "agitate the problem before offering the solution" -->
     <div class="preview-urgency" id="previewUrgency">
       <div class="preview-urgency-text" id="previewUrgencyText">We found issues holding your listing back.</div>
       <div class="preview-urgency-sub">Your competitors are seeing this data too. Every day without fixes costs you sales.</div>
     </div>
 
-    <!-- 3. EMAIL GATE â€” RIGHT HERE, peak desire moment (Perry Belcher: "ask when value is proven") -->
+    <!-- 3. EMAIL GATE — RIGHT HERE, peak desire moment (Perry Belcher: "ask when value is proven") -->
     <div class="preview-email-gate">
       <div class="preview-gate-headline">Get Your Full 12-Category Report Free</div>
       <div class="preview-gate-sub">Unlock all scores, prioritized action items, and step-by-step fixes. Takes 5 seconds.</div>
@@ -983,12 +983,12 @@ footer a { color: var(--blue); text-decoration: none; }
     <!-- 4. DIVIDER -->
     <div class="preview-scores-divider"><span>Your 12-Point Diagnosis</span></div>
 
-    <!-- 5. ALL 12 CATEGORIES â€” top 5 show grades, bottom 7 show lock icons (FOMO machine) -->
+    <!-- 5. ALL 12 CATEGORIES — top 5 show grades, bottom 7 show lock icons (FOMO machine) -->
     <div class="preview-categories" id="previewCategories">
       <!-- Populated by JS: 5 with real grades + 7 with lock icons -->
     </div>
 
-    <!-- 6. BOTTOM FOMO NUDGE â€” for scrollers who didn't enter email above -->
+    <!-- 6. BOTTOM FOMO NUDGE — for scrollers who didn't enter email above -->
     <div class="preview-bottom-nudge" id="previewBottomNudge">
       <p id="previewNudgeText">7 of your scores are hidden. Some might be failing.</p>
       <a onclick="document.getElementById('previewEmailInput').focus();document.getElementById('previewEmailInput').scrollIntoView({behavior:'smooth',block:'center'});">Enter your email above to unlock all 12 &uarr;</a>
@@ -1083,14 +1083,14 @@ const costObs = new IntersectionObserver(entries => {
 const cn = document.getElementById('costCounter');
 if (cn) costObs.observe(cn);
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════
 // FUNCTIONAL LOGIC
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════
 
 let pendingASIN = '';
 let previewReportData = null;
 
-// â•â•â• The 12 scoring categories â€” first 5 shown with grades, rest locked â•â•â•
+// ═══ The 12 scoring categories — first 5 shown with grades, rest locked ═══
 // ORDER: Most actionable categories first (visible to hook them),
 // lock the ones that create the most curiosity
 const CATEGORY_ORDER = [
@@ -1175,7 +1175,7 @@ async function runPreviewAnalysis() {
       }
     }, 3000);
 
-    // Call analyze WITHOUT email â€” server should accept optional email
+    // Call analyze WITHOUT email — server should accept optional email
     const resp = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1240,7 +1240,7 @@ function showPreviewResults(report) {
   } else if (overall < 70) {
     urgencyEl.textContent = `We found ${issueCount} issues holding back your sales.`;
   } else {
-    urgencyEl.textContent = `Good start â€” but we found ${issueCount} areas costing you rankings.`;
+    urgencyEl.textContent = `Good start — but we found ${issueCount} areas costing you rankings.`;
   }
 
   // Set bottom FOMO nudge
@@ -1251,7 +1251,7 @@ function showPreviewResults(report) {
     nudgeEl.textContent = `7 category scores are hidden. You need the full picture to take action.`;
   }
 
-  // Build ALL 12 category rows â€” top 5 show grades, bottom 7 show lock
+  // Build ALL 12 category rows — top 5 show grades, bottom 7 show lock
   const container = document.getElementById('previewCategories');
   container.innerHTML = '';
 
@@ -1265,7 +1265,7 @@ function showPreviewResults(report) {
     row.className = 'preview-cat' + (isLocked ? ' locked' : '');
 
     if (isLocked) {
-      // LOCKED: Show category name but grade is hidden â€” creates open loop (Dan Kennedy)
+      // LOCKED: Show category name but grade is hidden — creates open loop (Dan Kennedy)
       row.innerHTML = `
         <div class="preview-cat-grade" title="Enter email to reveal">&#128274;</div>
         <div class="preview-cat-name">${cat.name}</div>
@@ -1276,7 +1276,7 @@ function showPreviewResults(report) {
         row.querySelector('.preview-cat-bar-fill').style.width = Math.round(Math.random() * 30 + 15) + '%';
       }, 400 + i * 80);
     } else {
-      // VISIBLE: Full grade, color, bar â€” prove value (Gary Vee: jab jab jab)
+      // VISIBLE: Full grade, color, bar — prove value (Gary Vee: jab jab jab)
       row.innerHTML = `
         <div class="preview-cat-grade" style="background:${catBg};color:${catColor};">${cat.grade}</div>
         <div class="preview-cat-name">${cat.name}</div>
@@ -1300,7 +1300,7 @@ function showPreviewResults(report) {
 }
 
 function buildCategoryList(report) {
-  // Map display category names â†’ backend score keys (all 0-100 scale)
+  // Map display category names → backend score keys (all 0-100 scale)
   const scores = report.scores || {};
   const mapping = {
     'Title Optimization':      scores.title,
@@ -1371,7 +1371,7 @@ async function unlockFullReport() {
     await fetch('/api/subscribe', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, asin: pendingASIN, source: 'preview-gate', reportId: previewReportData?.id, grade: previewReportData?.grade, overall: previewReportData?.overall }),
+      body: JSON.stringify({ email, asin: pendingASIN, source: 'preview-gate' }),
     });
   } catch (e) { /* non-blocking */ }
 
@@ -1402,7 +1402,7 @@ async function subscribeNL() {
       body: JSON.stringify({ email }),
     });
     input.value = '';
-    input.placeholder = 'âœ“ Subscribed!';
+    input.placeholder = '✓ Subscribed!';
     input.style.borderColor = '#10B981';
   } catch (e) {
     input.placeholder = 'Something went wrong';

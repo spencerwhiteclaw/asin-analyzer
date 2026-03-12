@@ -358,6 +358,7 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 
 <script>
 const params = new URLSearchParams(window.location.search);
+let analysisId = params.get('analysis_id') || params.get('analysis') || sessionStorage.getItem('analysis_id');
 
 // ═══ FUNNEL RESILIENCE (Sprint 0.5) ═══
 // Read analysis_id from URL params OR sessionStorage. If we got it from URL
@@ -401,14 +402,11 @@ async function getAnalysisContext() {
   return analysisId;
 }
 
-// Initialize — get analysisId with fallback
-let analysisId = params.get('analysis_id') || params.get('analysis') || sessionStorage.getItem('analysis_id');
-
+// Initialize with funnel resilience
 (async () => {
   analysisId = await getAnalysisContext();
-  if (!analysisId) return;
 
-  // Now populate the grade recap + title preview from sessionStorage
+  // Try to get report context for the grade recap + title preview
   const stored = sessionStorage.getItem('asinOffer');
   if (stored) {
     try {
@@ -424,6 +422,7 @@ let analysisId = params.get('analysis_id') || params.get('analysis') || sessionS
         </div>
       `;
 
+      // Show current title if available
       if (data.title) {
         document.getElementById('currentTitle').textContent = data.title;
       } else {
@@ -478,8 +477,7 @@ async function handlePurchase() {
 function handleSkip(e) {
   e.preventDefault();
   sessionStorage.setItem('purchasePath', 'declined_tripwire');
-  // Pass analysis_id as query param for funnel resilience
-  window.location.href = `/downsell?analysis_id=${analysisId || ''}`;
+  window.location.href = `/downsell?analysis=${analysisId || ''}`;
 }
 </script>
 </body>

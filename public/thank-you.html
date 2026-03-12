@@ -364,22 +364,40 @@ nav{display:flex;align-items:center;justify-content:space-between;max-width:800p
 
 <script>
 const params = new URLSearchParams(window.location.search);
-const sessionId = params.get('session_id');
-const purchasePath = sessionStorage.getItem('purchasePath') || '';
+let analysisId = params.get('analysis_id') || params.get('analysis') || sessionStorage.getItem('analysis_id');
 
 // ═══ FUNNEL RESILIENCE (Sprint 0.5) ═══
+// Read analysis_id from URL params OR sessionStorage. If we got it from URL
+// but sessionStorage is empty, fetch from API and hydrate. This ensures the
+// funnel works even if the user closed a tab, opened from email, or is on mobile.
 async function getAnalysisContext() {
   const urlId = params.get('analysis_id') || params.get('analysis');
   const storedId = sessionStorage.getItem('analysis_id');
-  const id = urlId || storedId;
+  const analysisId = urlId || storedId;
 
-  if (id) sessionStorage.setItem('analysis_id', id);
+  if (!analysisId) {
+    // No analysis context available — redirect to homepage
+    window.location.href = '/';
+    return null;
+  }
 
-  if (!sessionStorage.getItem('asinEmail') && id) {
+  // Persist analysis_id to sessionStorage for downstream pages
+  sessionStorage.setItem('analysis_id', analysisId);
+
+  // If sessionStorage is missing the analysis data, fetch it from the API
+  if (!sessionStorage.getItem('asinOffer') || !sessionStorage.getItem('asinEmail')) {
     try {
-      const resp = await fetch(`/api/report/${id}`);
+      const resp = await fetch(`/api/report/${analysisId}`);
       if (resp.ok) {
         const data = await resp.json();
+        // Hydrate sessionStorage with the data downstream pages expect
+        sessionStorage.setItem('asinOffer', JSON.stringify({
+          asin: data.asin,
+          overall: data.overall_score || data.overallScore,
+          grade: data.overall_grade || data.overallGrade,
+          title: data.product_title || data.title || '',
+          actionCount: data.action_count || data.actionCount || 0,
+        }));
         if (data.email) sessionStorage.setItem('asinEmail', data.email);
       }
     } catch (e) {
@@ -387,19 +405,15 @@ async function getAnalysisContext() {
     }
   }
 
-  return id;
+  return analysisId;
 }
 
-let analysisId = params.get('analysis_id') || params.get('analysis') || sessionStorage.getItem('analysis_id');
-let email = sessionStorage.getItem('asinEmail') || '';
-
-// Hydrate context then proceed
+// Initialize with funnel resilience
 (async () => {
   analysisId = await getAnalysisContext();
-  email = sessionStorage.getItem('asinEmail') || '';
-  // Re-run plan loading after context is ready
-  loadPlan();
-})();
+  const sessionId = params.get('session_id');
+  const email = sessionStorage.getItem('asinEmail') || '';
+  const purchasePath = sessionStorage.getItem('purchasePath') || '';
 
 // Track purchase
 if(typeof gtag==='function')gtag('event','purchase',{transaction_id:sessionId||'unknown',value:7,currency:'USD'});
@@ -538,8 +552,7 @@ async function loadPlan() {
   }
 }
 
-// loadPlan() is called inside the async getAnalysisContext() init above
-// to ensure email/analysisId are hydrated before the API call fires.
+loadPlan();
 
 function copyRef() {
   const input = document.getElementById('refLink');
@@ -553,6 +566,7 @@ function copyRef() {
 // Don't clean up session storage yet — they might still upgrade
 // sessionStorage.removeItem('purchasePath');
 // sessionStorage.removeItem('asinOffer');
+})();
 </script>
 </body>
 </html>

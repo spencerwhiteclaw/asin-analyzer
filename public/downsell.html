@@ -91,25 +91,40 @@ nav{display:flex;align-items:center;justify-content:center;max-width:800px;margi
 
 <script>
 const params = new URLSearchParams(window.location.search);
+let analysisId = params.get('analysis_id') || params.get('analysis') || sessionStorage.getItem('analysis_id');
 
 // ═══ FUNNEL RESILIENCE (Sprint 0.5) ═══
+// Read analysis_id from URL params OR sessionStorage. If we got it from URL
+// but sessionStorage is empty, fetch from API and hydrate. This ensures the
+// funnel works even if the user closed a tab, opened from email, or is on mobile.
 async function getAnalysisContext() {
   const urlId = params.get('analysis_id') || params.get('analysis');
   const storedId = sessionStorage.getItem('analysis_id');
   const analysisId = urlId || storedId;
 
   if (!analysisId) {
+    // No analysis context available — redirect to homepage
     window.location.href = '/';
     return null;
   }
 
+  // Persist analysis_id to sessionStorage for downstream pages
   sessionStorage.setItem('analysis_id', analysisId);
 
-  if (!sessionStorage.getItem('asinEmail')) {
+  // If sessionStorage is missing the analysis data, fetch it from the API
+  if (!sessionStorage.getItem('asinOffer') || !sessionStorage.getItem('asinEmail')) {
     try {
       const resp = await fetch(`/api/report/${analysisId}`);
       if (resp.ok) {
         const data = await resp.json();
+        // Hydrate sessionStorage with the data downstream pages expect
+        sessionStorage.setItem('asinOffer', JSON.stringify({
+          asin: data.asin,
+          overall: data.overall_score || data.overallScore,
+          grade: data.overall_grade || data.overallGrade,
+          title: data.product_title || data.title || '',
+          actionCount: data.action_count || data.actionCount || 0,
+        }));
         if (data.email) sessionStorage.setItem('asinEmail', data.email);
       }
     } catch (e) {
@@ -120,11 +135,9 @@ async function getAnalysisContext() {
   return analysisId;
 }
 
-let analysisId = params.get('analysis_id') || params.get('analysis') || sessionStorage.getItem('analysis_id');
-
+// Initialize with funnel resilience
 (async () => {
   analysisId = await getAnalysisContext();
-})();
 
 async function handleDownsell() {
   const btn = document.getElementById('buyBtn');
@@ -166,6 +179,7 @@ function handleSkipAll(e) {
   sessionStorage.removeItem('purchasePath');
   window.location.href = '/';
 }
+})();
 </script>
 </body>
 </html>

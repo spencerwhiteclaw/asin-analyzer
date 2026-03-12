@@ -380,10 +380,55 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 </div>
 
 <script>
+// ═══ FUNNEL RESILIENCE (Sprint 0.5) ═══
+// Read analysis_id from URL params OR sessionStorage. If we got it from URL
+// but sessionStorage is empty, fetch from API and hydrate. This ensures the
+// funnel works even if the user closed a tab, opened from email, or is on mobile.
+async function getAnalysisContext() {
+  const params = new URLSearchParams(window.location.search);
+  const urlId = params.get('analysis_id') || params.get('analysis');
+  const storedId = sessionStorage.getItem('analysis_id');
+  const analysisId = urlId || storedId;
+
+  if (!analysisId) {
+    // No analysis context available — just proceed to cold path
+    return null;
+  }
+
+  // Persist analysis_id to sessionStorage for downstream pages
+  sessionStorage.setItem('analysis_id', analysisId);
+
+  // If sessionStorage is missing the analysis data, fetch it from the API
+  if (!sessionStorage.getItem('asinOffer') || !sessionStorage.getItem('asinEmail')) {
+    try {
+      const resp = await fetch(`/api/report/${analysisId}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        // Hydrate sessionStorage with the data downstream pages expect
+        sessionStorage.setItem('asinOffer', JSON.stringify({
+          asin: data.asin,
+          overall: data.overall_score || data.overallScore,
+          grade: data.overall_grade || data.overallGrade,
+          title: data.product_title || data.title || '',
+          actionCount: data.action_count || data.actionCount || 0,
+        }));
+        if (data.email) sessionStorage.setItem('asinEmail', data.email);
+      }
+    } catch (e) {
+      console.error('Failed to hydrate analysis data:', e);
+    }
+  }
+
+  return analysisId;
+}
+
 // ═══ DUAL PATH DETECTION ═══
-document.addEventListener('DOMContentLoaded', () => {
-  const offer = sessionStorage.getItem('asinOffer');
-  const report = sessionStorage.getItem('asinReport');
+(async () => {
+  await getAnalysisContext();
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const offer = sessionStorage.getItem('asinOffer');
+    const report = sessionStorage.getItem('asinReport');
 
   if (offer || report) {
     document.getElementById('warmHero').classList.add('active');
@@ -499,6 +544,7 @@ async function checkout(plan) {
     alert('Connection error. Please try again.');
   }
 }
+})();
 </script>
 </body>
 </html>
