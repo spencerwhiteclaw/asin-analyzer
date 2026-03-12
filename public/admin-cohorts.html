@@ -364,7 +364,7 @@
     <script>
         // Auth check
         async function checkAuth() {
-            const token = localStorage.getItem('supabase_token');
+            const token = localStorage.getItem('sb_access_token');
             if (!token) {
                 window.location.href = '/admin-login';
                 return false;
@@ -393,7 +393,7 @@
 
         // Fetch cohort retention data
         async function fetchCohortData() {
-            const token = localStorage.getItem('supabase_token');
+            const token = localStorage.getItem('sb_access_token');
             try {
                 const res = await fetch('/api/admin/cohort-retention', {
                     headers: { 'Authorization': `Bearer ${token}` }

@@ -935,9 +935,9 @@
         async function initializeAuth() {
             try {
                 // Get token from localStorage (set by Supabase auth in main app)
-                const token = localStorage.getItem('supabase_auth_token');
+                const token = localStorage.getItem('sb_access_token');
                 if (!token) {
-                    window.location.href = '/auth';
+                    window.location.href = '/login';
                     return;
                 }
                 currentToken = token;

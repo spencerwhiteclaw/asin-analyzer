@@ -384,7 +384,7 @@
     <script>
         // Auth check
         async function checkAuth() {
-            const token = localStorage.getItem('supabase_token');
+            const token = localStorage.getItem('sb_access_token');
             if (!token) {
                 window.location.href = '/admin-login';
                 return false;
@@ -432,7 +432,7 @@
 
         // Fetch financial data
         async function fetchFinancialData() {
-            const token = localStorage.getItem('supabase_token');
+            const token = localStorage.getItem('sb_access_token');
             try {
                 const months = currentMonths === 0 ? 999 : currentMonths;
                 const res = await fetch(`/api/admin/financial-summary?months=${months}`, {
