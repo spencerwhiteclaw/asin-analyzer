@@ -36,6 +36,27 @@ router.get('/health', (req, res) => {
 });
 
 // ============================================================================
+
+// GET /check-access - Simple auth check for sub-pages
+router.get('/check-access', requireAuth, requireAdmin, (req, res) => {
+  res.json({ ok: true, role: req.adminRole });
+});
+
+// GET /user - Return current admin user info
+router.get('/user', requireAuth, requireAdmin, async (req, res) => {
+  try {
+    res.json({
+      id: req.user.id,
+      email: req.user.email,
+      name: req.user.name,
+      role: req.adminRole,
+      permissions: req.adminPermissions,
+    });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to get user info' });
+  }
+});
+
 // 2. GET /dashboard - Main dashboard metrics
 // ============================================================================
 router.get('/dashboard', requireAuth, requireAdmin, async (req, res) => {
@@ -652,14 +673,14 @@ router.post('/customer/:userId/credit', requireAuth, requireAdmin, async (req, r
 
     // Insert into customer_credits
     await db.query(
-      `INSERT INTO customer_credits (user_id, credit_type, amount, reason, admin_id, created_at)
+      `INSERT INTO customer_credits (user_id, credit_type, amount, reason, granted_by, created_at)
        VALUES ($1, $2, $3, $4, $5, NOW())`,
       [userId, credit_type, parseInt(amount), reason, req.user.id]
     );
 
     // Log to admin_activity_log
     await db.query(
-      `INSERT INTO admin_activity_log (admin_id, user_id, action, details, created_at)
+      `INSERT INTO admin_activity_log (admin_user_id, target_user_id, action, details, created_at)
        VALUES ($1, $2, $3, $4, NOW())`,
       [req.user.id, userId, 'granted_credit', JSON.stringify({ credit_type, amount, reason })]
     );
@@ -714,13 +735,13 @@ router.post('/customer/:userId/change-tier', requireAuth, requireAdmin, async (r
 
     // Update user_profiles
     await db.query(
-      'UPDATE user_profiles SET subscription_tier = $1, updated_at = NOW() WHERE id = $2',
+      'UPDATE user_profiles SET subscription_tier = $1 WHERE id = $2',
       [new_tier, userId]
     );
 
     // Log to admin_activity_log
     await db.query(
-      `INSERT INTO admin_activity_log (admin_id, user_id, action, details, created_at)
+      `INSERT INTO admin_activity_log (admin_user_id, target_user_id, action, details, created_at)
        VALUES ($1, $2, $3, $4, NOW())`,
       [req.user.id, userId, 'tier_change', JSON.stringify({ old_tier: user.subscription_tier, new_tier, prorate })]
     );
@@ -758,13 +779,13 @@ router.post('/customer/:userId/note', requireAuth, requireAdmin, async (req, res
 
     // Update user notes
     await db.query(
-      'UPDATE user_profiles SET notes = $1, updated_at = NOW() WHERE id = $2',
+      'UPDATE user_profiles SET notes = $1 WHERE id = $2',
       [updatedNotes, userId]
     );
 
     // Log to admin_activity_log
     await db.query(
-      `INSERT INTO admin_activity_log (admin_id, user_id, action, details, created_at)
+      `INSERT INTO admin_activity_log (admin_user_id, target_user_id, action, details, created_at)
        VALUES ($1, $2, $3, $4, NOW())`,
       [req.user.id, userId, 'added_note', JSON.stringify({ note })]
     );
@@ -879,7 +900,7 @@ router.get('/export/:type', requireAuth, requireAdmin, ownerOnly, async (req, re
 
     // Log export
     await db.query(
-      `INSERT INTO admin_activity_log (admin_id, action, details, created_at)
+      `INSERT INTO admin_activity_log (admin_user_id, action, details, created_at)
        VALUES ($1, $2, $3, NOW())`,
       [req.user.id, 'export', JSON.stringify({ type: exportType, start_date: startDate, end_date: endDate })]
     );
@@ -1068,7 +1089,7 @@ router.post('/sync-rewardful', requireAuth, requireAdmin, ownerOnly, async (req,
 
     // Log action
     await db.query(
-      `INSERT INTO admin_activity_log (admin_id, action, details, created_at)
+      `INSERT INTO admin_activity_log (admin_user_id, action, details, created_at)
        VALUES ($1, $2, $3, NOW())`,
       [req.user.id, 'sync_rewardful', JSON.stringify({ manual: true })]
     );
@@ -1107,20 +1128,20 @@ router.post('/admin-users', requireAuth, requireAdmin, ownerOnly, async (req, re
     if (existingResult.rows.length > 0) {
       // Update existing
       await db.query(
-        'UPDATE admin_users SET role = $1, updated_at = NOW() WHERE user_id = $2',
+        'UPDATE admin_users SET role = $1 WHERE user_id = $2',
         [role, user_id]
       );
     } else {
       // Insert new
       await db.query(
-        'INSERT INTO admin_users (user_id, role, created_at, updated_at) VALUES ($1, $2, NOW(), NOW())',
+        'INSERT INTO admin_users (user_id, role, created_at) VALUES ($1, $2, NOW())',
         [user_id, role]
       );
     }
 
     // Log action
     await db.query(
-      `INSERT INTO admin_activity_log (admin_id, user_id, action, details, created_at)
+      `INSERT INTO admin_activity_log (admin_user_id, target_user_id, action, details, created_at)
        VALUES ($1, $2, $3, $4, NOW())`,
       [req.user.id, user_id, 'admin_role_change', JSON.stringify({ role })]
     );
