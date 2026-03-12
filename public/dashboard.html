@@ -136,7 +136,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-w
     <a href="/dashboard" class="active">Dashboard</a>
     <a href="/dashboard/history">History</a>
     <a href="/dashboard/account">Account</a>
-    <a href="/admin" id="adminNavLink" style="display:none;color:#3B82F6;font-weight:600;">⚙ Admin</a>
     <button class="avatar-btn" id="avatarBtn" onclick="window.location.href='/dashboard/account'">M</button>
   </div>
 </div>
@@ -599,18 +598,6 @@ function quickAnalyzeAsin(asin) {
 loadDashboard();
 loadSavedAsins();
 
-// Show Admin link if user is admin
-(async function checkAdmin() {
-  const token = localStorage.getItem('sb_access_token');
-  if (!token) return;
-  try {
-    const r = await fetch('/api/admin/health', { headers: { 'Authorization': 'Bearer ' + token } });
-    if (r.ok) {
-      const link = document.getElementById('adminNavLink');
-      if (link) link.style.display = '';
-    }
-  } catch(e) {}
-})();
 </script>
 </body>
 </html>
