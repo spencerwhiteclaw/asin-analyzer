@@ -759,13 +759,11 @@
         }
 
         // Get auth token
-        async function getToken() {
-            try {
-                const { data: { session } } = await supabaseClient.auth.getSession();
-                if (!session) {
-                    window.location.href = '/login';
-                    return null;
-                }
+        function getToken() {
+            const token = localStorage.getItem('sb_access_token');
+            if (!token) { window.location.href = '/login'; return null; }
+            return token;
+        }
                 return session.access_token;
             } catch (error) {
                 console.error('Failed to get session:', error);
