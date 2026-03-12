@@ -661,12 +661,11 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzcGVhbmVhbWN0aGZ1aWd5b291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NDM4MjMsImV4cCI6MjA4ODUxOTgyM30.rniJ85z6ndbF5Ukp00YOo1vrqFpZAi-AkEpZHj4te2c';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        async function getToken() {
-            const { data: { session } } = await sb.auth.getSession();
-            if (!session) {
-                window.location.href = '/login';
-                return null;
-            }
+        function getToken() {
+const token = localStorage.getItem('sb_access_token');
+if (!token) { window.location.href = '/login'; return null; }
+return token;
+}
             return session.access_token;
         }
 
