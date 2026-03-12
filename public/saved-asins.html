@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved ASINs - ASIN Analyzer</title>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-XRNTK9YM1L");</script>
+<!-- FB Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","938316492034344");fbq("track","PageView");</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: #0a0e17;
+            color: #f9fafb;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #111827;
+            border-bottom: 1px solid #1f2937;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f59e0b;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #f59e0b;
+        }
+
+        .nav-links a.active {
+            color: #f59e0b;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #f9fafb;
+        }
+
+        .subtitle {
+            color: #9ca3af;
+            margin-bottom: 2rem;
+        }
+
+        /* Add ASIN section */
+        .add-asin-section {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .add-asin-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .add-asin-form {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #f9fafb;
+        }
+
+        .form-group input {
+            padding: 0.75rem 1rem;
+            background-color: #0a0e17;
+            border: 1px solid #1f2937;
+            color: #f9fafb;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input::placeholder {
+            color: #6b7280;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background-color: #f59e0b;
+            color: #0a0e17;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background-color 0.2s;
+            height: fit-content;
+        }
+
+        .btn:hover {
+            background-color: #f59e0b;
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .form-error {
+            color: #fca5a5;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Tier limit */
+        .tier-limit {
+            background-color: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fcd34d;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* ASIN grid */
+        .saved-asins-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .asin-card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: all 0.2s;
+        }
+
+        .asin-card:hover {
+            border-color: #f59e0b;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.1);
+        }
+
+        .asin-code {
+            font-family: monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .asin-nickname {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .asin-nickname-text {
+            flex: 1;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #f9fafb;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+        }
+
+        .asin-nickname-text:hover {
+            background-color: #1f2937;
+        }
+
+        .asin-nickname-text.editing {
+            padding: 0;
+        }
+
+        .asin-nickname-input {
+            flex: 1;
+            padding: 0.5rem;
+            background-color: #0a0e17;
+            border: 1px solid #f59e0b;
+            color: #f9fafb;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+
+        .asin-nickname-input:focus {
+            outline: none;
+        }
+
+        .edit-btn,
+        .save-btn,
+        .cancel-btn {
+            padding: 0.25rem 0.5rem;
+            background: none;
+            border: none;
+            color: #f59e0b;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .edit-btn:hover,
+        .save-btn:hover {
+            color: #fbbf24;
+        }
+
+        .cancel-btn:hover {
+            color: #ef4444;
+        }
+
+        /* Stats row */
+        .asin-stats {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem 0;
+            border-top: 1px solid #1f2937;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .stat {
+            flex: 1;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #f9fafb;
+        }
+
+        /* Score badge */
+        .score-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background-color: #1f2937;
+            border-radius: 0.5rem;
+        }
+
+        .grade-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #0a0e17;
+        }
+
+        .grade-A {
+            background-color: #22c55e;
+        }
+
+        .grade-B {
+            background-color: #3b82f6;
+        }
+
+        .grade-C {
+            background-color: #f59e0b;
+        }
+
+        .grade-D {
+            background-color: #ef4444;
+        }
+
+        .grade-F {
+            background-color: #dc2626;
+        }
+
+        .score-info {
+            flex: 1;
+        }
+
+        .score-text {
+            font-weight: 700;
+            color: #f9fafb;
+            font-size: 1.1rem;
+        }
+
+        .score-label {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        /* Sparkline */
+        .sparkline-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 0.25rem;
+            height: 40px;
+            padding: 0.5rem 0;
+        }
+
+        .sparkline-bar {
+            flex: 1;
+            background-color: #f59e0b;
+            border-radius: 0.25rem;
+            min-height: 2px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .sparkline-bar:hover {
+            opacity: 1;
+        }
+
+        .sparkline-label {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-align: center;
+            margin-top: 0.25rem;
+        }
+
+        /* Actions */
+        .asin-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1rem;
+            background-color: #1f2937;
+            color: #f9fafb;
+            border: 1px solid #374151;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .action-btn:hover {
+            background-color: #374151;
+            border-color: #f59e0b;
+        }
+
+        .action-btn.analyze {
+            background-color: #f59e0b;
+            color: #0a0e17;
+            border: none;
+            font-weight: 600;
+        }
+
+        .action-btn.analyze:hover {
+            opacity: 0.9;
+            background-color: #f59e0b;
+        }
+
+        .action-btn.remove {
+            color: #ef4444;
+        }
+
+        .action-btn.remove:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-text {
+            color: #9ca3af;
+            margin-bottom: 0;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Loading and error states */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #9ca3af;
+        }
+
+        .error-message {
+            background-color: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .success-message {
+            background-color: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .add-asin-form {
+                flex-direction: column;
+            }
+
+            .form-group {
+                min-width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .asin-stats {
+                flex-wrap: wrap;
+            }
+
+            .asin-actions {
+                flex-direction: row;
+            }
+
+            .action-btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="nav-logo">ASIN Analyzer</a>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/archive">Archive</a></li>
+            <li><a href="/saved-asins" class="active">Saved ASINs</a></li>
+            <li><a href="/dashboard/account">Account</a></li>
+            <li><a href="#" id="logout-link">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container">
+        <h1>Saved ASINs</h1>
+        <p class="subtitle">Track and manage your saved ASINs for quick analysis and monitoring</p>
+
+        <!-- Add ASIN section -->
+        <div class="add-asin-section">
+            <h2 class="add-asin-title">Add New ASIN</h2>
+            <div class="add-asin-form" id="add-asin-form">
+                <div class="form-group">
+                    <label for="asin-input">ASIN Code</label>
+                    <input
+                        type="text"
+                        id="asin-input"
+                        placeholder="e.g., B0C1Z8F5K2"
+                        autocomplete="off"
+                        maxlength="10"
+                    >
+                    <div id="asin-error" class="form-error" style="display: none;"></div>
+                </div>
+                <div class="form-group">
+                    <label for="nickname-input">Nickname (optional)</label>
+                    <input
+                        type="text"
+                        id="nickname-input"
+                        placeholder="e.g., Best Seller Product"
+                        maxlength="100"
+                    >
+                </div>
+                <button type="submit" class="btn" id="add-btn">Add ASIN</button>
+            </div>
+        </div>
+
+        <!-- Tier limit -->
+        <div class="tier-limit" id="tier-limit"></div>
+
+        <!-- Error message -->
+        <div id="error-message"></div>
+
+        <!-- Success message -->
+        <div id="success-message"></div>
+
+        <!-- Loading state -->
+        <div id="loading" class="loading" style="display: none;">Loading saved ASINs...</div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">💾</div>
+            <h2 class="empty-state-title">No saved ASINs yet</h2>
+            <p class="empty-state-text">Save ASINs to track their scores over time and quickly re-analyze them whenever you need.</p>
+        </div>
+
+        <!-- ASIN grid -->
+        <div class="saved-asins-grid" id="asins-grid"></div>
+    </div>
+
+    <!-- Supabase and auth -->
+    <script>
+        // Supabase initialization
+        const SUPABASE_URL = 'https://rspeaneamcthfuigyoou.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzcGVhbmVhbWN0aGZ1aWd5b291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NDM4MjMsImV4cCI6MjA4ODUxOTgyM30.rniJ85z6ndbF5Ukp00YOo1vrqFpZAi-AkEpZHj4te2c';
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function getToken() {
+            const { data: { session } } = await sb.auth.getSession();
+            if (!session) {
+                window.location.href = '/login';
+                return null;
+            }
+            return session.access_token;
+        }
+
+        // State
+        let savedASINs = [];
+        let userTier = 'Free';
+        const tierLimits = {
+            'Free': 0,
+            'Seller': 5,
+            'Agency': 25,
+            'Enterprise': Infinity
+        };
+        let editingAsin = null;
+
+        // Initialize
+        async function init() {
+            const token = await getToken();
+            if (!token) return;
+
+            await loadUserTier();
+            await loadSavedASINs();
+            attachEventListeners();
+        }
+
+        // Load user tier
+        async function loadUserTier() {
+            const token = await getToken();
+            if (!token) return;
+
+            try {
+                const response = await fetch('/api/user-tier', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    userTier = data.tier || 'Free';
+                }
+            } catch (error) {
+                console.error('Error loading user tier:', error);
+            }
+
+            updateTierLimit();
+        }
+
+        // Update tier limit display
+        function updateTierLimit() {
+            const limit = tierLimits[userTier];
+            const current = savedASINs.length;
+            const tierLimitEl = document.getElementById('tier-limit');
+
+            if (limit === Infinity) {
+                tierLimitEl.textContent = `You have ${current} saved ASINs. Enterprise plan: unlimited storage.`;
+            } else {
+                tierLimitEl.textContent = `You have ${current} of ${limit} saved ASINs. Upgrade your plan to save more.`;
+            }
+
+            // Disable add button if at limit
+            const addBtn = document.getElementById('add-btn');
+            if (current >= limit && limit !== Infinity) {
+                addBtn.disabled = true;
+                document.getElementById('asin-input').disabled = true;
+            } else {
+                addBtn.disabled = false;
+                document.getElementById('asin-input').disabled = false;
+            }
+        }
+
+        // Load saved ASINs
+        async function loadSavedASINs() {
+            const token = await getToken();
+            if (!token) return;
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('asins-grid').innerHTML = '';
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('error-message').innerHTML = '';
+
+            try {
+                const response = await fetch('/api/my-saved-asins', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                savedASINs = data.asins || [];
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (savedASINs.length === 0) {
+                    document.getElementById('empty-state').style.display = 'block';
+                } else {
+                    renderASINs(savedASINs);
+                }
+
+                updateTierLimit();
+            } catch (error) {
+                console.error('Error loading saved ASINs:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-message').innerHTML = `
+                    <div class="error-message">
+                        Error loading saved ASINs. Please try again later.
+                    </div>
+                `;
+            }
+        }
+
+        // Render ASINs
+        function renderASINs(asins) {
+            const grid = document.getElementById('asins-grid');
+            grid.innerHTML = '';
+
+            asins.forEach(asin => {
+                const card = createASINCard(asin);
+                grid.appendChild(card);
+            });
+        }
+
+        // Create ASIN card
+        function createASINCard(asin) {
+            const card = document.createElement('div');
+            card.className = 'asin-card';
+
+            const grade = getGradeFromScore(asin.latest_score || 0);
+            const gradeClass = `grade-${grade.letter}`;
+            const lastAnalyzed = formatDate(asin.last_analyzed_at);
+            const totalCount = asin.total_analyses || 0;
+
+            // Create sparkline
+            const scores = asin.score_history || [];
+            const sparklineHTML = scores.length > 0
+                ? scores.map((score, i) => {
+                    const height = Math.max(5, (score / 100) * 35);
+                    return `<div class="sparkline-bar" style="height: ${height}px;" title="${score}"></div>`;
+                }).join('')
+                : '<p style="color: #6b7280; font-size: 0.9rem;">No history yet</p>';
+
+            card.innerHTML = `
+                <div class="asin-code">${escapeHtml(asin.asin)}</div>
+
+                <div class="asin-nickname">
+                    <span class="asin-nickname-text" data-asin="${escapeHtml(asin.asin)}" title="Click to edit">
+                        ${asin.nickname ? escapeHtml(asin.nickname) : '(No nickname)'}
+                    </span>
+                </div>
+
+                <div class="asin-stats">
+                    <div class="stat">
+                        <div class="stat-label">Last Score</div>
+                        <div class="stat-value">${asin.latest_score || 'N/A'}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Last Analyzed</div>
+                        <div class="stat-value" style="font-size: 0.9rem;">${lastAnalyzed}</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Total Analyses</div>
+                        <div class="stat-value">${totalCount}</div>
+                    </div>
+                </div>
+
+                ${asin.latest_score ? `
+                    <div class="score-badge">
+                        <div class="grade-circle ${gradeClass}">${grade.letter}</div>
+                        <div class="score-info">
+                            <div class="score-text">${asin.latest_score}/100</div>
+                            <div class="score-label">${grade.label}</div>
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${scores.length > 0 ? `
+                    <div>
+                        <div style="font-size: 0.85rem; color: #9ca3af; margin-bottom: 0.5rem;">Score history (last 5)</div>
+                        <div class="sparkline-container">
+                            ${sparklineHTML}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="asin-actions">
+                    <button class="action-btn analyze" data-asin="${escapeHtml(asin.asin)}">Re-Analyze Now</button>
+                    <button class="action-btn" data-asin="${escapeHtml(asin.asin)}" data-action="history">View History</button>
+                    <button class="action-btn remove" data-asin="${escapeHtml(asin.asin)}" data-action="remove">Remove</button>
+                </div>
+            `;
+
+            // Nickname editing
+            const nicknameText = card.querySelector('.asin-nickname-text');
+            nicknameText.addEventListener('click', () => {
+                startEditingNickname(asin.asin, card);
+            });
+
+            // Action buttons
+            card.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('click', handleActionButton);
+            });
+
+            return card;
+        }
+
+        // Start editing nickname
+        function startEditingNickname(asinCode, card) {
+            const nicknameText = card.querySelector('.asin-nickname-text');
+            const currentNickname = nicknameText.textContent === '(No nickname)' ? '' : nicknameText.textContent;
+
+            nicknameText.style.display = 'none';
+            nicknameText.classList.add('editing');
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'asin-nickname-input';
+            input.value = currentNickname;
+            input.maxLength = '100';
+
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'save-btn';
+            saveBtn.textContent = 'Save';
+            saveBtn.addEventListener('click', async () => {
+                await saveNickname(asinCode, input.value);
+                stopEditingNickname(card);
+            });
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'cancel-btn';
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.addEventListener('click', () => {
+                stopEditingNickname(card);
+            });
+
+            const nicknameContainer = card.querySelector('.asin-nickname');
+            nicknameContainer.innerHTML = '';
+            nicknameContainer.appendChild(input);
+            nicknameContainer.appendChild(saveBtn);
+            nicknameContainer.appendChild(cancelBtn);
+
+            input.focus();
+            input.select();
+        }
+
+        // Stop editing nickname
+        function stopEditingNickname(card) {
+            const nicknameContainer = card.querySelector('.asin-nickname');
+            const nicknameText = card.querySelector('.asin-nickname-text');
+            nicknameText.classList.remove('editing');
+            nicknameContainer.innerHTML = '';
+            nicknameContainer.appendChild(nicknameText);
+            nicknameText.style.display = '';
+        }
+
+        // Save nickname
+        async function saveNickname(asinCode, nickname) {
+            const token = await getToken();
+            if (!token) return;
+
+            try {
+                const response = await fetch(`/api/saved-asins/${asinCode}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nickname: nickname || null })
+                });
+
+                if (response.ok) {
+                    const asin = savedASINs.find(a => a.asin === asinCode);
+                    if (asin) {
+                        asin.nickname = nickname || null;
+                    }
+                    const nicknameText = document.querySelector(`[data-asin="${escapeHtml(asinCode)}"]`);
+                    if (nicknameText) {
+                        nicknameText.textContent = nickname || '(No nickname)';
+                    }
+                } else {
+                    showError('Failed to update nickname');
+                }
+            } catch (error) {
+                console.error('Error saving nickname:', error);
+                showError('Error saving nickname');
+            }
+        }
+
+        // Handle action buttons
+        function handleActionButton(e) {
+            const asin = e.target.dataset.asin;
+            const action = e.target.dataset.action;
+
+            if (e.target.classList.contains('analyze')) {
+                window.location.href = `/?asin=${asin}`;
+            } else if (action === 'history') {
+                window.location.href = `/archive?search=${asin}`;
+            } else if (action === 'remove') {
+                if (confirm(`Remove ASIN ${asin}?`)) {
+                    removeASIN(asin);
+                }
+            }
+        }
+
+        // Remove ASIN
+        async function removeASIN(asinCode) {
+            const token = await getToken();
+            if (!token) return;
+
+            try {
+                const response = await fetch(`/api/saved-asins/${asinCode}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    savedASINs = savedASINs.filter(a => a.asin !== asinCode);
+                    updateTierLimit();
+
+                    if (savedASINs.length === 0) {
+                        document.getElementById('empty-state').style.display = 'block';
+                        document.getElementById('asins-grid').innerHTML = '';
+                    } else {
+                        renderASINs(savedASINs);
+                    }
+
+                    showSuccess(`ASIN ${asinCode} removed`);
+                } else {
+                    showError('Failed to remove ASIN');
+                }
+            } catch (error) {
+                console.error('Error removing ASIN:', error);
+                showError('Error removing ASIN');
+            }
+        }
+
+        // Add new ASIN
+        async function handleAddASIN(e) {
+            e.preventDefault();
+
+            const asinInput = document.getElementById('asin-input');
+            const nicknameInput = document.getElementById('nickname-input');
+            const errorEl = document.getElementById('asin-error');
+            const asinCode = asinInput.value.trim().toUpperCase();
+            const nickname = nicknameInput.value.trim();
+
+            // Validate ASIN format
+            if (!asinCode) {
+                errorEl.textContent = 'ASIN is required';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            if (asinCode.length !== 10) {
+                errorEl.textContent = 'ASIN must be 10 characters';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            if (!/^[A-Z0-9]{10}$/.test(asinCode)) {
+                errorEl.textContent = 'ASIN must contain only letters and numbers';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            // Check if already saved
+            if (savedASINs.some(a => a.asin === asinCode)) {
+                errorEl.textContent = 'This ASIN is already saved';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            // Check tier limit
+            const limit = tierLimits[userTier];
+            if (savedASINs.length >= limit && limit !== Infinity) {
+                errorEl.textContent = 'You have reached your saved ASIN limit';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            errorEl.style.display = 'none';
+
+            const token = await getToken();
+            if (!token) return;
+
+            try {
+                const response = await fetch('/api/saved-asins', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        asin: asinCode,
+                        nickname: nickname || null
+                    })
+                });
+
+                if (response.ok) {
+                    const newAsin = await response.json();
+                    savedASINs.push(newAsin.asin || { asin: asinCode, nickname: nickname || null });
+
+                    asinInput.value = '';
+                    nicknameInput.value = '';
+                    updateTierLimit();
+
+                    if (document.getElementById('empty-state').style.display !== 'none') {
+                        document.getElementById('empty-state').style.display = 'none';
+                    }
+
+                    renderASINs(savedASINs);
+                    showSuccess(`ASIN ${asinCode} added successfully`);
+                } else if (response.status === 409) {
+                    errorEl.textContent = 'This ASIN is already saved';
+                    errorEl.style.display = 'block';
+                } else {
+                    showError('Failed to add ASIN');
+                }
+            } catch (error) {
+                console.error('Error adding ASIN:', error);
+                showError('Error adding ASIN');
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorEl = document.getElementById('error-message');
+            errorEl.innerHTML = `<div class="error-message">${escapeHtml(message)}</div>`;
+            setTimeout(() => {
+                errorEl.innerHTML = '';
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successEl = document.getElementById('success-message');
+            successEl.innerHTML = `<div class="success-message">${escapeHtml(message)}</div>`;
+            setTimeout(() => {
+                successEl.innerHTML = '';
+            }, 3000);
+        }
+
+        // Attach event listeners
+        function attachEventListeners() {
+            document.getElementById('add-asin-form').addEventListener('submit', handleAddASIN);
+
+            // Clear error on input
+            document.getElementById('asin-input').addEventListener('input', () => {
+                document.getElementById('asin-error').style.display = 'none';
+            });
+
+            // Logout
+            document.getElementById('logout-link').addEventListener('click', async (e) => {
+                e.preventDefault();
+                await sb.auth.signOut();
+                window.location.href = '/login';
+            });
+        }
+
+        // Utility functions
+        function getGradeFromScore(score) {
+            if (score >= 90) return { letter: 'A', label: 'Excellent' };
+            if (score >= 80) return { letter: 'B', label: 'Very Good' };
+            if (score >= 70) return { letter: 'C', label: 'Good' };
+            if (score >= 60) return { letter: 'D', label: 'Fair' };
+            return { letter: 'F', label: 'Poor' };
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Never';
+            const date = new Date(dateString);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return 'Today';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Yesterday';
+            } else {
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Start initialization
+        init();
+    </script>
+</body>
+</html>

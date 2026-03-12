@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASIN Analyzer Admin - Dashboard</title>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-XRNTK9YM1L");</script>
+<!-- FB Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","938316492034344");fbq("track","PageView");</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #0a0e17;
+            color: #f9fafb;
+            line-height: 1.6;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: #111827;
+            border-bottom: 1px solid #1f2937;
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f59e0b;
+            letter-spacing: -0.5px;
+        }
+
+        nav {
+            display: flex;
+            gap: 32px;
+            flex: 1;
+        }
+
+        nav a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+            padding: 8px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        nav a:hover {
+            color: #f9fafb;
+        }
+
+        nav a.active {
+            color: #f59e0b;
+            border-bottom-color: #f59e0b;
+        }
+
+        .auth-status {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* Main Content */
+        main {
+            padding: 32px 0;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: #f9fafb;
+        }
+
+        /* Period Selector */
+        .controls-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+
+        .period-selector {
+            display: flex;
+            gap: 8px;
+        }
+
+        .period-btn {
+            padding: 8px 16px;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            color: #9ca3af;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .period-btn:hover {
+            background-color: #374151;
+            color: #f9fafb;
+        }
+
+        .period-btn.active {
+            background-color: #f59e0b;
+            color: #0a0e17;
+            border-color: #f59e0b;
+        }
+
+        /* Metric Cards Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        .metric-card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.2s;
+            cursor: help;
+        }
+
+        .metric-card:hover {
+            border-color: #374151;
+            background-color: #1a202c;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #f9fafb;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: #9ca3af;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .metric-delta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+
+        .delta-positive {
+            color: #22c55e;
+        }
+
+        .delta-negative {
+            color: #ef4444;
+        }
+
+        .delta-arrow {
+            font-weight: 700;
+        }
+
+        .tooltip-trigger {
+            text-decoration: underline dotted #9ca3af;
+            cursor: help;
+        }
+
+        /* Charts Section */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 1200px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .chart-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #f9fafb;
+            margin-bottom: 16px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+        }
+
+        /* Funnel Section */
+        .funnel-card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .funnel-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #f9fafb;
+            margin-bottom: 20px;
+        }
+
+        .funnel-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .funnel-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .funnel-label {
+            min-width: 180px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #9ca3af;
+        }
+
+        .funnel-bar-container {
+            flex: 1;
+            background-color: #1f2937;
+            border-radius: 4px;
+            height: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .funnel-bar {
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+        }
+
+        .funnel-bar-value {
+            font-size: 11px;
+            font-weight: 600;
+            color: #0a0e17;
+        }
+
+        .funnel-rate {
+            min-width: 60px;
+            text-align: right;
+            font-size: 12px;
+            font-weight: 600;
+            color: #22c55e;
+        }
+
+        /* Activity Feed */
+        .activity-card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .activity-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #f9fafb;
+            margin-bottom: 16px;
+        }
+
+        .activity-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .activity-feed::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .activity-feed::-webkit-scrollbar-track {
+            background: #1f2937;
+            border-radius: 3px;
+        }
+
+        .activity-feed::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 3px;
+        }
+
+        .activity-feed::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background-color: #1a202c;
+            border-radius: 6px;
+            border-left: 3px solid #374151;
+            font-size: 13px;
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-timestamp {
+            color: #9ca3af;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        .activity-email {
+            color: #f9fafb;
+            font-weight: 500;
+            margin-bottom: 4px;
+            word-break: break-all;
+        }
+
+        .activity-tier {
+            color: #9ca3af;
+            font-size: 11px;
+        }
+
+        .activity-event {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 16px;
+        }
+
+        .event-badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-new {
+            background-color: #22c55e;
+            color: #0a0e17;
+        }
+
+        .badge-upgrade {
+            background-color: #3b82f6;
+            color: #fff;
+        }
+
+        .badge-downgrade {
+            background-color: #f59e0b;
+            color: #0a0e17;
+        }
+
+        .badge-cancel {
+            background-color: #ef4444;
+            color: #fff;
+        }
+
+        .badge-payment_failed {
+            background-color: #eab308;
+            color: #0a0e17;
+        }
+
+        .activity-mrr {
+            font-weight: 600;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .mrr-positive {
+            color: #22c55e;
+        }
+
+        .mrr-negative {
+            color: #ef4444;
+        }
+
+        /* Quick Actions Bar */
+        .actions-bar {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .actions-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 12px;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 6px;
+            color: #f9fafb;
+            font-size: 13px;
+        }
+
+        .search-input::placeholder {
+            color: #6b7280;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #f59e0b;
+            background-color: #374151;
+        }
+
+        .search-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .search-result {
+            padding: 10px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid #374151;
+            font-size: 12px;
+        }
+
+        .search-result:hover {
+            background-color: #374151;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .action-button {
+            padding: 10px 16px;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            color: #f9fafb;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .action-button:hover {
+            background-color: #374151;
+            border-color: #4b5563;
+        }
+
+        .action-button.primary {
+            background-color: #f59e0b;
+            color: #0a0e17;
+            border-color: #f59e0b;
+        }
+
+        .action-button.primary:hover {
+            background-color: #d97706;
+            border-color: #d97706;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 6px;
+            min-width: 160px;
+            z-index: 10;
+            display: none;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 10px 12px;
+            color: #f9fafb;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 13px;
+            border-bottom: 1px solid #374151;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #374151;
+        }
+
+        /* Loading & Empty States */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: #9ca3af;
+        }
+
+        .spinner {
+            border: 2px solid #374151;
+            border-top: 2px solid #f59e0b;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background-color: #7f1d1d;
+            border: 1px solid #ef4444;
+            color: #fecaca;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .access-denied {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            text-align: center;
+        }
+
+        .access-denied-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .access-denied-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .access-denied-message {
+            color: #9ca3af;
+            margin-bottom: 24px;
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            color: #f9fafb;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-button:hover {
+            background-color: #374151;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+            }
+
+            nav {
+                width: 100%;
+                order: 3;
+                gap: 16px;
+                font-size: 12px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .metric-value {
+                font-size: 24px;
+            }
+
+            .controls-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .period-selector {
+                justify-content: space-between;
+            }
+        }
+
+        /* Utility Classes */
+        .mt-24 {
+            margin-top: 24px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">⚙️ ASIN Analyzer Admin</div>
+                <nav>
+                    <a href="/admin" class="active">Overview</a>
+                    <a href="/admin/customers">Customers</a>
+                    <a href="/admin/cohorts">Cohorts</a>
+                    <a href="/admin/financials">Financials</a>
+                    <a href="/admin/affiliates">Affiliates</a>
+                    <a href="/">Back to Site</a>
+                </nav>
+                <div class="auth-status" id="authStatus">Authenticating...</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Page Title -->
+            <h1 class="page-title">Admin Dashboard</h1>
+
+            <!-- Error Message Container -->
+            <div id="errorContainer"></div>
+
+            <!-- Access Denied Screen -->
+            <div id="accessDeniedScreen" style="display: none;">
+                <div class="access-denied">
+                    <div class="access-denied-icon">🔒</div>
+                    <div class="access-denied-title">Access Denied</div>
+                    <div class="access-denied-message">You don't have permission to access the admin dashboard.</div>
+                    <a href="/" class="back-button">Return to Site</a>
+                </div>
+            </div>
+
+            <!-- Main Dashboard (Hidden Initially) -->
+            <div id="mainDashboard" style="display: none;">
+                <!-- Controls Bar -->
+                <div class="controls-bar">
+                    <div class="period-selector">
+                        <button class="period-btn" data-period="7d">Last 7d</button>
+                        <button class="period-btn" data-period="30d" style="--active: 1;">30d</button>
+                        <button class="period-btn" data-period="90d">90d</button>
+                        <button class="period-btn" data-period="12m">12m</button>
+                        <button class="period-btn" data-period="all">All</button>
+                    </div>
+                </div>
+
+                <!-- Metrics Grid -->
+                <div class="metrics-grid">
+                    <div class="metric-card" title="Monthly Recurring Revenue">
+                        <div class="metric-value" id="mrrValue">$0</div>
+                        <div class="metric-label">MRR</div>
+                        <div class="metric-delta" id="mrrDelta">
+                            <span class="delta-arrow">↑</span>
+                            <span>0.0%</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card" title="Annual Recurring Revenue">
+                        <div class="metric-value" id="arrValue">$0</div>
+                        <div class="metric-label">ARR</div>
+                        <div class="metric-delta" id="arrDelta">
+                            <span class="delta-arrow">↑</span>
+                            <span>0.0%</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card tooltip-trigger" title="Subscribers by tier: Seller / Agency / Enterprise">
+                        <div class="metric-value" id="activeSubValue">0</div>
+                        <div class="metric-label">Active Subscribers</div>
+                        <div class="metric-delta" id="activeSubDelta">
+                            <span class="delta-arrow">↑</span>
+                            <span>0.0%</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card" title="New + Expansion - Contraction - Churn">
+                        <div class="metric-value" id="netNewMrrValue">$0</div>
+                        <div class="metric-label">Net New MRR</div>
+                        <div class="metric-delta" id="netNewMrrDelta">
+                            <span class="delta-arrow">↑</span>
+                            <span>0.0%</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-value" id="dailyRevenueValue">$0</div>
+                        <div class="metric-label">Daily Revenue</div>
+                        <div class="metric-delta" id="dailyRevenueDelta">
+                            <span class="delta-arrow">↑</span>
+                            <span>0.0%</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card" title="Average Revenue Per User">
+                        <div class="metric-value" id="arpuValue">$0</div>
+                        <div class="metric-label">ARPU</div>
+                        <div class="metric-delta" id="arpuDelta">
+                            <span class="delta-arrow">↑</span>
+                            <span>0.0%</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-value" id="churnRateValue">0%</div>
+                        <div class="metric-label">Monthly Churn Rate</div>
+                        <div class="metric-delta" id="churnRateDelta">
+                            <span class="delta-arrow">↓</span>
+                            <span>0.0%</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card" title="Customer Lifetime Value Estimate">
+                        <div class="metric-value" id="ltvValue">$0</div>
+                        <div class="metric-label">LTV Estimate</div>
+                        <div class="metric-delta" id="ltvDelta">
+                            <span class="delta-arrow">↑</span>
+                            <span>0.0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="charts-grid">
+                    <!-- MRR Waterfall Chart -->
+                    <div class="chart-card">
+                        <div class="chart-title">MRR Waterfall</div>
+                        <div class="chart-container">
+                            <canvas id="waterfallChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- MRR Trend Chart -->
+                    <div class="chart-card">
+                        <div class="chart-title">MRR Trend (90-day)</div>
+                        <div class="chart-container">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Subscriber Growth by Tier Chart -->
+                    <div class="chart-card">
+                        <div class="chart-title">Subscriber Growth by Tier</div>
+                        <div class="chart-container">
+                            <canvas id="tierChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Revenue by Channel Chart -->
+                    <div class="chart-card">
+                        <div class="chart-title">Revenue by Channel</div>
+                        <div class="chart-container">
+                            <canvas id="channelChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Funnel Conversion Section -->
+                <div class="funnel-card">
+                    <div class="funnel-title">Funnel Conversion</div>
+                    <div class="funnel-steps">
+                        <div class="funnel-step">
+                            <div class="funnel-label">Email Captures</div>
+                            <div class="funnel-bar-container">
+                                <div class="funnel-bar" id="funnelBar1" style="width: 100%;">
+                                    <span class="funnel-bar-value" id="funnelValue1">0</span>
+                                </div>
+                            </div>
+                            <div class="funnel-rate">100%</div>
+                        </div>
+
+                        <div class="funnel-step">
+                            <div class="funnel-label">$7 Purchases</div>
+                            <div class="funnel-bar-container">
+                                <div class="funnel-bar" id="funnelBar2" style="width: 0%;">
+                                    <span class="funnel-bar-value" id="funnelValue2">0</span>
+                                </div>
+                            </div>
+                            <div class="funnel-rate" id="funnelRate1">0%</div>
+                        </div>
+
+                        <div class="funnel-step">
+                            <div class="funnel-label">Active Subscriptions</div>
+                            <div class="funnel-bar-container">
+                                <div class="funnel-bar" id="funnelBar3" style="width: 0%;">
+                                    <span class="funnel-bar-value" id="funnelValue3">0</span>
+                                </div>
+                            </div>
+                            <div class="funnel-rate" id="funnelRate2">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Feed -->
+                <div class="activity-card">
+                    <div class="activity-title">Recent Activity (Last 25 Events)</div>
+                    <div class="activity-feed" id="activityFeed">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Bar -->
+                <div class="actions-bar">
+                    <div class="search-container">
+                        <input type="text" class="search-input" id="customerSearch" placeholder="Search customers by email...">
+                        <div class="search-dropdown" id="searchDropdown"></div>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="action-button" id="exportBtn">📥 Export CSV</button>
+                        <div class="dropdown-menu" id="exportMenu">
+                            <button class="dropdown-item" data-export="customers">Customers</button>
+                            <button class="dropdown-item" data-export="revenue">Revenue</button>
+                            <button class="dropdown-item" data-export="metrics">Metrics</button>
+                            <button class="dropdown-item" data-export="financial">Financial Summary</button>
+                        </div>
+                    </div>
+
+                    <button class="action-button primary" id="syncBtn">🔄 Sync Rewardful</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ============================================================================
+        // STATE & GLOBALS
+        // ============================================================================
+        let currentToken = null;
+        let currentPeriod = '30d';
+        let dashboardData = null;
+        let chartInstances = {};
+
+        // ============================================================================
+        // AUTH & INITIALIZATION
+        // ============================================================================
+        async function initializeAuth() {
+            try {
+                // Get token from localStorage (set by Supabase auth in main app)
+                const token = localStorage.getItem('supabase_auth_token');
+                if (!token) {
+                    window.location.href = '/auth';
+                    return;
+                }
+                currentToken = token;
+
+                // Verify admin access
+                const dashResp = await fetch('/api/admin/dashboard', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (dashResp.status === 403) {
+                    showAccessDenied();
+                    return;
+                }
+
+                if (!dashResp.ok) throw new Error('Failed to fetch dashboard');
+
+                dashboardData = await dashResp.json();
+                showMainDashboard();
+                renderDashboard();
+
+                // Update auth status
+                document.getElementById('authStatus').textContent = 'Logged in (Admin)';
+            } catch (error) {
+                console.error('Auth error:', error);
+                showError('Failed to authenticate: ' + error.message);
+            }
+        }
+
+        function showAccessDenied() {
+            document.getElementById('mainDashboard').style.display = 'none';
+            document.getElementById('accessDeniedScreen').style.display = 'block';
+        }
+
+        function showMainDashboard() {
+            document.getElementById('accessDeniedScreen').style.display = 'none';
+            document.getElementById('mainDashboard').style.display = 'block';
+        }
+
+        // ============================================================================
+        // RENDER DASHBOARD DATA
+        // ============================================================================
+        function renderDashboard() {
+            renderMetrics();
+            renderCharts();
+            renderFunnel();
+            renderActivityFeed();
+        }
+
+        function renderMetrics() {
+            const metrics = dashboardData.metrics || {};
+
+            updateMetricCard('mrrValue', 'mrrDelta', metrics.mrr, metrics.mrr_growth_pct);
+            updateMetricCard('arrValue', 'arrDelta', metrics.arr, metrics.arr_growth_pct, true);
+            updateMetricCard('activeSubValue', 'activeSubDelta', metrics.active_subscribers, metrics.subscriber_growth_pct);
+            updateMetricCard('netNewMrrValue', 'netNewMrrDelta', metrics.net_new_mrr, metrics.net_new_mrr_growth_pct);
+            updateMetricCard('dailyRevenueValue', 'dailyRevenueDelta', metrics.daily_revenue, metrics.daily_revenue_growth_pct);
+            updateMetricCard('arpuValue', 'arpuDelta', metrics.arpu, metrics.arpu_growth_pct);
+            updateMetricCard('churnRateValue', 'churnRateDelta', metrics.monthly_churn_rate, metrics.churn_rate_change_pct, false, true);
+            updateMetricCard('ltvValue', 'ltvDelta', metrics.ltv_estimate, metrics.ltv_growth_pct, true);
+        }
+
+        function updateMetricCard(valueId, deltaId, value, growth, isCurrency = true, isPercent = false) {
+            const formatter = isCurrency ? formatCurrency : (isPercent ? formatPercent : formatNumber);
+            document.getElementById(valueId).textContent = formatter(value || 0);
+
+            const deltaEl = document.getElementById(deltaId);
+            const growth_num = growth || 0;
+            const arrow = growth_num >= 0 ? '↑' : '↓';
+            const isPositive = (isPercent && growth_num <= 0) || (!isPercent && growth_num >= 0);
+            const className = isPositive ? 'delta-positive' : 'delta-negative';
+
+            deltaEl.innerHTML = `
+                <span class="delta-arrow ${className}">${arrow}</span>
+                <span class="${className}">${Math.abs(growth_num).toFixed(1)}%</span>
+            `;
+        }
+
+        function renderCharts() {
+            // Destroy existing charts
+            Object.values(chartInstances).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+            chartInstances = {};
+
+            const chartData = dashboardData.charts || {};
+
+            // MRR Waterfall
+            createWaterfallChart(chartData.waterfall);
+
+            // MRR Trend
+            createTrendChart(chartData.trend);
+
+            // Subscriber Growth by Tier
+            createTierChart(chartData.tier_growth);
+
+            // Revenue by Channel
+            createChannelChart(chartData.revenue_by_channel);
+        }
+
+        function createWaterfallChart(data) {
+            if (!data) return;
+
+            const ctx = document.getElementById('waterfallChart').getContext('2d');
+            const labels = data.map(d => d.label);
+            const values = data.map(d => d.value);
+            const colors = data.map(d => {
+                if (d.label === 'Net') return '#f59e0b';
+                if (d.value >= 0) return '#22c55e';
+                return '#ef4444';
+            });
+
+            chartInstances.waterfall = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'MRR Change',
+                        data: values,
+                        backgroundColor: colors,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#9ca3af',
+                                callback: v => '$' + (v / 1000).toFixed(0) + 'k'
+                            },
+                            grid: { color: '#1f2937' }
+                        },
+                        x: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTrendChart(data) {
+            if (!data) return;
+
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            const labels = data.map(d => formatDate(d.date));
+            const values = data.map(d => d.mrr);
+
+            chartInstances.trend = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'MRR',
+                        data: values,
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#f59e0b',
+                        pointBorderColor: '#0a0e17',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#9ca3af',
+                                callback: v => '$' + (v / 1000).toFixed(0) + 'k'
+                            },
+                            grid: { color: '#1f2937' }
+                        },
+                        x: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTierChart(data) {
+            if (!data || data.length === 0) return;
+
+            const ctx = document.getElementById('tierChart').getContext('2d');
+            const labels = data[0].data ? Object.keys(data[0].data) : [];
+            const dates = data.map(d => formatDate(d.date));
+
+            const datasets = labels.map((label, idx) => {
+                const colors = ['#22c55e', '#3b82f6', '#f59e0b'];
+                return {
+                    label: label.charAt(0).toUpperCase() + label.slice(1),
+                    data: data.map(d => d.data[label] || 0),
+                    borderColor: colors[idx % colors.length],
+                    backgroundColor: colors[idx % colors.length],
+                    fill: true,
+                    tension: 0.4
+                };
+            });
+
+            chartInstances.tier = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            stacked: true,
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: '#1f2937' }
+                        },
+                        x: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createChannelChart(data) {
+            if (!data) return;
+
+            const ctx = document.getElementById('channelChart').getContext('2d');
+            const labels = data.map(d => d.channel);
+            const values = data.map(d => d.revenue);
+            const colors = ['#3b82f6', '#f59e0b'];
+
+            chartInstances.channel = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors,
+                        borderColor: '#111827',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderFunnel() {
+            const funnel = dashboardData.funnel || {};
+            const emails = funnel.email_captures || 1;
+            const purchases = funnel.purchases_7 || 0;
+            const subscriptions = funnel.subscriptions || 0;
+
+            document.getElementById('funnelValue1').textContent = formatNumber(emails);
+            document.getElementById('funnelValue2').textContent = formatNumber(purchases);
+            document.getElementById('funnelValue3').textContent = formatNumber(subscriptions);
+
+            const rate1 = emails > 0 ? (purchases / emails) * 100 : 0;
+            const rate2 = purchases > 0 ? (subscriptions / purchases) * 100 : 0;
+
+            document.getElementById('funnelBar2').style.width = rate1 + '%';
+            document.getElementById('funnelBar3').style.width = (rate1 * rate2 / 100) + '%';
+
+            document.getElementById('funnelRate1').textContent = rate1.toFixed(1) + '%';
+            document.getElementById('funnelRate2').textContent = rate2.toFixed(1) + '%';
+        }
+
+        function renderActivityFeed() {
+            const events = dashboardData.events || [];
+            const feedEl = document.getElementById('activityFeed');
+
+            if (events.length === 0) {
+                feedEl.innerHTML = '<div class="loading" style="padding: 40px; color: #9ca3af;">No recent activity</div>';
+                return;
+            }
+
+            feedEl.innerHTML = events.map(event => {
+                const badgeClass = 'badge-' + event.event_type;
+                const badgeText = event.event_type.replace('_', ' ').toUpperCase();
+                const mrrClass = event.mrr_impact >= 0 ? 'mrr-positive' : 'mrr-negative';
+                const mrrSign = event.mrr_impact >= 0 ? '+' : '';
+
+                return `
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div class="activity-timestamp">${formatRelativeTime(event.timestamp)}</div>
+                            <div class="activity-email">${truncateEmail(event.email)}</div>
+                            <div class="activity-tier">${event.tier || 'N/A'}</div>
+                        </div>
+                        <div class="activity-event">
+                            <span class="event-badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                        <div class="activity-mrr ${mrrClass}">
+                            ${mrrSign}${formatCurrency(event.mrr_impact)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============================================================================
+        // EVENT HANDLERS
+        // ============================================================================
+        function setupEventListeners() {
+            // Period selector
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentPeriod = e.target.dataset.period;
+                    await loadDashboard(currentPeriod);
+                });
+            });
+
+            // Set initial active button
+            document.querySelector('[data-period="30d"]').classList.add('active');
+
+            // Customer search
+            const searchInput = document.getElementById('customerSearch');
+            searchInput.addEventListener('input', debounce(handleCustomerSearch, 300));
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const email = e.target.value.trim();
+                    if (email) {
+                        window.location.href = `/admin/customer/${encodeURIComponent(email)}`;
+                    }
+                }
+            });
+
+            // Export dropdown
+            document.getElementById('exportBtn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const menu = document.getElementById('exportMenu');
+                menu.classList.toggle('show');
+            });
+
+            document.querySelectorAll('[data-export]').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    handleExport(e.target.dataset.export);
+                    document.getElementById('exportMenu').classList.remove('show');
+                });
+            });
+
+            // Sync Rewardful
+            document.getElementById('syncBtn').addEventListener('click', handleSyncRewardful);
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.dropdown')) {
+                    document.getElementById('exportMenu').classList.remove('show');
+                }
+                if (!e.target.closest('.search-container')) {
+                    document.getElementById('searchDropdown').innerHTML = '';
+                }
+            });
+        }
+
+        async function handleCustomerSearch(query) {
+            if (!query || query.length < 2) {
+                document.getElementById('searchDropdown').innerHTML = '';
+                return;
+            }
+
+            try {
+                const resp = await fetch(`/api/admin/customers?search=${encodeURIComponent(query)}`, {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+                const results = await resp.json();
+                const dropdown = document.getElementById('searchDropdown');
+
+                if (results.length === 0) {
+                    dropdown.innerHTML = '<div class="search-result">No results found</div>';
+                    return;
+                }
+
+                dropdown.innerHTML = results.map(r => `
+                    <div class="search-result" onclick="window.location.href='/admin/customer/${encodeURIComponent(r.email)}'">
+                        ${r.email} • ${r.tier || 'N/A'}
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Search error:', error);
+            }
+        }
+
+        async function handleExport(type) {
+            try {
+                const resp = await fetch(`/api/admin/export/${type}?period=${currentPeriod}`, {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+                const blob = await resp.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `export-${type}-${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Export error:', error);
+                showError('Failed to export CSV');
+            }
+        }
+
+        async function handleSyncRewardful() {
+            const btn = document.getElementById('syncBtn');
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = '⏳ Syncing...';
+
+            try {
+                const resp = await fetch('/api/admin/sync-rewardful', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+
+                if (resp.ok) {
+                    btn.textContent = '✓ Synced!';
+                    setTimeout(() => {
+                        btn.disabled = false;
+                        btn.textContent = originalText;
+                        loadDashboard(currentPeriod);
+                    }, 2000);
+                } else {
+                    throw new Error('Sync failed');
+                }
+            } catch (error) {
+                console.error('Sync error:', error);
+                showError('Failed to sync Rewardful');
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        async function loadDashboard(period) {
+            try {
+                const resp = await fetch(`/api/admin/dashboard?period=${period}`, {
+                    headers: { 'Authorization': `Bearer ${currentToken}` }
+                });
+
+                if (!resp.ok) throw new Error('Failed to fetch dashboard');
+
+                dashboardData = await resp.json();
+                renderDashboard();
+            } catch (error) {
+                console.error('Load error:', error);
+                showError('Failed to load dashboard data');
+            }
+        }
+
+        function showError(message) {
+            const container = document.getElementById('errorContainer');
+            container.innerHTML = `<div class="error-message">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // ============================================================================
+        // UTILITY FUNCTIONS
+        // ============================================================================
+        function formatCurrency(value) {
+            if (!value) return '$0';
+            return '$' + (value >= 0 ? value.toFixed(0) : value.toFixed(0)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function formatNumber(value) {
+            if (!value) return '0';
+            return Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        function formatPercent(value) {
+            return (value || 0).toFixed(1) + '%';
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function formatRelativeTime(timestamp) {
+            const now = new Date();
+            const then = new Date(timestamp);
+            const seconds = (now - then) / 1000;
+
+            if (seconds < 60) return 'just now';
+            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
+            if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
+            if (seconds < 604800) return Math.floor(seconds / 86400) + 'd ago';
+
+            return then.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function truncateEmail(email) {
+            if (email.length > 30) {
+                return email.substring(0, 27) + '...';
+            }
+            return email;
+        }
+
+        function debounce(fn, delay) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => fn(...args), delay);
+            };
+        }
+
+        // ============================================================================
+        // INIT
+        // ============================================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeAuth();
+            setupEventListeners();
+        });
+    </script>
+</body>
+</html>

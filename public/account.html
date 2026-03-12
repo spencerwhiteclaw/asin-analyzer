@@ -1,204 +1,1108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<!-- GA4 — Replace G-XRNTK9YM1L with your Measurement ID -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - ASIN Analyzer</title>
+<!-- GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-XRNTK9YM1L');</script>
-<!-- Facebook Pixel — Replace 938316492034344 with your Pixel ID -->
-<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','938316492034344');fbq('track','PageView');</script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-XRNTK9YM1L");</script>
+<!-- FB Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","938316492034344");fbq("track","PageView");</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Account Settings — ASIN Analyzer</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{--blue:#3B82F6;--blue-dark:#2563EB;--green:#10B981;--red:#EF4444;--text:#0F172A;--text2:#475569;--muted:#94A3B8;--border:#E2E8F0;--bg:#FFFFFF;--bg2:#F8FAFC;--bg3:#F1F5F9;--r:12px;--r2:16px;--r3:20px;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg2);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6;}
-.dash-nav{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:16px 40px;background:var(--bg);border-bottom:1px solid var(--border);}
-.logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:21px;font-weight:800;color:var(--text);text-decoration:none;}
-.logo-text span{color:var(--blue);}
-.dash-nav-r{display:flex;align-items:center;gap:24px;}
-.dash-nav-r a{color:var(--text2);font-size:14px;font-weight:500;text-decoration:none;}
-.dash-nav-r a:hover{color:var(--text);}
-.dash-nav-r a.active{color:var(--blue);font-weight:600;}
-.wrap{max-width:720px;margin:0 auto;padding:32px 24px 80px;}
-h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:28px;font-weight:800;margin-bottom:28px;}
-.section{background:var(--bg);border:1px solid var(--border);border-radius:var(--r3);padding:24px;margin-bottom:20px;}
-.section h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:17px;font-weight:700;margin-bottom:16px;}
-.form-group{margin-bottom:16px;}
-.form-group label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:6px;}
-.form-group input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:var(--r);font-size:15px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;}
-.form-group input:focus{border-color:var(--blue);}
-.form-group input:read-only{background:var(--bg2);color:var(--muted);}
-.save-btn{padding:10px 20px;background:var(--blue);color:#fff;border:none;border-radius:var(--r);font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;}
-.save-btn:hover{background:var(--blue-dark);}
-.plan-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--bg3);}
-.plan-row:last-child{border:none;}
-.plan-row label{font-size:14px;color:var(--text2);}
-.plan-row strong{font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;}
-.billing-btn{padding:10px 20px;background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:var(--r);font-weight:600;font-size:14px;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block;}
-.billing-btn:hover{background:var(--bg3);}
-.danger-zone{border-color:rgba(239,68,68,0.2);}
-.danger-zone h2{color:var(--red);}
-.danger-btn{padding:10px 20px;background:rgba(239,68,68,0.06);color:var(--red);border:1px solid rgba(239,68,68,0.2);border-radius:var(--r);font-weight:600;font-size:14px;cursor:pointer;transition:all .2s;}
-.danger-btn:hover{background:rgba(239,68,68,0.12);}
-.msg{padding:10px 14px;border-radius:var(--r);font-size:13px;margin-bottom:12px;display:none;}
-.msg.success{background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);color:var(--green);display:block;}
-.msg.error{background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);color:var(--red);display:block;}
-</style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0a0e17;
+            color: #f9fafb;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #111827;
+            border-bottom: 1px solid #1f2937;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-bottom: 40px;
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            margin: 0;
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f59e0b;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #f59e0b;
+        }
+
+        .nav-links a.active {
+            color: #f59e0b;
+            font-weight: 600;
+        }
+
+        .nav-logout {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            color: #f9fafb;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .nav-logout:hover {
+            background-color: #374151;
+            border-color: #4b5563;
+        }
+
+        /* Page Title */
+        .page-header {
+            margin-bottom: 32px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #9ca3af;
+            font-size: 16px;
+        }
+
+        /* Cards */
+        .card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: #374151;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #f9fafb;
+        }
+
+        .card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #f9fafb;
+        }
+
+        /* Hero Card */
+        .hero-card {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .hero-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .hero-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f9fafb;
+        }
+
+        .hero-email {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #1f2937;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #f9fafb;
+        }
+
+        .tier-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            width: fit-content;
+            margin-top: 4px;
+        }
+
+        .tier-badge.seller {
+            background-color: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .tier-badge.agency {
+            background-color: rgba(139, 92, 246, 0.15);
+            color: #8b5cf6;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .tier-badge.enterprise {
+            background-color: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .tier-badge.free {
+            background-color: rgba(156, 163, 175, 0.15);
+            color: #9ca3af;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+
+        /* Subscription Card */
+        .subscription-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .subscription-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .subscription-label {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .subscription-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f9fafb;
+        }
+
+        .subscription-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .subscription-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            width: fit-content;
+        }
+
+        .subscription-status.active {
+            background-color: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .subscription-status.past-due {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .subscription-status.cancelled {
+            background-color: rgba(107, 114, 128, 0.15);
+            color: #9ca3af;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: #f59e0b;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background-color: #d97706;
+        }
+
+        .btn-secondary {
+            background-color: #1f2937;
+            color: #f9fafb;
+            border: 1px solid #374151;
+        }
+
+        .btn-secondary:hover {
+            background-color: #374151;
+            border-color: #4b5563;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Quota Meter */
+        .quota-card {
+            background: linear-gradient(135deg, #111827 0%, #0f1419 100%);
+        }
+
+        .quota-label {
+            font-size: 12px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+
+        .quota-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 16px;
+        }
+
+        .quota-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: #f9fafb;
+        }
+
+        .quota-total {
+            color: #9ca3af;
+            font-size: 16px;
+        }
+
+        .quota-bonus {
+            color: #f59e0b;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 24px;
+            background-color: #1f2937;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            border: 1px solid #2d3748;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .progress-fill.low {
+            background-color: #10b981;
+            width: var(--progress);
+        }
+
+        .progress-fill.medium {
+            background-color: #f59e0b;
+            width: var(--progress);
+        }
+
+        .progress-fill.high {
+            background-color: #ef5350;
+            width: var(--progress);
+        }
+
+        .quota-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        /* Warning Banners */
+        .warning-banner {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .warning-banner.yellow {
+            background-color: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+
+        .warning-banner.red {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .warning-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Plan Comparison */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .comparison-plan {
+            background-color: #0a0e17;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .comparison-plan.next {
+            border: 2px solid #f59e0b;
+        }
+
+        .comparison-plan h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #f9fafb;
+        }
+
+        .comparison-features {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+
+        .feature-check {
+            color: #10b981;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .feature-cross {
+            color: #6b7280;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background-color: #0a0e17;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            color: #f9fafb;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .quick-link:hover {
+            border-color: #f59e0b;
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+
+        .quick-link-icon {
+            font-size: 24px;
+            color: #f59e0b;
+        }
+
+        .quick-link-text h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .quick-link-text p {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-card {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 16px;
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #1f2937 25%, #2d3748 50%, #1f2937 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 6px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .error-message {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-<div class="dash-nav">
-  <a href="/" class="logo-text">ASIN <span>Analyzer</span></a>
-  <div class="dash-nav-r">
-    <a href="/dashboard">Dashboard</a>
-    <a href="/dashboard/history">History</a>
-    <a href="/dashboard/account" class="active">Account</a>
-  </div>
-</div>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="/dashboard" class="nav-brand">ASIN Analyzer</a>
+            <ul class="nav-links">
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/archive">Archive</a></li>
+                <li><a href="/dashboard/account" class="active">Account</a></li>
+            </ul>
+            <button class="nav-logout" onclick="handleLogout()">Logout</button>
+        </div>
+    </nav>
 
-<div class="wrap">
-  <h1>Account Settings</h1>
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>My Account</h1>
+            <p>Manage your account settings, subscription, and usage</p>
+        </div>
 
-  <div id="msgBox"></div>
+        <!-- Messages -->
+        <div id="messages"></div>
 
-  <!-- Profile -->
-  <div class="section">
-    <h2>Profile</h2>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="email" readonly />
+        <!-- Hero Card -->
+        <div class="card hero-card">
+            <div class="hero-info">
+                <div class="hero-name" id="userName">-</div>
+                <div class="hero-email" id="userEmail">-</div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Member Since</span>
+                        <span class="stat-value" id="memberSince">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Lifetime Reports</span>
+                        <span class="stat-value" id="lifetimeReports">-</span>
+                    </div>
+                </div>
+            </div>
+            <div id="tierBadgeContainer"></div>
+        </div>
+
+        <!-- Subscription Card -->
+        <div class="card">
+            <h2>Subscription & Billing</h2>
+            <div class="subscription-grid">
+                <div class="subscription-item">
+                    <span class="subscription-label">Current Plan</span>
+                    <span class="subscription-value" id="planName">-</span>
+                </div>
+                <div class="subscription-item">
+                    <span class="subscription-label">Monthly Price</span>
+                    <span class="subscription-price" id="planPrice">-</span>
+                </div>
+                <div class="subscription-item">
+                    <span class="subscription-label">Status</span>
+                    <span class="subscription-status" id="billingStatus"></span>
+                </div>
+                <div class="subscription-item">
+                    <span class="subscription-label">Next Billing</span>
+                    <span class="subscription-value" id="nextBilling">-</span>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="handleManageBilling()" id="manageBillingBtn">Manage Billing</button>
+                <a href="/pricing" class="btn btn-secondary" id="upgradeBtn">Upgrade Plan</a>
+            </div>
+        </div>
+
+        <!-- Quota Meter Card -->
+        <div class="card quota-card">
+            <div class="quota-label">Monthly Report Usage</div>
+            <div id="quotaWarning"></div>
+            <div class="quota-display">
+                <div>
+                    <div class="quota-number"><span id="reportsUsed">0</span>/<span id="reportsLimit">0</span></div>
+                    <div class="quota-bonus" id="bonusReports" style="display: none;"></div>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="--progress: 0%;">
+                    <span id="progressText"></span>
+                </div>
+            </div>
+            <div class="quota-footer">
+                <span id="quotaStatus">-</span>
+                <span id="resetCountdown">-</span>
+            </div>
+        </div>
+
+        <!-- Plan Comparison (hidden if Enterprise) -->
+        <div class="card" id="comparisonCard" style="display: none;">
+            <h2>Upgrade Path</h2>
+            <p style="color: #9ca3af; margin-bottom: 16px;">See what you'll get with the next tier</p>
+            <div class="comparison-grid" id="comparisonGrid"></div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="card">
+            <h2>Quick Actions</h2>
+            <div class="quick-links">
+                <a href="/archive" class="quick-link">
+                    <div class="quick-link-icon">📦</div>
+                    <div class="quick-link-text">
+                        <h4>View Archive</h4>
+                        <p>Browse past reports</p>
+                    </div>
+                </a>
+                <a href="/dashboard" class="quick-link">
+                    <div class="quick-link-icon">⭐</div>
+                    <div class="quick-link-text">
+                        <h4>Saved ASINs</h4>
+                        <p>Your watchlist</p>
+                    </div>
+                </a>
+                <a href="/dashboard" class="quick-link">
+                    <div class="quick-link-icon">🔍</div>
+                    <div class="quick-link-text">
+                        <h4>Run New Report</h4>
+                        <p>Analyze an ASIN</p>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-      <label>Name</label>
-      <input type="text" id="name" placeholder="Your name" />
-    </div>
-    <button class="save-btn" onclick="updateProfile()">Save Changes</button>
-  </div>
 
-  <!-- Change Password -->
-  <div class="section">
-    <h2>Change Password</h2>
-    <div class="form-group">
-      <label>New Password</label>
-      <input type="password" id="newPw" placeholder="Minimum 8 characters" minlength="8" />
-    </div>
-    <div class="form-group">
-      <label>Confirm New Password</label>
-      <input type="password" id="confirmPw" placeholder="Confirm new password" />
-    </div>
-    <button class="save-btn" onclick="changePassword()">Update Password</button>
-  </div>
+    <!-- Scripts -->
+    <script>
+        // Configuration
+        const SUPABASE_URL = 'https://rspeaneamcthfuigyoou.supabase.co'; // TODO: Set from environment
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJzcGVhbmVhbWN0aGZ1aWd5b291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5NDM4MjMsImV4cCI6MjA4ODUxOTgyM30.rniJ85z6ndbF5Ukp00YOo1vrqFpZAi-AkEpZHj4te2c'; // TODO: Set from environment
 
-  <!-- Subscription -->
-  <div class="section">
-    <h2>Subscription & Billing</h2>
-    <div class="plan-row"><label>Current Plan</label><strong id="planName">Loading...</strong></div>
-    <div class="plan-row"><label>Reports This Month</label><strong id="planUsage">—</strong></div>
-    <div class="plan-row"><label>Status</label><strong id="planStatus">—</strong></div>
-    <div class="plan-row"><label>Next Billing</label><strong id="nextBill">—</strong></div>
-    <div style="margin-top:16px;display:flex;gap:10px;">
-      <a href="/pricing" class="billing-btn">Change Plan</a>
-      <button class="billing-btn" onclick="openBillingPortal()">Manage Billing →</button>
-    </div>
-  </div>
+        // Initialize Supabase
+        let supabaseClient = null;
 
-  <!-- Danger Zone -->
-  <div class="section danger-zone">
-    <h2>Danger Zone</h2>
-    <p style="font-size:14px;color:var(--text2);margin-bottom:16px;">Cancelling your subscription will downgrade you to the free tier at the end of your billing period. Your reports will be preserved.</p>
-    <button class="danger-btn" onclick="cancelSubscription()">Cancel Subscription</button>
-    <button class="danger-btn" onclick="handleLogout()" style="margin-left:10px;">Log Out</button>
-  </div>
-</div>
+        async function initSupabase() {
+            try {
+                supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                return true;
+            } catch (error) {
+                console.error('Failed to initialize Supabase:', error);
+                showError('Failed to initialize authentication');
+                return false;
+            }
+        }
 
-<script>
-const token = localStorage.getItem('sb_access_token');
-if (!token) window.location.href = '/login';
+        // Get auth token
+        async function getToken() {
+            try {
+                const { data: { session } } = await supabaseClient.auth.getSession();
+                if (!session) {
+                    window.location.href = '/login';
+                    return null;
+                }
+                return session.access_token;
+            } catch (error) {
+                console.error('Failed to get session:', error);
+                window.location.href = '/login';
+                return null;
+            }
+        }
 
-async function loadAccount() {
-  try {
-    const resp = await fetch('/api/dashboard', { headers: { 'Authorization': `Bearer ${token}` } });
-    if (resp.status === 401) { window.location.href = '/login'; return; }
-    const data = await resp.json();
-    const u = data.user;
+        // Show error message
+        function showError(message) {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = `<div class="error-message">⚠️ ${message}</div>`;
+            setTimeout(() => {
+                messagesDiv.innerHTML = '';
+            }, 5000);
+        }
 
-    document.getElementById('email').value = u.email || '';
-    document.getElementById('name').value = u.name || '';
+        // Show success message
+        function showSuccess(message) {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = `<div class="success-message">✓ ${message}</div>`;
+            setTimeout(() => {
+                messagesDiv.innerHTML = '';
+            }, 3000);
+        }
 
-    const tierNames = { free:'Free', seller:'Seller ($19/mo)', agency_power:'Agency Power ($39/mo)', agency:'Agency ($49/mo)', enterprise:'Enterprise ($199/mo)' };
-    const tierLimits = { free:1, seller:10, agency_power:100, agency:50, enterprise:300 };
-    const tier = u.subscription_tier || 'free';
+        // Format currency
+        function formatCurrency(amount) {
+            if (!amount) return '$0/mo';
+            return `$${amount}/mo`;
+        }
 
-    document.getElementById('planName').textContent = tierNames[tier] || tier;
-    document.getElementById('planUsage').textContent = `${u.analyses_this_month || 0} / ${tierLimits[tier] || 1}`;
-    document.getElementById('planStatus').textContent = u.subscription_status === 'active' ? '✓ Active' : (u.subscription_status || 'Free');
-    document.getElementById('planStatus').style.color = u.subscription_status === 'active' ? 'var(--green)' : 'var(--muted)';
-  } catch (e) { console.error(e); }
-}
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
 
-async function updateProfile() {
-  const name = document.getElementById('name').value.trim();
-  try {
-    const resp = await fetch('/api/account/update', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify({ name }),
-    });
-    showMsg(resp.ok ? 'success' : 'error', resp.ok ? 'Profile updated.' : 'Update failed.');
-  } catch (e) { showMsg('error', 'Connection error.'); }
-}
+        // Get tier badge HTML
+        function getTierBadge(tier) {
+            const tierMap = {
+                free: { label: 'Free', class: 'free', icon: '☆' },
+                seller: { label: 'Seller', class: 'seller', icon: '⚙' },
+                agency: { label: 'Agency', class: 'agency', icon: '👥' },
+                enterprise: { label: 'Enterprise', class: 'enterprise', icon: '⭐' }
+            };
+            const tierInfo = tierMap[tier] || tierMap.free;
+            return `<div class="tier-badge ${tierInfo.class}">
+                <span>${tierInfo.icon}</span>
+                <span>${tierInfo.label}</span>
+            </div>`;
+        }
 
-async function changePassword() {
-  const pw = document.getElementById('newPw').value;
-  const confirm = document.getElementById('confirmPw').value;
-  if (pw !== confirm) { showMsg('error', 'Passwords do not match.'); return; }
-  if (pw.length < 8) { showMsg('error', 'Password must be 8+ characters.'); return; }
+        // Get billing status badge
+        function getBillingStatus(status) {
+            const statusMap = {
+                active: { label: 'Active', class: 'active', dot: true },
+                past_due: { label: 'Past Due', class: 'past-due', dot: true },
+                cancelled: { label: 'Cancelled', class: 'cancelled', dot: true }
+            };
+            const statusInfo = statusMap[status] || statusMap.active;
+            const dot = statusInfo.dot ? '<span class="status-dot"></span>' : '';
+            return `<div class="subscription-status ${statusInfo.class}">
+                ${dot}
+                ${statusInfo.label}
+            </div>`;
+        }
 
-  try {
-    const resp = await fetch('/api/auth/change-password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-      body: JSON.stringify({ password: pw }),
-    });
-    showMsg(resp.ok ? 'success' : 'error', resp.ok ? 'Password updated.' : 'Failed to update password.');
-    if (resp.ok) { document.getElementById('newPw').value = ''; document.getElementById('confirmPw').value = ''; }
-  } catch (e) { showMsg('error', 'Connection error.'); }
-}
+        // Calculate quota percentage
+        function getQuotaPercentage(used, limit) {
+            if (limit === 0) return 0;
+            return Math.min((used / limit) * 100, 100);
+        }
 
-async function openBillingPortal() {
-  try {
-    const resp = await fetch('/api/stripe/portal', { headers: { 'Authorization': `Bearer ${token}` } });
-    const data = await resp.json();
-    if (data.url) window.location.href = data.url;
-    else showMsg('error', 'Billing portal not available.');
-  } catch (e) { showMsg('error', 'Connection error.'); }
-}
+        // Get progress color status
+        function getProgressStatus(percentage) {
+            if (percentage < 60) return 'low';
+            if (percentage < 80) return 'medium';
+            return 'high';
+        }
 
-async function cancelSubscription() {
-  if (!confirm('Are you sure? You will be downgraded to Free at the end of your billing period.')) return;
-  try {
-    const resp = await fetch('/api/stripe/cancel', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}` },
-    });
-    showMsg(resp.ok ? 'success' : 'error', resp.ok ? 'Subscription cancelled. Access continues until end of billing period.' : 'Cancellation failed.');
-  } catch (e) { showMsg('error', 'Connection error.'); }
-}
+        // Calculate days until reset
+        function getDaysUntilReset() {
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            const nextMonth = new Date(currentYear, currentMonth + 1, 1);
+            const daysLeft = Math.ceil((nextMonth - now) / (1000 * 60 * 60 * 24));
+            return daysLeft;
+        }
 
-function handleLogout() {
-  localStorage.removeItem('sb_access_token');
-  localStorage.removeItem('sb_refresh_token');
-  window.location.href = '/';
-}
+        // Render plan comparison
+        function renderComparison(currentTier, allTiers) {
+            const tierOrder = ['free', 'seller', 'agency', 'enterprise'];
+            const currentIndex = tierOrder.indexOf(currentTier);
 
-function showMsg(type, text) {
-  document.getElementById('msgBox').innerHTML = `<div class="msg ${type}">${text}</div>`;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+            if (currentIndex === -1 || currentIndex === tierOrder.length - 1) {
+                document.getElementById('comparisonCard').style.display = 'none';
+                return;
+            }
 
-loadAccount();
-</script>
+            const nextTierName = tierOrder[currentIndex + 1];
+            const currentPlan = allTiers[currentTier];
+            const nextPlan = allTiers[nextTierName];
+
+            if (!nextPlan) return;
+
+            const currentFeatures = [
+                { name: 'Monthly Reports', current: currentPlan?.monthly_reports, next: nextPlan?.monthly_reports },
+                { name: 'Saved ASINs', current: currentPlan?.max_saved_asins, next: nextPlan?.max_saved_asins },
+                { name: 'API Access', current: currentPlan?.api_access, next: nextPlan?.api_access },
+                { name: 'Priority Support', current: currentPlan?.priority_support, next: nextPlan?.priority_support }
+            ];
+
+            let comparisonHTML = `
+                <div class="comparison-plan">
+                    <h4>${currentPlan?.name || 'Current'}</h4>
+                    <div class="comparison-features">
+            `;
+
+            currentFeatures.forEach(feature => {
+                const hasFeature = feature.current > 0 || feature.current === true;
+                comparisonHTML += `
+                    <div class="feature-item">
+                        <span class="feature-${hasFeature ? 'check' : 'cross'}">
+                            ${hasFeature ? '✓' : '✗'}
+                        </span>
+                        <span>${feature.name}</span>
+                        ${feature.current && typeof feature.current === 'number' ? `<span style="color: #f59e0b;">${feature.current}</span>` : ''}
+                    </div>
+                `;
+            });
+
+            comparisonHTML += `
+                    </div>
+                </div>
+                <div class="comparison-plan next">
+                    <h4>${nextPlan?.name}</h4>
+                    <div class="comparison-features">
+            `;
+
+            currentFeatures.forEach(feature => {
+                const hasFeature = feature.next > 0 || feature.next === true;
+                comparisonHTML += `
+                    <div class="feature-item">
+                        <span class="feature-${hasFeature ? 'check' : 'cross'}">
+                            ${hasFeature ? '✓' : '✗'}
+                        </span>
+                        <span>${feature.name}</span>
+                        ${feature.next && typeof feature.next === 'number' ? `<span style="color: #f59e0b;">${feature.next}</span>` : ''}
+                    </div>
+                `;
+            });
+
+            comparisonHTML += `
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('comparisonGrid').innerHTML = comparisonHTML;
+            document.getElementById('comparisonCard').style.display = 'block';
+        }
+
+        // Load account data
+        async function loadAccountData() {
+            const token = await getToken();
+            if (!token) return;
+
+            try {
+                const response = await fetch('/api/my-account', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                populateAccount(data);
+            } catch (error) {
+                console.error('Failed to load account data:', error);
+                showError('Failed to load account data. Please try refreshing the page.');
+            }
+        }
+
+        // Populate account data
+        function populateAccount(data) {
+            // Hero card
+            document.getElementById('userName').textContent = data.user?.name || '-';
+            document.getElementById('userEmail').textContent = data.user?.email || '-';
+            document.getElementById('memberSince').textContent = formatDate(data.user?.created_at);
+            document.getElementById('lifetimeReports').textContent = data.stats?.lifetime_reports || '0';
+            document.getElementById('tierBadgeContainer').innerHTML = getTierBadge(data.user?.tier || 'free');
+
+            // Subscription
+            document.getElementById('planName').textContent = data.subscription?.plan_name || '-';
+            document.getElementById('planPrice').textContent = formatCurrency(data.subscription?.monthly_price);
+            document.getElementById('billingStatus').innerHTML = getBillingStatus(data.subscription?.status || 'active');
+            document.getElementById('nextBilling').textContent = formatDate(data.subscription?.next_billing_date);
+
+            // Hide upgrade button if enterprise
+            const upgradeBtn = document.getElementById('upgradeBtn');
+            if (data.user?.tier === 'enterprise' || data.subscription?.status === 'cancelled') {
+                upgradeBtn.style.display = 'none';
+            }
+
+            // Quota meter
+            const used = data.quota?.used_this_month || 0;
+            const limit = data.quota?.limit_this_month || 0;
+            const bonus = data.quota?.bonus_reports || 0;
+            const percentage = getQuotaPercentage(used, limit);
+            const status = getProgressStatus(percentage);
+
+            document.getElementById('reportsUsed').textContent = used;
+            document.getElementById('reportsLimit').textContent = limit;
+            document.getElementById('progressFill').className = `progress-fill ${status}`;
+            document.getElementById('progressFill').style.setProperty('--progress', `${percentage}%`);
+            document.getElementById('progressText').textContent = `${Math.round(percentage)}%`;
+
+            const daysLeft = getDaysUntilReset();
+            document.getElementById('resetCountdown').textContent = `Resets in ${daysLeft} day${daysLeft !== 1 ? 's' : ''}`;
+
+            if (bonus > 0) {
+                document.getElementById('bonusReports').style.display = 'block';
+                document.getElementById('bonusReports').innerHTML = `+ ${bonus} bonus report${bonus !== 1 ? 's' : ''} available`;
+            }
+
+            // Warning banners
+            const quotaWarning = document.getElementById('quotaWarning');
+            if (percentage >= 100) {
+                quotaWarning.innerHTML = `
+                    <div class="warning-banner red">
+                        <span class="warning-icon">🚨</span>
+                        <div>
+                            <strong>Monthly limit reached.</strong> Upgrade your plan to run more reports.
+                        </div>
+                    </div>
+                `;
+            } else if (percentage >= 80) {
+                quotaWarning.innerHTML = `
+                    <div class="warning-banner yellow">
+                        <span class="warning-icon">⚠️</span>
+                        <div>You're using ${Math.round(percentage)}% of your monthly quota.</div>
+                    </div>
+                `;
+            }
+
+            // Plan comparison
+            if (data.all_tiers) {
+                renderComparison(data.user?.tier || 'free', data.all_tiers);
+            }
+
+            // Quota status text
+            if (percentage === 0) {
+                document.getElementById('quotaStatus').textContent = 'No reports used yet';
+            } else if (percentage < 100) {
+                document.getElementById('quotaStatus').textContent = `${limit - used} report${(limit - used) !== 1 ? 's' : ''} remaining`;
+            } else {
+                document.getElementById('quotaStatus').textContent = 'Limit reached';
+            }
+        }
+
+        // Handle manage billing
+        async function handleManageBilling() {
+            const token = await getToken();
+            if (!token) return;
+
+            const btn = document.getElementById('manageBillingBtn');
+            btn.disabled = true;
+            btn.textContent = 'Loading...';
+
+            try {
+                const response = await fetch('/api/create-portal-session', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    showError('Failed to open billing portal');
+                    btn.disabled = false;
+                    btn.textContent = 'Manage Billing';
+                }
+            } catch (error) {
+                console.error('Failed to create portal session:', error);
+                showError('Failed to access billing portal. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Manage Billing';
+            }
+        }
+
+        // Handle logout
+        async function handleLogout() {
+            try {
+                await supabaseClient.auth.signOut();
+                localStorage.removeItem('sb-session');
+                window.location.href = '/login';
+            } catch (error) {
+                console.error('Logout failed:', error);
+                // Clear anyway
+                localStorage.removeItem('sb-session');
+                window.location.href = '/login';
+            }
+        }
+
+        // Initialize page
+        async function init() {
+            const initialized = await initSupabase();
+            if (!initialized) return;
+
+            await loadAccountData();
+        }
+
+        // Load when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
 </body>
 </html>

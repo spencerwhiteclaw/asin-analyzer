@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Summary - ASIN Analyzer Admin</title>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-XRNTK9YM1L");</script>
+<!-- FB Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","938316492034344");fbq("track","PageView");</script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0e17;
+            color: #f9fafb;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #111827;
+            border-bottom: 1px solid #1f2937;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-logo {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #f9fafb;
+        }
+
+        .nav-links a.active {
+            color: #f59e0b;
+            border-bottom: 2px solid #f59e0b;
+            padding-bottom: 0.25rem;
+        }
+
+        .nav-right a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .nav-right a:hover {
+            color: #f9fafb;
+        }
+
+        /* Main content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Date range selector */
+        .date-selector {
+            display: flex;
+            gap: 0.5rem;
+            background-color: #111827;
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+            border: 1px solid #1f2937;
+        }
+
+        .date-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: transparent;
+            color: #9ca3af;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .date-btn.active {
+            background-color: #f59e0b;
+            color: #0a0e17;
+            font-weight: 500;
+        }
+
+        .date-btn:hover:not(.active) {
+            color: #f9fafb;
+        }
+
+        /* Card */
+        .card {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        th {
+            background-color: #0a0e17;
+            border-bottom: 2px solid #1f2937;
+            padding: 0.75rem;
+            text-align: right;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        th:first-child {
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #1f2937;
+            text-align: right;
+        }
+
+        td:first-child {
+            text-align: left;
+            color: #f9fafb;
+            font-weight: 500;
+            min-width: 120px;
+        }
+
+        tr.totals-row {
+            background-color: #0a0e17;
+            border-top: 2px solid #1f2937;
+            border-bottom: 2px solid #1f2937;
+            font-weight: 600;
+        }
+
+        /* Margin percentage coloring */
+        .margin-excellent {
+            color: #22c55e;
+            background-color: rgba(34, 197, 94, 0.1);
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .margin-good {
+            color: #fbbf24;
+            background-color: rgba(234, 179, 8, 0.1);
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .margin-poor {
+            color: #ef4444;
+            background-color: rgba(239, 68, 68, 0.1);
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        /* Key Ratios */
+        .ratios-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .ratio-card {
+            background-color: #0a0e17;
+            border: 1px solid #1f2937;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .ratio-label {
+            color: #9ca3af;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ratio-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f9fafb;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #f59e0b;
+            color: #0a0e17;
+        }
+
+        .btn-primary:hover {
+            background-color: #d97706;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #9ca3af;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #f9fafb;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading state */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            color: #9ca3af;
+        }
+
+        .spinner {
+            border: 2px solid #1f2937;
+            border-top: 2px solid #f59e0b;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 0.8s linear infinite;
+            margin-right: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error state */
+        .error {
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            color: #fecaca;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-left">
+            <div class="nav-logo">ASIN Analyzer Admin</div>
+            <ul class="nav-links">
+                <li><a href="/admin">Overview</a></li>
+                <li><a href="/admin/customers">Customers</a></li>
+                <li><a href="/admin/cohorts">Cohorts</a></li>
+                <li><a href="/admin/financials" class="active">Financials</a></li>
+                <li><a href="/admin/affiliates">Affiliates</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <a href="/">Back to Site</a>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container">
+        <div class="header">
+            <h1>Financial Summary</h1>
+            <div class="date-selector">
+                <button class="date-btn active" data-months="6">Last 6 months</button>
+                <button class="date-btn" data-months="12">Last 12 months</button>
+                <button class="date-btn" data-months="0">All</button>
+            </div>
+        </div>
+
+        <div id="error-container"></div>
+
+        <!-- P&L Table -->
+        <div class="card">
+            <h2>Profit & Loss</h2>
+            <div id="pl-table-area">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <span>Loading financial data...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Ratios -->
+        <div id="ratios-container"></div>
+
+        <!-- MRR Section -->
+        <div class="card">
+            <h2>Monthly Recurring Revenue (MRR)</h2>
+            <div id="mrr-table-area"></div>
+        </div>
+
+        <!-- Subscriber Section -->
+        <div class="card">
+            <h2>Subscriber Activity</h2>
+            <div id="subscriber-table-area"></div>
+        </div>
+
+        <!-- Export button -->
+        <div class="button-group">
+            <button class="btn-primary" id="export-btn">Export as CSV</button>
+        </div>
+    </div>
+
+    <script>
+        // Auth check
+        async function checkAuth() {
+            const token = localStorage.getItem('supabase_token');
+            if (!token) {
+                window.location.href = '/admin-login';
+                return false;
+            }
+
+            try {
+                const res = await fetch('/api/admin/check-access', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) {
+                    localStorage.removeItem('supabase_token');
+                    window.location.href = '/admin-login';
+                    return false;
+                }
+            } catch (err) {
+                console.error('Auth check failed:', err);
+                window.location.href = '/admin-login';
+                return false;
+            }
+            return true;
+        }
+
+        // State
+        let financialData = null;
+        let currentMonths = 6;
+
+        // Format currency
+        function formatCurrency(value) {
+            if (value === null || value === undefined) return '$0.00';
+            return '$' + parseFloat(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // Format percentage
+        function formatPercentage(value) {
+            if (value === null || value === undefined) return '0%';
+            return (Math.round(parseFloat(value) * 10) / 10).toFixed(1) + '%';
+        }
+
+        // Get margin color class
+        function getMarginColor(margin) {
+            if (margin >= 60) return 'margin-excellent';
+            if (margin >= 40) return 'margin-good';
+            return 'margin-poor';
+        }
+
+        // Fetch financial data
+        async function fetchFinancialData() {
+            const token = localStorage.getItem('supabase_token');
+            try {
+                const months = currentMonths === 0 ? 999 : currentMonths;
+                const res = await fetch(`/api/admin/financial-summary?months=${months}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('Failed to fetch financial data');
+                financialData = await res.json();
+                renderPLTable();
+                renderMRRTable();
+                renderSubscriberTable();
+                renderRatios();
+            } catch (err) {
+                console.error('Error fetching financial data:', err);
+                showError('Failed to load financial data. Please try again.');
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            const container = document.getElementById('error-container');
+            container.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        // Render P&L Table
+        function renderPLTable() {
+            const area = document.getElementById('pl-table-area');
+
+            if (!financialData || !financialData.monthly || financialData.monthly.length === 0) {
+                area.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💰</div>
+                        <div class="empty-state-title">No financial data yet</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'table-wrapper';
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Gross Revenue</th>
+                            <th>Refunds</th>
+                            <th>Net Revenue</th>
+                            <th>Stripe Fees</th>
+                            <th>Affiliate Commissions</th>
+                            <th>Infrastructure</th>
+                            <th>Rewardful</th>
+                            <th>Estimated Margin ($)</th>
+                            <th>Margin %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            let totalGross = 0, totalRefunds = 0, totalNet = 0, totalStripe = 0, totalAffiliate = 0, totalInfra = 0, totalRewardful = 0, totalMargin = 0;
+
+            financialData.monthly.forEach(month => {
+                const monthLabel = new Date(month.month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                const margin = month.net_revenue - month.stripe_fees - month.affiliate_commissions - month.infrastructure - month.rewardful;
+                const marginPercent = month.net_revenue > 0 ? (margin / month.net_revenue) * 100 : 0;
+                const marginClass = getMarginColor(marginPercent);
+
+                html += `
+                    <tr>
+                        <td>${monthLabel}</td>
+                        <td>${formatCurrency(month.gross_revenue)}</td>
+                        <td>${formatCurrency(month.refunds)}</td>
+                        <td>${formatCurrency(month.net_revenue)}</td>
+                        <td>${formatCurrency(month.stripe_fees)}</td>
+                        <td>${formatCurrency(month.affiliate_commissions)}</td>
+                        <td>${formatCurrency(month.infrastructure)}</td>
+                        <td>${formatCurrency(month.rewardful)}</td>
+                        <td>${formatCurrency(margin)}</td>
+                        <td><span class="${marginClass}">${formatPercentage(marginPercent)}</span></td>
+                    </tr>
+                `;
+
+                totalGross += month.gross_revenue || 0;
+                totalRefunds += month.refunds || 0;
+                totalNet += month.net_revenue || 0;
+                totalStripe += month.stripe_fees || 0;
+                totalAffiliate += month.affiliate_commissions || 0;
+                totalInfra += month.infrastructure || 0;
+                totalRewardful += month.rewardful || 0;
+                totalMargin += margin;
+            });
+
+            const totalMarginPercent = totalNet > 0 ? (totalMargin / totalNet) * 100 : 0;
+            const totalMarginClass = getMarginColor(totalMarginPercent);
+
+            html += `
+                    <tr class="totals-row">
+                        <td>Total</td>
+                        <td>${formatCurrency(totalGross)}</td>
+                        <td>${formatCurrency(totalRefunds)}</td>
+                        <td>${formatCurrency(totalNet)}</td>
+                        <td>${formatCurrency(totalStripe)}</td>
+                        <td>${formatCurrency(totalAffiliate)}</td>
+                        <td>${formatCurrency(totalInfra)}</td>
+                        <td>${formatCurrency(totalRewardful)}</td>
+                        <td>${formatCurrency(totalMargin)}</td>
+                        <td><span class="${totalMarginClass}">${formatPercentage(totalMarginPercent)}</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            `;
+
+            wrapper.innerHTML = html;
+            area.innerHTML = '';
+            area.appendChild(wrapper);
+        }
+
+        // Render MRR Table
+        function renderMRRTable() {
+            const area = document.getElementById('mrr-table-area');
+
+            if (!financialData || !financialData.monthly || financialData.monthly.length === 0) {
+                area.innerHTML = '';
+                return;
+            }
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'table-wrapper';
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Starting MRR</th>
+                            <th>Ending MRR</th>
+                            <th>MRR Growth Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            financialData.monthly.forEach(month => {
+                const monthLabel = new Date(month.month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                const mrrGrowth = month.starting_mrr > 0
+                    ? (((month.ending_mrr - month.starting_mrr) / month.starting_mrr) * 100).toFixed(1)
+                    : 0;
+
+                html += `
+                    <tr>
+                        <td>${monthLabel}</td>
+                        <td>${formatCurrency(month.starting_mrr)}</td>
+                        <td>${formatCurrency(month.ending_mrr)}</td>
+                        <td>${mrrGrowth}%</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            wrapper.innerHTML = html;
+            area.innerHTML = '';
+            area.appendChild(wrapper);
+        }
+
+        // Render Subscriber Table
+        function renderSubscriberTable() {
+            const area = document.getElementById('subscriber-table-area');
+
+            if (!financialData || !financialData.monthly || financialData.monthly.length === 0) {
+                area.innerHTML = '';
+                return;
+            }
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'table-wrapper';
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Starting Subscribers</th>
+                            <th>Ending Subscribers</th>
+                            <th>New Subscribers</th>
+                            <th>Churned</th>
+                            <th>Net Growth</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            financialData.monthly.forEach(month => {
+                const monthLabel = new Date(month.month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+                html += `
+                    <tr>
+                        <td>${monthLabel}</td>
+                        <td>${month.subscribers_start || 0}</td>
+                        <td>${month.subscribers_end || 0}</td>
+                        <td>${month.new_subscribers || 0}</td>
+                        <td>${month.churned || 0}</td>
+                        <td>${(month.subscribers_end || 0) - (month.subscribers_start || 0)}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            wrapper.innerHTML = html;
+            area.innerHTML = '';
+            area.appendChild(wrapper);
+        }
+
+        // Render Key Ratios
+        function renderRatios() {
+            const container = document.getElementById('ratios-container');
+
+            if (!financialData || !financialData.monthly || financialData.monthly.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const latestMonth = financialData.monthly[financialData.monthly.length - 1];
+            const latestMargin = latestMonth.net_revenue > 0
+                ? (((latestMonth.net_revenue - latestMonth.stripe_fees - latestMonth.affiliate_commissions - latestMonth.infrastructure - latestMonth.rewardful) / latestMonth.net_revenue) * 100).toFixed(1)
+                : 0;
+
+            // Average margin
+            let totalMargin = 0;
+            financialData.monthly.forEach(month => {
+                const margin = month.net_revenue - month.stripe_fees - month.affiliate_commissions - month.infrastructure - month.rewardful;
+                const marginPercent = month.net_revenue > 0 ? (margin / month.net_revenue) * 100 : 0;
+                totalMargin += marginPercent;
+            });
+            const avgMargin = (totalMargin / financialData.monthly.length).toFixed(1);
+
+            // MRR Growth
+            const mrrGrowth = latestMonth.starting_mrr > 0
+                ? (((latestMonth.ending_mrr - latestMonth.starting_mrr) / latestMonth.starting_mrr) * 100).toFixed(1)
+                : 0;
+
+            // LTV (estimated as monthly revenue * 24 / churn rate, simplified)
+            const ltv = (latestMonth.net_revenue * 24).toFixed(2);
+
+            // ARPU
+            const arpu = latestMonth.subscribers_end > 0
+                ? (latestMonth.net_revenue / latestMonth.subscribers_end).toFixed(2)
+                : 0;
+
+            const html = `
+                <div class="card">
+                    <h2>Key Metrics</h2>
+                    <div class="ratios-grid">
+                        <div class="ratio-card">
+                            <div class="ratio-label">Latest Month Margin %</div>
+                            <div class="ratio-value">${latestMargin}%</div>
+                        </div>
+                        <div class="ratio-card">
+                            <div class="ratio-label">Average Margin %</div>
+                            <div class="ratio-value">${avgMargin}%</div>
+                        </div>
+                        <div class="ratio-card">
+                            <div class="ratio-label">MRR Growth Rate</div>
+                            <div class="ratio-value">${mrrGrowth}%</div>
+                        </div>
+                        <div class="ratio-card">
+                            <div class="ratio-label">Estimated LTV</div>
+                            <div class="ratio-value">${formatCurrency(ltv)}</div>
+                        </div>
+                        <div class="ratio-card">
+                            <div class="ratio-label">Estimated ARPU</div>
+                            <div class="ratio-value">${formatCurrency(arpu)}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Export as CSV
+        function exportCSV() {
+            if (!financialData || !financialData.monthly || !financialData.monthly.length) {
+                alert('No data to export');
+                return;
+            }
+
+            let csv = 'Month,Gross Revenue,Refunds,Net Revenue,Stripe Fees,Affiliate Commissions,Infrastructure,Rewardful,Estimated Margin,Margin %,Starting MRR,Ending MRR,MRR Growth %,Starting Subscribers,Ending Subscribers,New Subscribers,Churned,Net Growth\n';
+
+            financialData.monthly.forEach(month => {
+                const monthLabel = new Date(month.month + '-01').toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                const margin = month.net_revenue - month.stripe_fees - month.affiliate_commissions - month.infrastructure - month.rewardful;
+                const marginPercent = month.net_revenue > 0 ? ((margin / month.net_revenue) * 100).toFixed(1) : 0;
+                const mrrGrowth = month.starting_mrr > 0 ? (((month.ending_mrr - month.starting_mrr) / month.starting_mrr) * 100).toFixed(1) : 0;
+                const netGrowth = (month.subscribers_end || 0) - (month.subscribers_start || 0);
+
+                csv += `"${monthLabel}",${month.gross_revenue},${month.refunds},${month.net_revenue},${month.stripe_fees},${month.affiliate_commissions},${month.infrastructure},${month.rewardful},${margin},${marginPercent},${month.starting_mrr},${month.ending_mrr},${mrrGrowth},${month.subscribers_start || 0},${month.subscribers_end || 0},${month.new_subscribers || 0},${month.churned || 0},${netGrowth}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `financial-summary-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        // Date selector
+        document.querySelectorAll('.date-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMonths = parseInt(btn.dataset.months);
+                fetchFinancialData();
+            });
+        });
+
+        // Export button
+        document.getElementById('export-btn').addEventListener('click', exportCSV);
+
+        // Initialize
+        (async () => {
+            if (await checkAuth()) {
+                await fetchFinancialData();
+            }
+        })();
+    </script>
+</body>
+</html>

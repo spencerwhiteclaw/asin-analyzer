@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Program - Earn 40% Commission | ASIN Analyzer</title>
+<!-- GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XRNTK9YM1L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-XRNTK9YM1L");</script>
+<!-- FB Pixel -->
+<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init","938316492034344");fbq("track","PageView");</script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0a0e17;
+            color: #f9fafb;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #111827;
+            border-bottom: 1px solid #1f2937;
+            padding: 0 20px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .logo {
+            font-weight: 700;
+            font-size: 18px;
+            color: #f59e0b;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        nav a:hover {
+            color: #f9fafb;
+        }
+
+        nav a.active {
+            color: #f59e0b;
+        }
+
+        nav .spacer {
+            flex: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #d1d5db;
+            margin-bottom: 16px;
+        }
+
+        .text-accent {
+            color: #f59e0b;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #f59e0b;
+            color: #0a0e17;
+        }
+
+        .btn-primary:hover {
+            background-color: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: #1f2937;
+            color: #f9fafb;
+            border: 1px solid #374151;
+        }
+
+        .btn-secondary:hover {
+            background-color: #374151;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 60px 0;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(34, 197, 94, 0.02) 100%);
+        }
+
+        .hero h1 {
+            color: #f9fafb;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #f9fafb 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subheading {
+            font-size: 18px;
+            color: #d1d5db;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            margin-bottom: 40px;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 0;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .step {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .step:hover {
+            border-color: #f59e0b;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.1);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: #f59e0b;
+            color: #0a0e17;
+            border-radius: 50%;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .step h3 {
+            margin-bottom: 12px;
+        }
+
+        .step p {
+            margin-bottom: 0;
+            color: #9ca3af;
+        }
+
+        /* Commission Calculator */
+        .calculator {
+            padding: 80px 0;
+            background-color: #111827;
+            border-top: 1px solid #1f2937;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .calculator-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .calculator-left h2 {
+            margin-bottom: 20px;
+        }
+
+        .calculator-left p {
+            margin-bottom: 30px;
+        }
+
+        .calculator-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+
+        .input-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: #1f2937;
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .input-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #f59e0b;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .input-group input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .input-group input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #f59e0b;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .input-group input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .slider-value {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .slider-value span {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .tier-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tier-btn {
+            padding: 12px 20px;
+            border: 2px solid #1f2937;
+            background-color: #0a0e17;
+            color: #9ca3af;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .tier-btn:hover {
+            border-color: #f59e0b;
+            color: #f9fafb;
+        }
+
+        .tier-btn.active {
+            background-color: #f59e0b;
+            color: #0a0e17;
+            border-color: #f59e0b;
+        }
+
+        .calculator-right {
+            background-color: #0a0e17;
+            border: 2px solid #1f2937;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .calculator-right h3 {
+            color: #9ca3af;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .earnings-display {
+            font-size: 48px;
+            font-weight: 700;
+            color: #f59e0b;
+            margin-bottom: 20px;
+            word-break: break-word;
+        }
+
+        .earnings-period {
+            font-size: 16px;
+            color: #9ca3af;
+        }
+
+        /* Earnings Table */
+        .earnings-section {
+            padding: 80px 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table thead {
+            background-color: #111827;
+            border-bottom: 2px solid #1f2937;
+        }
+
+        table th {
+            padding: 16px;
+            text-align: left;
+            color: #9ca3af;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #1f2937;
+            background-color: #0a0e17;
+        }
+
+        table tbody tr:hover {
+            background-color: #111827;
+        }
+
+        table td {
+            padding: 16px;
+            font-size: 14px;
+        }
+
+        table td:first-child {
+            font-weight: 600;
+            color: #f59e0b;
+        }
+
+        /* Why Promote */
+        .why-promote {
+            padding: 80px 0;
+            background-color: #111827;
+            border-top: 1px solid #1f2937;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature {
+            background-color: #0a0e17;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 30px;
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .feature h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #f9fafb;
+        }
+
+        .feature p {
+            margin-bottom: 0;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        /* FAQ */
+        .faq-section {
+            padding: 80px 0;
+        }
+
+        .faq-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+        }
+
+        .faq-item {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .faq-question:hover {
+            background-color: #1f2937;
+        }
+
+        .faq-toggle {
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px 20px 20px;
+            color: #9ca3af;
+            display: none;
+            font-size: 14px;
+            line-height: 1.8;
+            border-top: 1px solid #1f2937;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        /* Bottom CTA */
+        .bottom-cta {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(34, 197, 94, 0.02) 100%);
+        }
+
+        .bottom-cta h2 {
+            margin-bottom: 24px;
+        }
+
+        .bottom-cta p {
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111827;
+            border-top: 1px solid #1f2937;
+            padding: 40px 0;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            .hero {
+                padding: 60px 0 40px 0;
+            }
+
+            .how-it-works,
+            .calculator,
+            .earnings-section,
+            .why-promote,
+            .faq-section,
+            .bottom-cta {
+                padding: 60px 0;
+            }
+
+            .calculator-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .faq-container {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                gap: 20px;
+            }
+
+            nav .logo {
+                font-size: 16px;
+            }
+
+            nav a {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="logo">ASIN Analyzer</a>
+        <a href="/">Home</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/affiliates" class="active">Affiliates</a>
+        <div class="spacer"></div>
+        <a href="/login" class="btn btn-secondary" style="padding: 8px 16px; font-size: 14px; display: inline-block;">Login</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Earn 40% Recurring Commission on Every Referral</h1>
+            <p class="hero-subheading">Join the ASIN Analyzer affiliate program and earn passive income helping Amazon sellers optimize their listings.</p>
+            <div class="hero-cta">
+                <a href="https://rewardful.com/asin-analyzer" class="btn btn-primary" target="_blank">Apply to Become an Affiliate</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Sign Up</h3>
+                    <p>Apply through our affiliate portal. Takes just 2 minutes and your application is reviewed immediately.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Share Your Link</h3>
+                    <p>Get a unique referral link. Share it in seller groups, YouTube videos, blogs, podcasts, or newsletters.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Earn 40% Monthly</h3>
+                    <p>Earn 40% of every subscription payment, every month, for as long as your referrals stay subscribed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commission Calculator -->
+    <section class="calculator">
+        <div class="container">
+            <div class="calculator-content">
+                <div class="calculator-left">
+                    <h2>How Much Could You Earn?</h2>
+                    <p>Use our calculator to see potential earnings based on your referrals and pricing tier.</p>
+
+                    <div class="calculator-inputs">
+                        <div class="input-group">
+                            <label>Number of Referrals</label>
+                            <input type="range" id="referralSlider" min="1" max="100" value="10">
+                            <div class="slider-value">
+                                <span id="referralCount">10</span> referrals
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Subscription Tier</label>
+                            <div class="tier-buttons">
+                                <button class="tier-btn active" onclick="setTier('seller', 19)">Seller ($19/mo)</button>
+                                <button class="tier-btn" onclick="setTier('agency', 49)">Agency ($49/mo)</button>
+                                <button class="tier-btn" onclick="setTier('enterprise', 199)">Enterprise ($199/mo)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calculator-right">
+                    <h3>Your Monthly Earnings</h3>
+                    <div class="earnings-display" id="earningsDisplay">$76.00</div>
+                    <p class="earnings-period">10 referrals × $19/mo tier × 40% commission</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Earnings Examples Table -->
+    <section class="earnings-section">
+        <div class="container">
+            <h2>Earnings Examples</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Subscription Tier</th>
+                            <th>Monthly Price</th>
+                            <th>Your Commission (40%)</th>
+                            <th>10 Referrals/mo</th>
+                            <th>25 Referrals/mo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Seller</td>
+                            <td>$19/mo</td>
+                            <td>$7.60/mo</td>
+                            <td>$76/mo</td>
+                            <td>$190/mo</td>
+                        </tr>
+                        <tr>
+                            <td>Agency</td>
+                            <td>$49/mo</td>
+                            <td>$19.60/mo</td>
+                            <td>$196/mo</td>
+                            <td>$490/mo</td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise</td>
+                            <td>$199/mo</td>
+                            <td>$79.60/mo</td>
+                            <td>$796/mo</td>
+                            <td>$1,990/mo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Promote ASIN Analyzer -->
+    <section class="why-promote">
+        <div class="container">
+            <h2>Why Promote ASIN Analyzer</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h4>Amazon Sellers Need This</h4>
+                    <p>5M+ active sellers on Amazon, and most have unoptimized listings. You're helping them solve a real problem.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎁</div>
+                    <h4>Free Tool = Easy Referral</h4>
+                    <p>Users get a free ASIN report first. Low friction entry point means higher conversion rates.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💰</div>
+                    <h4>40% Recurring Revenue</h4>
+                    <p>Not a one-time payout. You earn 40% every month your referrals stay subscribed. True passive income.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⏱️</div>
+                    <h4>60-Day Cookie Window</h4>
+                    <p>Even if they don't sign up immediately, you get credit for 60 days. More conversions, more earnings.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📈</div>
+                    <h4>Real-Time Dashboard</h4>
+                    <p>Track your referrals, earnings, and payouts live. See exactly how much you're making.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚀</div>
+                    <h4>Growing Platform</h4>
+                    <p>ASIN Analyzer is rapidly growing. Your affiliate earnings grow with us.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How do I get paid?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Monthly payouts are processed via Rewardful, our affiliate platform partner. You'll receive payments directly to your bank account, PayPal, or other payment methods supported by Rewardful. Payouts happen automatically on the 15th of each month for the previous month's commissions.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What's the cookie duration?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        We track referrals for 60 days. If someone clicks your link and signs up within 60 days, you'll earn the commission. This gives you plenty of time for your referrals to decide and convert.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do I earn on annual plans too?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! You earn 40% of every subscription payment, whether it's monthly or annual. If someone signs up for an annual plan, you get 40% of the entire annual payment upfront, and then 40% of renewals every year.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I promote to my own audience?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely! You can promote ASIN Analyzer to your email list, social media followers, YouTube channel, blog readers, podcast audience, or any other platform where you have an audience. We just ask that you follow our promotional guidelines and be transparent about the affiliate relationship.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Is there a minimum payout?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        No minimum! Even if you earn just a few dollars, you'll receive your payout. There are no fees or thresholds to clear. Whatever you earn is yours.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How do I track my referrals?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        You'll have access to a dedicated affiliate dashboard where you can see real-time data on your referrals, clicks, conversions, and earnings. You can track everything and optimize your promotion strategy based on what's working.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="bottom-cta">
+        <div class="container">
+            <h2>Ready to Start Earning?</h2>
+            <p>Join hundreds of affiliates already earning with ASIN Analyzer</p>
+            <a href="https://rewardful.com/asin-analyzer" class="btn btn-primary" target="_blank">Apply to Become an Affiliate</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 ASIN Analyzer. All rights reserved. | <a href="/privacy" style="color: #6b7280;">Privacy Policy</a> | <a href="/terms" style="color: #6b7280;">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Commission Calculator
+        let currentTier = 'seller';
+        let currentPrice = 19;
+        let referralCount = 10;
+
+        const referralSlider = document.getElementById('referralSlider');
+        const referralCountDisplay = document.getElementById('referralCount');
+        const earningsDisplay = document.getElementById('earningsDisplay');
+
+        // Update calculator on slider change
+        referralSlider.addEventListener('input', (e) => {
+            referralCount = parseInt(e.target.value);
+            referralCountDisplay.textContent = referralCount;
+            updateEarnings();
+        });
+
+        // Set tier
+        window.setTier = function(tier, price) {
+            currentTier = tier;
+            currentPrice = price;
+
+            // Update button states
+            document.querySelectorAll('.tier-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            updateEarnings();
+        };
+
+        // Update earnings display
+        function updateEarnings() {
+            const earnings = referralCount * currentPrice * 0.4;
+            earningsDisplay.textContent = '$' + earnings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // FAQ Toggle
+        window.toggleFAQ = function(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Toggle current item
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        };
+
+        // Smooth scroll for links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Initialize
+        updateEarnings();
+    </script>
+</body>
+</html>
