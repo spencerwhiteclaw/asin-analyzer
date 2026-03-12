@@ -112,10 +112,10 @@ router.get('/dashboard', requireAuth, requireAdmin, async (req, res) => {
     // MRR components from today's subscription_events
     const mrrComponentsResult = await db.query(
       `SELECT
-        COALESCE(SUM(CASE WHEN event_type = 'new_subscription' THEN mrr_change ELSE 0 END), 0) as new_mrr,
-        COALESCE(SUM(CASE WHEN event_type = 'upgrade' THEN mrr_change ELSE 0 END), 0) as expansion_mrr,
-        COALESCE(SUM(CASE WHEN event_type = 'downgrade' THEN mrr_change ELSE 0 END), 0) as contraction_mrr,
-        COALESCE(SUM(CASE WHEN event_type = 'cancellation' THEN mrr_change ELSE 0 END), 0) as churned_mrr
+        COALESCE(SUM(CASE WHEN event_type = 'new_subscription' THEN mrr_delta ELSE 0 END), 0) as new_mrr,
+        COALESCE(SUM(CASE WHEN event_type = 'upgrade' THEN mrr_delta ELSE 0 END), 0) as expansion_mrr,
+        COALESCE(SUM(CASE WHEN event_type = 'downgrade' THEN mrr_delta ELSE 0 END), 0) as contraction_mrr,
+        COALESCE(SUM(CASE WHEN event_type = 'cancellation' THEN mrr_delta ELSE 0 END), 0) as churned_mrr
        FROM subscription_events
        WHERE DATE(created_at) = $1`,
       [todayStr]
@@ -188,7 +188,7 @@ router.get('/dashboard', requireAuth, requireAdmin, async (req, res) => {
       email: row.email,
       event_type: row.event_type,
       subscription_tier: row.subscription_tier,
-      mrr_change: parseFloat(row.mrr_change) || 0,
+      mrr_delta: parseFloat(row.mrr_delta) || 0,
       created_at: row.created_at,
     }));
 
@@ -240,7 +240,7 @@ router.get('/mrr-waterfall', requireAuth, requireAdmin, async (req, res) => {
       `SELECT
         DATE_TRUNC('month', created_at)::DATE as month,
         event_type,
-        SUM(mrr_change) as total_mrr_change
+        SUM(mrr_delta) as total_mrr_delta
        FROM subscription_events
        WHERE created_at >= $1
        GROUP BY DATE_TRUNC('month', created_at), event_type
@@ -261,7 +261,7 @@ router.get('/mrr-waterfall', requireAuth, requireAdmin, async (req, res) => {
           churned_mrr: 0,
         };
       }
-      const change = parseFloat(row.total_mrr_change) || 0;
+      const change = parseFloat(row.total_mrr_delta) || 0;
       if (row.event_type === 'new_subscription') waterfallMap[monthStr].new_mrr += change;
       else if (row.event_type === 'upgrade') waterfallMap[monthStr].expansion_mrr += change;
       else if (row.event_type === 'downgrade') waterfallMap[monthStr].contraction_mrr += change;
@@ -942,14 +942,14 @@ async function exportMetricsCSV(startDate, endDate) {
 
 async function exportSubscriptionsCSV(startDate, endDate) {
   const result = await db.query(
-    `SELECT user_id, event_type, subscription_tier, mrr_change, created_at
+    `SELECT user_id, event_type, new_tier as subscription_tier, mrr_delta, created_at
      FROM subscription_events
      ORDER BY created_at DESC`
   );
 
   let csv = 'User ID,Event Type,Tier,MRR Change,Date\n';
   result.rows.forEach(row => {
-    csv += `"${row.user_id}","${row.event_type}","${row.subscription_tier}","${row.mrr_change}","${row.created_at}"\n`;
+    csv += `"${row.user_id}","${row.event_type}","${row.subscription_tier}","${row.mrr_delta}","${row.created_at}"\n`;
   });
   return csv;
 }
