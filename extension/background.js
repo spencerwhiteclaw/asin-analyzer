@@ -1,7 +1,7 @@
 // ═══ ASIN Analyzer Extension — Background Service Worker ═══
 // Handles message passing between content scripts and API
 
-const API_BASE = 'https://www.asinanalyzer.app';
+const API_BASE = 'https://asinanalyzer.app';
 
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

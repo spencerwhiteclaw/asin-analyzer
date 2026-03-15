@@ -1,8 +1,8 @@
 // ═══ ASIN Analyzer Extension — API Client ═══
 // Shared module for all content scripts and background worker
 
-const AA_API_BASE = 'https://www.asinanalyzer.app';
-const AA_REPORT_BASE = 'https://www.asinanalyzer.app/report';
+const AA_API_BASE = 'https://asinanalyzer.app';
+const AA_REPORT_BASE = 'https://asinanalyzer.app/report';
 
 // Get API key from chrome.storage.local
 async function getApiKey() {

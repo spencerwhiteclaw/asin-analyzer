@@ -1,5 +1,5 @@
 // ============================================================
-// routes/stripe.js — Stripe Checkout + Webhook Routes
+// routes/stripe.js â€” Stripe Checkout + Webhook Routes
 // v4.8 Sprint 7: Enhanced with subscription lifecycle event logging
 // Sprint 0 base + Sprint 7D subscription_events table
 // ============================================================
@@ -16,7 +16,7 @@ const stripe = process.env.STRIPE_SECRET_KEY
   ? require('stripe')(process.env.STRIPE_SECRET_KEY)
   : null;
 
-// ── Price-to-Tier mapping (matches v4.8 exactly) ──
+// â”€â”€ Price-to-Tier mapping (matches v4.8 exactly) â”€â”€
 const PRICE_TO_TIER = {
   [process.env.STRIPE_PRICE_ID_SELLER_MONTHLY || '']:     'seller',
   [process.env.STRIPE_PRICE_ID_SELLER_ANNUAL || '']:      'seller',
@@ -27,9 +27,9 @@ const PRICE_TO_TIER = {
   [process.env.STRIPE_PRICE_ID_ENTERPRISE_ANNUAL || '']:  'enterprise',
 };
 
-// ══════════════════════════════════════════════════════════════
-// GET /api/stripe/portal — Open Stripe Customer Portal
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// GET /api/stripe/portal â€” Open Stripe Customer Portal
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 router.get('/portal', requireAuth, async (req, res) => {
   if (!stripe) return res.status(503).json({ error: 'Payments not configured.' });
 
@@ -43,7 +43,7 @@ router.get('/portal', requireAuth, async (req, res) => {
 
     const session = await stripe.billingPortal.sessions.create({
       customer: customerId,
-      return_url: 'https://www.asinanalyzer.app/dashboard/account',
+      return_url: 'https://asinanalyzer.app/dashboard/account',
     });
 
     res.json({ url: session.url });
@@ -53,9 +53,9 @@ router.get('/portal', requireAuth, async (req, res) => {
   }
 });
 
-// ══════════════════════════════════════════════════════════════
-// POST /api/stripe/cancel — Cancel subscription
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// POST /api/stripe/cancel â€” Cancel subscription
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 router.post('/cancel', requireAuth, async (req, res) => {
   if (!stripe) return res.status(503).json({ error: 'Payments not configured.' });
 
@@ -86,10 +86,10 @@ router.post('/cancel', requireAuth, async (req, res) => {
   }
 });
 
-// ══════════════════════════════════════════════════════════════
-// POST /api/stripe/create-checkout — Create Stripe Checkout session
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// POST /api/stripe/create-checkout â€” Create Stripe Checkout session
 // Sprint 7C: Added client_reference_id for Rewardful affiliate tracking
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 router.post('/create-checkout', async (req, res) => {
   if (!stripe) return res.status(503).json({ error: 'Payments not configured yet.' });
 
@@ -97,14 +97,14 @@ router.post('/create-checkout', async (req, res) => {
     const { priceId, email, analysisId, mode, rewardful_referral } = req.body;
 
     const sessionParams = {
-      // Only pass customer_email if it's a valid email — otherwise Stripe
+      // Only pass customer_email if it's a valid email â€” otherwise Stripe
       // throws resource_missing for unrecognized/empty email strings
       ...(email && email.includes('@') ? { customer_email: email } : {}),
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: mode || 'payment',
-      success_url: `https://www.asinanalyzer.app/thank-you?session_id={CHECKOUT_SESSION_ID}&analysis_id=${analysisId || ''}`,
-      cancel_url: `https://www.asinanalyzer.app/report/${analysisId || ''}`,
+      success_url: `https://asinanalyzer.app/thank-you?session_id={CHECKOUT_SESSION_ID}&analysis_id=${analysisId || ''}`,
+      cancel_url: `https://asinanalyzer.app/report/${analysisId || ''}`,
       metadata: {
         analysisId: String(analysisId || ''),
         product: priceId,
@@ -124,10 +124,10 @@ router.post('/create-checkout', async (req, res) => {
   }
 });
 
-// ══════════════════════════════════════════════════════════════
-// POST /api/stripe/webhook — Handle Stripe events
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// POST /api/stripe/webhook â€” Handle Stripe events
 // v4.8 Sprint 7D: Full subscription lifecycle event logging
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 router.post('/webhook', async (req, res) => {
   if (!stripe) return res.status(503).send('Payments not configured');
 
@@ -142,7 +142,7 @@ router.post('/webhook', async (req, res) => {
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
-  // ── Idempotency check (Sprint 0 — processed_stripe_events table) ──
+  // â”€â”€ Idempotency check (Sprint 0 â€” processed_stripe_events table) â”€â”€
   try {
     const isDuplicate = await checkStripeIdempotency(event.id);
     if (isDuplicate) {
@@ -155,7 +155,7 @@ router.post('/webhook', async (req, res) => {
   }
 
   switch (event.type) {
-    // ── CHECKOUT COMPLETED ──
+    // â”€â”€ CHECKOUT COMPLETED â”€â”€
     case 'checkout.session.completed': {
       const session = event.data.object;
       const email = session.customer_email || session.customer_details?.email;
@@ -174,7 +174,7 @@ router.post('/webhook', async (req, res) => {
             analysisId ? parseInt(analysisId, 10) : null,
           ]
         );
-        console.log(`[STRIPE] Purchase recorded: ${email} — $${(session.amount_total / 100).toFixed(2)}`);
+        console.log(`[STRIPE] Purchase recorded: ${email} â€” $${(session.amount_total / 100).toFixed(2)}`);
       } catch (dbErr) {
         console.error('[STRIPE_ERROR] Purchase record failed:', dbErr.message);
       }
@@ -184,7 +184,7 @@ router.post('/webhook', async (req, res) => {
       break;
     }
 
-    // ── SUBSCRIPTION CREATED ──
+    // â”€â”€ SUBSCRIPTION CREATED â”€â”€
     case 'customer.subscription.created': {
       const sub = event.data.object;
       const customerId = sub.customer;
@@ -241,7 +241,7 @@ router.post('/webhook', async (req, res) => {
       break;
     }
 
-    // ── SUBSCRIPTION UPDATED (upgrade/downgrade/interval change) ──
+    // â”€â”€ SUBSCRIPTION UPDATED (upgrade/downgrade/interval change) â”€â”€
     case 'customer.subscription.updated': {
       const sub = event.data.object;
       const previousAttributes = event.data.previous_attributes || {};
@@ -335,7 +335,7 @@ router.post('/webhook', async (req, res) => {
       break;
     }
 
-    // ── SUBSCRIPTION DELETED (expired) ──
+    // â”€â”€ SUBSCRIPTION DELETED (expired) â”€â”€
     case 'customer.subscription.deleted': {
       const sub = event.data.object;
       const customerId = sub.customer;
@@ -382,7 +382,7 @@ router.post('/webhook', async (req, res) => {
       break;
     }
 
-    // ── PAYMENT SUCCEEDED ──
+    // â”€â”€ PAYMENT SUCCEEDED â”€â”€
     case 'invoice.payment_succeeded': {
       const invoice = event.data.object;
       const customerId = invoice.customer;
@@ -435,7 +435,7 @@ router.post('/webhook', async (req, res) => {
       break;
     }
 
-    // ── PAYMENT FAILED ──
+    // â”€â”€ PAYMENT FAILED â”€â”€
     case 'invoice.payment_failed': {
       const invoice = event.data.object;
       console.log(`[STRIPE] Payment failed: ${invoice.customer_email}`);
@@ -469,9 +469,9 @@ router.post('/webhook', async (req, res) => {
   res.json({ received: true });
 });
 
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // Sprint 7D: Log subscription lifecycle event to subscription_events table
-// ══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 async function logSubscriptionEvent(userId, eventType, data = {}) {
   try {
     await db.query(

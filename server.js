@@ -169,7 +169,7 @@ app.get('/report/:id', async (req, res) => {
         return res.send(`<!DOCTYPE html><html><head>
           <meta property="og:title" content="${gradeEmoji} ${r.asin} scored ${r.overall_grade} (${r.overall_score}/100) ΓÇö ASIN Analyzer">
           <meta property="og:description" content="${r.product_title ? r.product_title.substring(0, 120) + '...' : r.asin} ΓÇö Scored across ${scoreCount} categories. Free listing audit at asinanalyzer.app">
-          <meta property="og:url" content="https://www.asinanalyzer.app/report/${req.params.id}">
+          <meta property="og:url" content="https://asinanalyzer.app/report/${req.params.id}">
           <meta property="og:type" content="website">
           <meta property="og:site_name" content="ASIN Analyzer">
           <meta name="twitter:card" content="summary">

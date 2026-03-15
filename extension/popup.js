@@ -1,6 +1,6 @@
 // ═══ ASIN Analyzer Extension — Popup Logic ═══
 
-const API_BASE = 'https://www.asinanalyzer.app';
+const API_BASE = 'https://asinanalyzer.app';
 
 document.addEventListener('DOMContentLoaded', init);
 

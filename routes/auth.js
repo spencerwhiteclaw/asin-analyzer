@@ -105,7 +105,7 @@ router.get('/google', async (req, res) => {
     const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: 'https://www.asinanalyzer.app/dashboard' },
+      options: { redirectTo: 'https://asinanalyzer.app/dashboard' },
     });
 
     if (error) return res.status(500).json({ error: error.message });
@@ -126,7 +126,7 @@ router.post('/magic-link', async (req, res) => {
     const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const { error } = await supabaseClient.auth.signInWithOtp({
       email: email.trim().toLowerCase(),
-      options: { emailRedirectTo: 'https://www.asinanalyzer.app/dashboard' },
+      options: { emailRedirectTo: 'https://asinanalyzer.app/dashboard' },
     });
 
     if (error) return res.status(500).json({ error: error.message });
@@ -147,7 +147,7 @@ router.post('/forgot-password', async (req, res) => {
     const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const { error } = await supabaseClient.auth.resetPasswordForEmail(
       email.trim().toLowerCase(),
-      { redirectTo: 'https://www.asinanalyzer.app/reset-password' }
+      { redirectTo: 'https://asinanalyzer.app/reset-password' }
     );
 
     // Always return success to prevent email enumeration

@@ -646,7 +646,7 @@ router.post('/create-portal-session', requireAuth, async (req, res) => {
     // Create Stripe billing portal session
     const session = await stripe.billingPortal.sessions.create({
       customer: stripeCustomerId,
-      return_url: 'https://www.asinanalyzer.app/dashboard',
+      return_url: 'https://asinanalyzer.app/dashboard',
     });
 
     res.json({ url: session.url });
